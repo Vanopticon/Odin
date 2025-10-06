@@ -1,8 +1,7 @@
-# Application Name
+# Vanopticon
 
 ![Accessibility](https://img.shields.io/badge/Accessibility-%230170EA.svg?style=for-the-badge&logo=Accessibility&logoColor=white)
 ![License](https://img.shields.io/github/license/JEleniel/template?style=for-the-badge)
-![Version](https://img.shields.io/github/v/release/JEleniel/template?style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/JEleniel/template?style=for-the-badge)
 ![Pull Requests](https://img.shields.io/github/issues-pr/JEleniel/template?style=for-the-badge)
 
@@ -10,85 +9,54 @@
 
 ## Overview
 
-_A one to two paragraph describing the project, what it does, and where we plan to take it._
+**Vanopticon** is a modular suite of **Cyber Defense and Intelligence tools** designed to operate at the forward edge of digital security—where visibility, foresight, and response converge.
 
-> **Note:** This is a template repository. Replace `{username}` and `{repo}` in links and badges with your GitHub username and repository name. Fill in the overview, features, and other sections with details specific to your project.
+The name derives from _vanguard_ (those who go before) and _panopticon_ (the all-seeing construct), symbolizing a system built to **observe, anticipate, and protect** across complex threat landscapes.
 
-## Features
+## Vision
 
-- Feature 1
-- Feature 2
-- Feature 3
+Vanopticon embodies a principle of active vigilance:
 
-## Documentation
+To guard the frontier through insight, automation, and strategic awareness—
+custodiat custodias — to guard even the guardians themselves.
 
-Our documentation is organized into the following sections:
+### Core Principles
 
-- **API Reference**: Technical documentation for integrators
-- **User Guide**: Step-by-step instructions for users
-- **Tutorials**: Hands-on learning materials
-- **Architecture**: System design and components
+1. **Ethics and Integrity**: Upholding the highest standards of honesty, equity and fairness, and respect for everyone.
+2. **Evidence-Based Decision Making**: Leveraging peer reviewed research, data, and proven approaches to define policies and procedures, ensuring accountability and effectiveness.
+3. **Open Source Transparency**: Every line of code and every dit of documentation is openly available and easily auditable.
+4. **Active and Passive Awareness**: A combination of active detection and passive monitoring give Vanopticon a complete, real-time view of emerging threats. This allows Vanopticon to live up to its name: the all seeing forward guardian of your information technologies.
+5. **Distributed Autonomy**: Components are designed to be distributed, redundant, and self-recovering. Communication between components uses standard, secure protocols to coordinate detection and response without cantralization or bottlenecks.
 
-For full documentation, visit:
+## Architecture Overview
 
-- [Full Documentation](docs/README.md)
-- [API Reference](docs/api/README.md)
-- [Architecture Overview](docs/architecture.md)
+Vanopticon is structured as a distributed suite of interoperable modules:
 
-## Getting Started
+| Layer               | Function                                                       |
+| ------------------- | -------------------------------------------------------------- |
+| **Sentinel**  | A module that can be deployed in multiple locations to provide continuous active monitoring, data collection, and anomaly detection. |
+| **Analysis** | Standard threat analysis techniques meet Machine Learning and complex data pattern detection.            |
+| **Shield**    | Active response automation, containment, and defensive counteraction. |
+| **Command**   | Everything needed to coordinate, deploy, monitor, and control all Vanopticon modules. |
 
-Explore the [Getting Started](../../wiki/Getting-Started) guide.
+Each module can operate independently or within the full Vanopticon ecosystem.
 
-> **Note:** Replace this section with installation and setup instructions for your project.
+---
 
-### Prerequisites
+## Technology Goals
 
-- Requirement 1
-- Requirement 2
+- **Distributed operation** — scales from a single host to a global mesh.
+- **Event-driven** — built around asynchronous, reactive telemetry pipelines.
+- **Language-agnostic interfaces** — gRPC/REST APIs for modular integration.
+- **Policy as Code** — all defensive behavior is declarative, versionable, and auditable.
 
-### Installation
+## Contributing
 
-```bash
-# Install command here
-```
-
-## Configuration
-
-The following configuration options are available:
-
-### Environment Variables
-
-| Variable     | Description                       | Default |
-| ------------ | --------------------------------- | ------- |
-| `API_KEY`    | Authentication key for API access | N/A     |
-| `DEBUG_MODE` | Enable debug logging              | false   |
-| `PORT`       | Server port number                | 3000    |
-
-### Configuration File
-
-The `config.yml` file supports the following options:
-
-```yaml
-api:
-    timeout: 5000
-    retries: 3
-logging:
-    level: info
-    path: ./logs
-```
+This collection thrives on collaboration. Users are encouraged to engage in [discussions](https://github.com/JEleniel/open-business-policy/edit/repo-setup/README.md); [suggest additions, changes, or corrections](https://github.com/JEleniel/open-business-policy/edit/repo-setup/README.md); or even join as a direct contributor. Together we can create a framework that empowers ethical, inclusive, sustainable businesses worldwide.
 
 ## Support
 
 [Getting Support](SUPPORT.md)
-
-### Supported Platforms
-
-| Platform | Version 1.0.0 | Version 1.1.0 | Notes               |
-| -------- | :-----------: | :-----------: | ------------------- |
-| Linux    |       ✔       |       ✔       | Full support        |
-| Windows  |       ✔       |       ✔       | Limited WSL support |
-| MacOS    |       ⚠       |       ✔       | Intel/ARM support   |
-| BSD      |      ❌       |       ⚠       | Testing needed      |
 
 ## Feedback and Contributions
 
@@ -98,44 +66,21 @@ Please be sure to read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 [Contributing to the Project](CONTRIBUTING.md)
 
-## Building and Testing
-
-### Build Requirements
-
-- Requirement 1
-- Requirement 2
-
-### Build Steps
-
-```bash
-# Build commands here
-```
-
-> **Note:** Add your project's build commands here.
-
-### Running Tests
-
-```bash
-# Test commands here
-```
-
-> **Note:** Add your project's test commands here.
-
 ## Versioning
 
 We use [SemVer](http://semver.org/) for versioning.
 
-## License
+## [License](LICENSE.md)
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+<img alt="" src="docs/images/by-sa.svg" style="height:24px;" />
+
+The Open Business Policy © 2025 by Tony M. Bishop is licensed under THE [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/) license.
 
 ## Contributors
 
 <a href="https://github.com/{username}/{repo}/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo={username}/{repo}" />
+    <img src="https://contrib.rocks/image?repo={username}/{repo}" alt="contributor avatars/>
 </a>
-
-Made with [contrib.rocks](https://contrib.rocks).
 
 ## Tooling
 
@@ -147,6 +92,7 @@ The tools we use include:
 ![VS Code](https://img.shields.io/badge/VS%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 
-# Acknowledgements
+## Acknowledgements
 
 Badges provided by [Shields.io](https://shields.io)
+Avatar icons made with [contrib.rocks](https://contrib.rocks).
