@@ -1,5 +1,9 @@
 # Project specific
 # Add files and directories specific to your project that should be ignored here
+debug/
+target/
+.analyze/
+**/mutants.out*/
 
 # Visual Studio Code
 .vscode/*
@@ -45,6 +49,7 @@
 *.zst
 
 # Backup Files
+*.bk
 *.bak
 *.gho
 *.ori
@@ -74,6 +79,7 @@ ehthumbs_vista.db
 *.stackdump
 Thumbs.db
 Thumbs.db:encryptable
+*.pdb
 
 # MacOS Files
 ._*
