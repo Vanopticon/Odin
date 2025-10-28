@@ -8,6 +8,8 @@ _This will be the starting point for all documentation for the project. Document
 - [Contributing Guidelines](../CONTRIBUTING.md) - Development setup and contribution process
 - [Code of Conduct](../CODE_OF_CONDUCT.md) - Community guidelines and standards
 
+- [Changelog](CHANGELOG.md) - Project history and release notes
+
 ## User Guides
 
 _Either add short guides heree or link to full guides._
