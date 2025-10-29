@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+:root {
+	font-size: 16px;
+	line-height: 1.2;
+	font-family: 'Noto Sans', Verdana, sans-serif;
+}
+
+body {
+	@apply bg-black text-white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@apply m-0 p-0 font-bold;
+	font-family: 'Oxanium', 'Noto Serif', serif;
+}
+
+h1 {
+	@apply text-[2.2rem];
+}
+h2 {
+	@apply text-[2rem];
+}
+h3 {
+	@apply text-[1.8rem];
+}
+h4 {
+	@apply text-[1.6rem];
+}
+h5 {
+	@apply text-[1.4rem];
+}
+h6 {
+	@apply text-[1.2rem];
+}

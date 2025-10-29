@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { loadEnv } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
@@ -11,7 +12,7 @@ export default defineConfig(({ mode }) => {
 	const tls_cert = env['ODIN_TLS_CERT'] || '/etc/tls/tls.crt';
 
 	return {
-		plugins: [sveltekit()],
+		plugins: [tailwindcss(), sveltekit()],
 		server: {
 			origin: `https://${host}:${port}`,
 			https: {
