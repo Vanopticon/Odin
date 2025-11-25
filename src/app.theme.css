@@ -1,0 +1,76 @@
+:root {
+	@media (prefers-color-scheme: light) {
+		--accent-text: #var(--color-amber-100);
+		--accent-variant: var(--color-cyan-800);
+		--accent: var(--color-sky-800);
+		--bg: var(--color-slate-50);
+		--border: var(--color-slate-200);
+		--danger-text: #var(--color-white);
+		--danger: #var(--color-red-700);
+		--info-text: var(--color-violet-100);
+		--info: #var(--color-sky-700);
+		--primary-text: #var(--color-yellow-100);
+		--primary-variant: #var(--color-indigo-800);
+		--primary: var(--color-blue-800);
+		--surface-text: #var(--color-black);
+		--surface: var(--color-slate-100);
+		--warn-text: #var(--color-white);
+		--warn: #var(--color-amber-700);
+	}
+
+	@media (prefers-color-scheme: dark) {
+		--accent-text: var(--color-black);
+		--accent-variant: var(--color-cyan-400);
+		--accent: var(--color-sky-400);
+		--bg: var(--color-black);
+		--border: var(--color-slate-300);
+		--danger-text: var(--color-black);
+		--danger: var(--color-red-400);
+		--info-text: var(--color-violet-950);
+		--info: var(--color-sky-400);
+		--primary-text: var(--color-amber-950);
+		--primary-variant: var(--color-indigo-400);
+		--primary: var(--color-blue-400);
+		--surface-text: var(--color-white);
+		--surface: var(--color-black);
+		--warn-text: var(--color-black);
+		--warn: var(--color-amber-400);
+	}
+}
+
+.bg {
+	background-color: var(--bg);
+	color: var(--surface-text);
+}
+.primary {
+	background-color: var(--primary);
+	color: var(--primary-text);
+}
+.primary-variant {
+	background-color: var(--primary-variant);
+	color: var(--primary-text);
+}
+.accent {
+	background-color: var(--accent);
+	color: var(--accent-text);
+}
+.accent-variant {
+	background-color: var(--accent-variant);
+	color: var(--accent-text);
+}
+.surface {
+	background-color: var(--surface);
+	color: var(--surface-text);
+}
+.info {
+	background-color: var(--info);
+	color: var(--info-text);
+}
+.warn {
+	background-color: var(--warn);
+	color: var(--warn-text);
+}
+.danger {
+	background-color: var(--danger);
+	color: var(--danger-text);
+}

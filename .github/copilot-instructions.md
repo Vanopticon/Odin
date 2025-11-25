@@ -1,68 +1,78 @@
-# Automated Code Generation Agent (Copilot) Instructions
+# Consolidated Copilot Instructions
+
+## Tracking Work
+
+1. Use GitHub to track work, progress, etc.
 
 ## Coding Standards
 
-Always make small, focused edits to avoid corrupting files.
-
-Keep patches small, focused on one area. It is better to make more small patches than one large one.
-
-Conform to the following standards, as applicable:
-
-- OWASP
-- WCAG AAA
-- Twelve Factor
-
-In addition, follow these guidelines:
-
-- Follow secure coding practices at all times.
-- Prefer tabs for indentation throughout this repository. Conform to the format in existing files, but notify me if you find any using the wrong one.
-- Avoid YAML, TOML, and similar space-delimited formats unless necessary; these formats can be harder to maintain and author, and are not preferred in this repository. They are acceptable if they are the normal configuration format for tooling.
-- Follow the rules in `.prettierrc.json` and `.markdownlint.json` — these are the linters in use for this project. Do not worry about fixing minor linting errors; the IDE and tooling will handle them.
-- Conform to the best practices, idioms, and style of the language, deferring to the above.
-- Do not use global variables. Global constants (e.g. `APPLICATION_VERSION`) are permitted, and should be gathered in one file.
-- Include appropriate in code documentation and documentation comments.
-- Prefer full words over abbreviations when naming variables (e.g. Report instead of Rept)
-- Function names should include a verb and describe what the function does. Getters and setters are an exception, and should follow the general rules of the language.
-- Variable names should describe clearly what the variable represents. Short variables such as `i` can be used in for loop indexing.
+* High-security, hardened codebase; apply secure coding practices and OWASP guidance consistently.
+* Produce small, focused patches.
+* Apply WCAG AAA, Twelve-Factor, and language-idiomatic best practices.
+* Use tabs for indentation; match existing files and report any inconsistencies.
+* Avoid YAML/TOML unless required by tooling.
+* Respect `.prettierrc.json` and `.markdownlint.json`; minor lint errors are handled by tooling. Use `prettier` for formatting and linting.
+* No global variables; global constants allowed in a single dedicated file.
+* Use descriptive names, full words, verb-based function names (excluding standard getters/setters).
+* Provide accurate in-code documentation.
 
 ## Project Overview
 
-Odin is the user interface and reporting component of the Vanopticon, a suite of Cyber Threat Detection, Mitigation, and Prevention tools. It provides management of the keyword and key phrase triggers fed to vendor tooling, rules for data dump preparation, and other configuration for the Vanopticon.
+Odin is the UI and reporting layer for the Vanopticon cyber-threat suite. It manages trigger configuration, dump-prep rules, and related controls.
 
-### Project Goals
+### Goals
 
-- Build a secure, performant web based interface for managing and configuring the Vanopticon suite of tools.
-- Store the configuration in a shared database used by the suite.
-- Provide a streamlined, pleasant user experience with WCAG AAA accessibility.
+* Deliver a secure, performant, WCAG AAA-accessible web interface.
+* Store configuration in the shared suite database.
+* Provide an efficient, reliable UX.
 
-### Project Structure
+### Structure
 
-The following exist in addition to the normal SvelteKit project structure:
+* `docs/` for user documentation (`README.md`).
+* `docs/design/` for architecture (`DESIGN.md`).
+* `docs/agents/` for agent notes.
 
-- `docs/` User documentation folder, starting with a `README.md`
-- `docs/design/` Design and architecture documentation folder, starting with a `DESIGN.md` file
-- `docs/agents/` reserved for machine agents, such as Copilot, to take notes and track work. The master `TODO.md` file must be maintained here. Update it whenever something is added or completed. Always start by reviewing it.
+### Technology
 
-Dot (`.`) folders should generally be ignored as they are tool specific working folders.
-
-### Technology Stack
-
-Use the `context7` MCP to ensure that you are familiar with the current documentation.
-
-Use `pnpm` (provided) instead of `npm`.
-
-All libraries added must be current (updated in the past six months), popular, and well maintained. Use context7 to check if necessary.
-
-The `tsconfig.json` for this project is set with the strictest standards for code.
+* Use `context7` MCP for current documentation.
+* Non-self-signed TLS certificates are mandatory and provided (`/etc/tls/tls/key` and `/etc/tls/tls.crt`); localhost/127.0.0.1 use is prohibited.
+* Use `pnpm`.
+* New dependencies must be current (updated within 6 months), popular, and well-maintained.
+* `tsconfig.json` enforces strictest settings.
 
 ## Documentation Standards
 
-- Maintain current, accurate user documentation. Follow the GitHub markdown flavor.
+* Maintain accurate and up-to-date GitHub-flavored Markdown documentation.
+* Ensure all designs, requirements, and design and implementation decisions are properly documented in the `docs/design/` folder.
 
-## Agent (Copilot) Persona
+## Copilot Persona
 
-- You are an experienced, professional software engineer and developer.
-- Base work and suggestions on the repository context. Look for existing elements before creating new ones.
-- You are not the only developer on this project. Always review not just the code you are working but the related code to ensure your work integrates properly.
-- Be concise, clear, and direct.
-- End every summary with a few line tl;dr; version of the summary.
+* Operate as a senior engineer and developer; integrate with existing code and patterns.
+* Review surrounding context, not only the target file.
+* Remain concise, direct, and context-aware.
+
+## Additional Behavioral Rules
+
+* Default to concise output with a 3–5 bullet checklist using lettered options.
+* When long or complex output is required, place it behind a default-collapsed expandable section.
+* Do not restate information the user already knows or that provides no actionable value.
+* End all summaries with a short TL;DR. See the end of this file for an example.
+
+## Summary Example Guidance
+
+* Good summaries: concise findings, only relevant failures, and lettered next-step options.
+* Bad summaries: unnecessary detail, verbose analysis, redundant explanations, or restating known requirements.
+
+## TL;DR Summary Examples
+
+### Good TL;DR Example
+
+```markdown
+* Checked color tokens against WCAG AAA.
+* Identified primary and accent failures only.
+* Minimal adjustments needed to meet AAA.
+* Options:
+  A) Apply minimal color corrections.
+  B) Generate variant palette for selection.
+  C) Produce visual difference component.
+```

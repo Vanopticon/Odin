@@ -1,46 +1,46 @@
 {
-	"name": "odin",
-	"private": true,
-	"version": "0.0.1",
-	"type": "module",
-	"scripts": {
-		"dev": "node server/dev.js",
-		"build": "vite build",
-		"preview": "vite preview",
-		"start": "node server/prod.js",
-		"prepare": "svelte-kit sync || echo ''",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"format": "prettier --write .",
-		"lint": "prettier --check .",
-		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run && npm run test:e2e",
-		"test:e2e": "playwright test"
+	"dependencies": {
+		"@sveltejs/adapter-node": "^5.4.0",
+		"compression": "^1.8.1",
+		"dotenv": "^17.2.3",
+		"express": "^5.1.0",
+		"express-rate-limit": "^8.2.1",
+		"helmet": "^8.1.0",
+		"pg": "^8.16.3",
+		"typeorm": "latest"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.56.1",
 		"@sveltejs/adapter-auto": "^7.0.0",
-		"@sveltejs/kit": "^2.48.5",
+		"@sveltejs/kit": "^2.49.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/vite": "^4.1.17",
-		"@vitest/browser-playwright": "^4.0.10",
+		"@vitest/browser-playwright": "^4.0.13",
 		"playwright": "^1.56.1",
 		"prettier": "^3.6.2",
 		"prettier-plugin-svelte": "^3.4.0",
-		"svelte": "^5.43.8",
+		"svelte": "^5.43.14",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^4.1.17",
 		"typescript": "^5.9.3",
-		"vite": "^7.2.2",
-		"vitest": "^4.0.10",
+		"vite": "^7.2.4",
+		"vitest": "^4.0.13",
 		"vitest-browser-svelte": "^2.0.1"
 	},
-	"dependencies": {
-		"@sveltejs/adapter-node": "^5.4.0",
-		"express": "^4.18.2",
-		"helmet": "^7.0.0",
-		"express-rate-limit": "^6.7.0",
-		"compression": "^1.7.4",
-		"selfsigned": "^2.1.0"
-	}
+	"name": "odin",
+	"private": true,
+	"scripts": {
+		"build": "vite build",
+		"migrate:run": "pnpm build && node ./dist/lib/db/run-migrations.js",
+		"dev": "node server/server.js dev",
+		"format": "prettier --write .",
+		"lint": "prettier --check .",
+		"start": "node server/server.js prod",
+		"start:prod": "node server/server.js prod",
+		"test": "npm run test:unit -- --run && npm run test:e2e",
+		"test:e2e": "playwright test",
+		"test:unit": "vitest"
+	},
+	"type": "module",
+	"version": "1.0.0-alpha"
 }

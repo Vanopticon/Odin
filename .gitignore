@@ -1,24 +1,141 @@
-test-results
-node_modules
+# === Node / Build ===
+node_modules/
+.svelte-kit/
+.vercel/
+.netlify/
+.output/
+dist/
+build/
+.parcel-cache/
+.cache/
+/.cache/
+.vite/
 
-# Output
-.output
-.vercel
-.netlify
-.wrangler
-/.svelte-kit
-/build
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Env
+# === Environment & Secrets ===
 .env
 .env.*
 !.env.example
-!.env.test
 
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+# Secrets and key material
+*.pem
+*.key
+*.crt
+*.cert
+*.keystore
+*.p12
+*.pfx
+
+# === Logs ===
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*-debug.log*
+*-error.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# === Runtime / PIDs ===
+pids/
+*.pid
+*.pid.lock
+*.seed
+
+# === Coverage & Tests ===
+coverage/
+.nyc_output/
+.playwright/
+playwright-report/
+test-results/
+
+# === OS Files ===
+# Linux
+*~
+.directory
+.fuse_hidden*
+.nfs*
+.Trash-*
+
+# Windows
+$RECYCLE.BIN/
+[Dd]esktop.ini
+ehthumbs.db
+ehthumbs_vista.db
+*.lnk
+*.stackdump
+Thumbs.db
+Thumbs.db:encryptable
+
+# macOS
+._*
+.apdisk
+.AppleDB
+.AppleDesktop
+.AppleDouble
+.com.apple.timemachine.donotpresent
+.DocumentRevisions-V100
+.DS_Store
+.fseventsd
+.LSOverride
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+Icon
+Network Trash Folder
+Temporary Items
+
+# === Editors / IDEs ===
+.vscode/*
+!.vscode/*.code-snippets
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.*.json
+!.vscode/settings.json
+!.vscode/tasks.json
+.history/
+.vscode-test
+*.vsix
+
+# === Archives / Packages ===
+*.7z
+*.bz2
+*.bzip
+*.bzip2
+*.cab
+*.deb
+*.dmg
+*.egg
+*.gem
+*.gz
+*.gzip
+*.iso
+*.jar
+*.lzma
+*.msi
+*.msix
+*.msm
+*.msp
+*.rar
+*.rpm
+*.tar
+*.tgz
+*.txz
+*.tzst
+*.xar
+*.xpi
+*.xz
+*.zip
+*.zst
+
+# === Temporary / Backup / Patch files ===
+*.bak
+*.gho
+*.ori
+*.orig
+*.diff
+*.patch
+*.rej
+*.tmp
+

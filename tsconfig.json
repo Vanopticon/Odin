@@ -1,5 +1,7 @@
 {
 	"compilerOptions": {
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
 		"allowJs": true,
 		"checkJs": true,
 		"esModuleInterop": true,
@@ -21,5 +23,11 @@
 		"sourceMap": true,
 		"strict": true
 	},
-	"extends": "./.svelte-kit/tsconfig.json"
+	"extends": "./.svelte-kit/tsconfig.json",
+	"include": [
+		"server/*.js",
+		"src/**/*",
+		"src/**/*.svelte",
+		".svelte-kit/types/**/*.d.ts"
+	]
 }

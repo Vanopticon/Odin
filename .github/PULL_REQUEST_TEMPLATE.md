@@ -1,3 +1,47 @@
+<!--
+Use this template for PRs that implement work tracked by the master TODO.
+Link the related issue(s) in the checklist below and include testing instructions.
+-->
+
+## Summary
+
+What this PR does (one or two sentences):
+
+## Related issues
+
+- [ ] Issue: link one or more related issues (required)
+
+Related issues (suggested checklist format):
+
+- [ ] Audit repository artifacts — <https://github.com/Vanopticon/Odin/issues/17>
+- [ ] Define product requirements — <https://github.com/Vanopticon/Odin/issues/16>
+- [ ] Create high-level designs — <https://github.com/Vanopticon/Odin/issues/15>
+- [ ] Implement OAuth integration — <https://github.com/Vanopticon/Odin/issues/14>
+- [ ] Design user/role/permission model — <https://github.com/Vanopticon/Odin/issues/13>
+- [ ] Enforce permission checks (routes) — <https://github.com/Vanopticon/Odin/issues/12>
+- [ ] Enforce permission checks (UI controls) — <https://github.com/Vanopticon/Odin/issues/10>
+- [ ] Backend APIs & persisted sessions — <https://github.com/Vanopticon/Odin/issues/9>
+- [ ] Database migrations and seed data — <https://github.com/Vanopticon/Odin/issues/8>
+- [ ] Frontend implementation & accessibility — <https://github.com/Vanopticon/Odin/issues/7>
+- [ ] Testing: unit, integration, e2e — <https://github.com/Vanopticon/Odin/issues/5>
+- [ ] CI, secrets, and security checks — <https://github.com/Vanopticon/Odin/issues/4>
+- [ ] Docs: developer + operator guides — <https://github.com/Vanopticon/Odin/issues/6>
+- [ ] Observability & logging — <https://github.com/Vanopticon/Odin/issues/11>
+- [ ] Release & deployment checklist — <https://github.com/Vanopticon/Odin/issues/3>
+
+## Acceptance criteria
+
+- [ ] Tests added/updated (unit/integration/e2e as appropriate)
+- [ ] Documentation updated (if required)
+- [ ] Migration steps included (if applicable)
+
+## Testing notes
+
+Provide steps to reproduce and verify the change (commands, env vars, etc.)
+
+## Release notes
+
+Optional short summary for the changelog.
 <<<<<<< HEAD
 
 # Pull Request Template
@@ -28,6 +72,7 @@ Describe how this change was tested (commands, environment, steps) and how to ve
 Example:
 
 - Run: `make test` or `pnpm test`
+
 - # Environment: OS, runtime versions, any env vars required (do not include secrets)
 
 # Pull Request

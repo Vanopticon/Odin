@@ -1,5 +1,12 @@
 {
 	"files.associations": {
 		"*.css": "tailwindcss"
+	},
+	"chat.mcp.serverSampling": {
+		"Odin/.vscode/mcp.json: svelte": {
+			"allowedModels": [
+				"copilot/gpt-5-mini"
+			]
+		}
 	}
 }

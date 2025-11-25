@@ -1,1 +1,56 @@
 @import 'tailwindcss';
+@import './app.theme.css';
+
+:root {
+	--font-sans: 'Noto Sans', Roboto, Arial, Verdana, Tahoma, 'Trebuchet MS', sans-serif;
+	--font-serif: 'Noto Serif', 'Times New Roman', Georgia, Garamond, serif;
+	--font-heading: Antonio, 'Times New Roman', Georgia, Garamond, serif;
+	--font-mono: 'Noto Sans Mono', 'Courier New', Courier, monospace;
+}
+
+/* Base elements (light theme defaults) */
+html,
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-family: var(--font-sans);
+}
+
+/* Headings and links */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	/* Headings use the primary brand color */
+	@apply font-bold;
+	@apply mt-2 mb-2;
+	line-height: 1;
+	font-family: var(--font-heading);
+}
+h1 {
+	font-size: 2.4rem;
+}
+h2 {
+	font-size: 2.2rem;
+}
+h3 {
+	font-size: 2rem;
+}
+h4 {
+	font-size: 1.8rem;
+}
+h5 {
+	font-size: 1.6rem;
+}
+h6 {
+	font-size: 1.4rem;
+}
+
+.panel h2 {
+	font-size: 1.6rem;
+}

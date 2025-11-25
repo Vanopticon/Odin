@@ -1,2 +1,27 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script lang="ts">
+	import { page } from '$app/state';
+	import Panel from '$lib/controls/panel.svelte';
+
+	page.data.title = 'Dashboard';
+</script>
+
+<div class="grid grid-cols-1 md:grid-cols-2 m-0 grow">
+	<div class="row-span-2">
+		<Panel title="Keywords"></Panel>
+	</div>
+	<div class="">
+		<Panel title="Keyword Heatmap" color="info">
+			<table>
+				<thead><tr><th>Keyword</th><th>Last Seen</th></tr></thead>
+				<tbody>
+					<tr><td>example.com</td><td>2024-06-01</td></tr>
+					<tr><td>testsite.org</td><td>2024-05-30</td></tr>
+					<tr><td>mysite.net</td><td>2024-05-28</td></tr>
+				</tbody>
+			</table>
+		</Panel>
+	</div>
+	<div class="">
+		<Panel title="Brand Heatmap" color="warn">Keyword Heatmap here</Panel>
+	</div>
+</div>
