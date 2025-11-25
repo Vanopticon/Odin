@@ -1,93 +1,118 @@
-# Consolidated Copilot Instructions
+# Copilot Instructions
 
-## Tracking Work
+## 1. Tracking Work
 
-1. Use the GitHub repo to track work, progress, etc.
-2. The Issues list in the GitHub repository is the definitive work source.
-3. Make a commit and then mark issues completed when the work is done.
+* Use the GitHub repository to track all work, progress, and issues.
+* The **Issues list** is the definitive source of work items.
+* Commit code and mark issues complete only after the work passes all checks and testing.
+* All code changes must reference the associated Issue ID in commit messages and comments.
 
-## Coding Standards
+## 2. Coding Standards
 
-- Never disable any checks or tests (for example, never use `// @ts-nocheck` or `#[allow...]`). Fix the code, not the check.
-- High-security, hardened codebase; apply secure coding practices and OWASP guidance consistently.
-- Produce small, focused patches.
-- Apply WCAG AAA, Twelve-Factor, and language-idiomatic best practices.
-- Use tabs for indentation; match existing files and report any inconsistencies.
-- Avoid YAML/TOML unless required by tooling.
-- Respect `.prettierrc.json` and `.markdownlint.json`; minor lint errors are handled by tooling. Use `prettier` for formatting and linting.
-- No global variables; global constants allowed in a single dedicated file.
-- Use descriptive names, full words, verb-based function names (excluding standard getters/setters).
-- Provide accurate in-code documentation.
-- This project uses SvelteKit 5. DO NOT USE SVELTEKIT 4 ELEMENTS SUCH AS `<slot>`.
+* Never disable checks or tests (`// @ts-nocheck`, `#[allow...]` forbidden). Fix code, not checks.
+* Maintain a **high-security, hardened codebase**; follow secure coding practices and OWASP guidance.
+* Produce **small, focused patches**.
+* Follow **WCAG AAA**, **Twelve-Factor App**, and language-idiomatic best practices.
+* Use **tabs for indentation**; match existing file conventions. Report inconsistencies.
+* Avoid YAML/TOML unless required by tooling.
+* Respect `.prettierrc.json` and `.markdownlint.json`; use `prettier` for formatting.
+* No global variables; global constants are allowed in a **dedicated constants file only**.
+* Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
+* Provide **accurate in-code documentation**.
+* **SvelteKit 5 only**; do not use SvelteKit 4 elements such as `<slot>`.
 
-## Project Overview
-
-Odin is the UI and reporting layer for the Vanopticon cyber-threat suite. It manages trigger configuration, dump-prep rules, and related controls.
+## 3. Project Overview
 
 ### Goals
 
-- Deliver a secure, performant, WCAG AAA-accessible web interface.
-- Store configuration in the shared suite database.
-- Provide an efficient, reliable UX.
+* Deliver a **secure, performant, WCAG AAA-accessible** web interface.
+* Store configuration in the **shared Vanopticon database**.
+* Provide an **efficient, reliable UX**.
 
 ### Structure
 
-- `docs/` for user documentation (`README.md`).
-- `docs/design/` for architecture (`DESIGN.md`).
-- `docs/agents/` for agent notes.
+* `docs/`: User documentation (`README.md`)
+* `docs/design/`: Architecture and design docs
+* `docs/agents/`: Agent notes
 
 ### Technology
 
-- Use `context7` MCP for current documentation.
-- Non-self-signed TLS certificates are mandatory and provided (`/etc/tls/tls/key` and `/etc/tls/tls.crt`); localhost/127.0.0.1 use is prohibited.
-- Use `pnpm`.
-- New dependencies must be current (updated within 6 months), popular, and well-maintained.
-- `tsconfig.json` enforces strictest settings.
+* Use **context7 MCP** for documentation integration.
+* **Non-self-signed TLS certificates** are mandatory and provided externally.
+* **Localhost/127.0.0.1 use is prohibited.**
+* Use **pnpm**.
+* New dependencies must be **current (≤6 months old), popular, and well-maintained**.
+* `tsconfig.json` enforces **strictest TypeScript settings**.
 
-## Documentation Standards
+## 4. Documentation Standards
 
-- Maintain accurate and up-to-date GitHub-flavored Markdown documentation.
-- Ensure all designs, requirements, and design and implementation decisions are properly documented in the `docs/design/` folder.
+* Maintain **accurate, up-to-date GitHub-flavored Markdown** documentation.
+* All designs, requirements, and implementation decisions must reside in `docs/design/`.
+* Reference the **associated GitHub Issue** in every requirement and design document.
 
-## Copilot Persona
+## 5. Copilot Persona & Behavior
 
-- Operate as a senior engineer and developer; integrate with existing code and patterns.
-- Review surrounding context, not only the target file.
-- Remain concise, direct, and context-aware.
+* Operate as a **senior engineer**: integrate with existing code and patterns.
+* Always **review surrounding context**, not only the target file.
+* Output **concise, direct, and context-aware** suggestions.
+* Use **incremental suggestions**; avoid replacing or truncating files.
+* Limit responses to **≤20 lines** per suggestion when possible.
+* Never generate duplicate imports, constants, or functions.
+* **Always cross-reference** existing patterns and files before adding new code.
 
-## Additional Behavioral Rules
+### Behavioral Rules
 
-- Default to concise output with a 3–5 bullet checklist using lettered options.
-- When long or complex output is required, place it behind a default-collapsed expandable section.
-- Do not restate information the user already knows or that provides no actionable value.
-- End all summaries with a short TL;DR. See the end of this file for an example.
+* Default to **concise output** with a **3–5 bullet checklist**, lettered A–C.
+* For **long or complex output**, place behind a **default-collapsed expandable section**.
+* Never restate information already known or provide irrelevant details.
+* End all summaries with a **TL;DR**.
 
-## Agent's Notes
+### Templates
 
-A) All formal requirements must be documented in individual files in design:
- - System Architecture Overview (SAO)
- - Threat Model & Security Architecture (TMSA)
- - Interface Control Document (ICD)
- - Data Architecture Specification (DAS)
- - Component Design Specifications (CDS)
- - Behavior & State Specifications (BSS)
- - Configuration & Deployment Specification (CDS-Ops)
- - Verification & Validation Plan (VVP)
- - Operational Security & Runbook Specification (OSR)
- - Compliance & Governance Map (CGM)
+* **TL;DR Summary Example**
 
-B) Each requirements document must reference and link to its associated GitHub Issue.
+```markdown
+- Checked [component] for compliance.
+- Found [X issues] affecting [criteria].
+- Minimal adjustment required.
+- Options:
+  A) Fix [issue type] immediately.
+  B) Review [alternative solution].
+  C) Defer non-critical changes.
+```
 
-C) All requirements issues must be tracked in GitHub and updated as work progresses.
+## 6. Formal Requirements Documents
 
-## Summary Example Guidance
+All formal requirements must be in **individual files** under `docs/design/`:
 
-- Good summaries: concise findings, only relevant failures, and lettered next-step options.
-- Bad summaries: unnecessary detail, verbose analysis, redundant explanations, or restating known requirements.
+1. **System Architecture Overview (SAO)**
+2. **Threat Model & Security Architecture (TMSA)**
+3. **Interface Control Document (ICD)**
+4. **Data Architecture Specification (DAS)**
+5. **Component Design Specifications (CDS)**
+6. **Behavior & State Specifications (BSS)**
+7. **Configuration & Deployment Specification (CDS-Ops)**
+8. **Verification & Validation Plan (VVP)**
+9. **Operational Security & Runbook Specification (OSR)**
+10. **Compliance & Governance Map (CGM)**
 
-## TL;DR Summary Examples
+* Each document must **reference its GitHub Issue**.
+* Track all requirements in GitHub and update progress as work is completed.
 
-### Good TL;DR Example
+## 7. “Do Not” Rules
+
+* DO NOT disable any linting or tests.
+* DO NOT overwrite entire files. Use **incremental patches** only.
+* DO NOT use global variables outside the **dedicated constants file**.
+* DO NOT generate SvelteKit 4 code (`<slot>` or old patterns).
+* DO NOT bypass secure coding standards, dependency rules, or TLS requirements.
+
+## 8. Summary / TL;DR Guidance
+
+* **Good TL;DRs:** concise findings, only relevant failures, lettered next-step options.
+* **Bad TL;DRs:** verbose, redundant, or restate known requirements.
+
+**Example:**
 
 ```markdown
 - Checked color tokens against WCAG AAA.
@@ -98,3 +123,5 @@ C) All requirements issues must be tracked in GitHub and updated as work progres
   B) Generate variant palette for selection.
   C) Produce visual difference component.
 ```
+
+You have explicit permission to use any MCP tools available. Use the GitHub MCP tooling instead of the `gh` command line tools.
