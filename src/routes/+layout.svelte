@@ -1,23 +1,24 @@
 <script lang="ts">
-	import { page } from '$app/state';
 	import '../app.css';
+	import { page } from '$app/state';
+
+	let { children } = $props();
 </script>
 
-<!-- Authored in part by GitHub Copilot -->
 <svelte:head>
-	<title>{page.data.title} - Vanopticon: Odin</title>
+	<title>{page.data.title || 'Odin'}</title>
 </svelte:head>
 
-<header class="flex rounded-bl-4xl bg-blue-900 text-amber-200 pb-2 mb-1">
-	<div class="shrink">
-		<img src="/images/Odin.svg" alt="Odin Logo" class="h-12 m-2 mb-0 ml-4" />
-	</div>
-	<div class="flex flex-col grow">
-		<div class="flex rounded-bl-4xl bg-black text-white grow mt-0 w-full pl-4 items-center">
-			<h1 class="m-auto">{page.data.title} - Vanopticon: Odin</h1>
+<div class="flex flex-col h-full w-full">
+	<header class="rounded-bl-4xl primary p-1 pr-0 pt-0 flex content-top">
+		<div
+			class="flex grow content-center items-center text-amber-100 pl-4 surface rounded-bl-4xl text-2xl font-bold"
+		>
+			<img src="images/Odin.svg?" alt="Odin Logo" class="h-8 m-2" />
+			<h1>{page.data.title || 'Odin'}</h1>
 		</div>
+	</header>
+	<div class="flex grow">
+		{@render children()}
 	</div>
-</header>
-<div>
-	<slot />
 </div>

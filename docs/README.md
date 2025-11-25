@@ -1,3 +1,56 @@
+# Odin — Developer Quickstart
+
+This quickstart helps developers get Odin running locally for development and testing.
+
+Prerequisites
+
+- Node.js (>=18) and `pnpm` installed.
+- A running PostgreSQL instance and an accessible `DATABASE_URL` environment variable.
+- Optional: OAuth provider credentials for full auth flows.
+
+Install
+
+```bash
+pnpm install
+```
+
+Environment
+
+Copy or create a `.env` (not committed) with the minimum required variables:
+
+```
+DATABASE_URL=postgres://user:pass@localhost:5432/odin
+NODE_ENV=development
+# TLS_KEY and TLS_CERT are used in production; for local dev the server can run without them.
+```
+
+Run database migrations and seed data
+
+```bash
+# Build and run the migration helper
+pnpm migrate:run
+```
+
+Run the app in development
+
+```bash
+pnpm dev
+```
+
+Run tests
+
+```bash
+pnpm test:unit
+pnpm test:e2e
+```
+
+Notes
+
+- The `dev` script starts `server/server.js` in dev mode (see `package.json`).
+- TLS and production deployment steps are documented in `docs/RELEASE.md`.
+
+If you want, I can also add a `Makefile` or `pnpm` script wrapper to simplify these commands.
+
 # Documentation
 
 _This will be the starting point for all documentation for the project. Documentation must be ready for deployment using GitHub pages and Jekyll._
