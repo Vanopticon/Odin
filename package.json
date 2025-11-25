@@ -40,7 +40,7 @@
 		"start:prod": "node server/server.js prod",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"test:unit": "vitest --passWithNoTests"
+		"test:unit": "vitest run --passWithNoTests"
 	},
 	"type": "module",
 	"version": "1.0.0-alpha"
