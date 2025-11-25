@@ -25,9 +25,6 @@
 	});
 </script>
 
-// preserve the legacy 'children' prop rendering used across the project let {(children =
-	undefined)} = $props();
-
 {#if $visible}
 	<div
 		class="panel border-black border-2 border-solid rounded-l-4xl {color} h-full w-full pl-1 pb-1 flex flex-col content-top"
