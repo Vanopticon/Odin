@@ -41,9 +41,10 @@ pnpm test
 - `pnpm run test:e2e` — runs Playwright end-to-end tests (Playwright will build and preview the app automatically).
 
 Notes:
+
 - The project uses `pnpm` across scripts and CI — Playwright is configured to run `pnpm run build && pnpm run preview` as the test web server.
 - A minimal smoke unit test exists at `src/__tests__/smoke.test.ts` to ensure the unit test runner is present in CI.
 
 ## Deploy
 
-To deploy, choose the appropriate SvelteKit adapter for your platform. See https://svelte.dev/docs/kit/adapters for options.
+To deploy, choose the appropriate SvelteKit adapter for your platform. See <https://svelte.dev/docs/kit/adapters> for options.

@@ -2,10 +2,13 @@
 
 ## Tracking Work
 
-1. Use GitHub to track work, progress, etc.
+1. Use the GitHub repo to track work, progress, etc.
+2. The Issues list in the GitHub repository is the definitive work source.
+3. Make a commit and then mark issues completed when the work is done.
 
 ## Coding Standards
 
+* Never disable any checks or tests (for example, never use `// @ts-nocheck` or `#[allow...]`). Fix the code, not the check.
 * High-security, hardened codebase; apply secure coding practices and OWASP guidance consistently.
 * Produce small, focused patches.
 * Apply WCAG AAA, Twelve-Factor, and language-idiomatic best practices.
@@ -15,6 +18,7 @@
 * No global variables; global constants allowed in a single dedicated file.
 * Use descriptive names, full words, verb-based function names (excluding standard getters/setters).
 * Provide accurate in-code documentation.
+* This project uses SvelteKit 5. DO NOT USE SVELTEKIT 4 ELEMENTS SUCH AS `<slot>`.
 
 ## Project Overview
 

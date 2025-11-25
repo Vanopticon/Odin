@@ -49,12 +49,14 @@ export async function seedDatabase(ds: DataSource) {
 			];
 
 			for (const r of roles) {
-				const exists = await ds.manager.query('select 1 from roles where name = $1 limit 1', [r.name]);
+				const exists = await ds.manager.query('select 1 from roles where name = $1 limit 1', [
+					r.name
+				]);
 				if (exists.length === 0) {
-					await ds.manager.query('insert into roles(id, name, description) values(gen_random_uuid(), $1, $2)', [
-						r.name,
-						r.description
-					]);
+					await ds.manager.query(
+						'insert into roles(id, name, description) values(gen_random_uuid(), $1, $2)',
+						[r.name, r.description]
+					);
 				}
 			}
 
@@ -66,14 +68,21 @@ export async function seedDatabase(ds: DataSource) {
 			];
 
 			for (const p of permissions) {
-				const exists = await ds.manager.query('select 1 from permissions where name = $1 limit 1', [p.name]);
+				const exists = await ds.manager.query('select 1 from permissions where name = $1 limit 1', [
+					p.name
+				]);
 				if (exists.length === 0) {
-					await ds.manager.query('insert into permissions(name, description) values($1, $2)', [p.name, p.description]);
+					await ds.manager.query('insert into permissions(name, description) values($1, $2)', [
+						p.name,
+						p.description
+					]);
 				}
 			}
 
 			// assign broad permissions to admin role if not present
-			const adminRole = await ds.manager.query('select id from roles where name=$1 limit 1', ['admin']);
+			const adminRole = await ds.manager.query('select id from roles where name=$1 limit 1', [
+				'admin'
+			]);
 			if (adminRole.length > 0) {
 				const adminId = adminRole[0].id;
 				for (const p of permissions) {
@@ -82,10 +91,10 @@ export async function seedDatabase(ds: DataSource) {
 						[adminId, p.name]
 					);
 					if (exists.length === 0) {
-						await ds.manager.query('insert into role_permissions(role_id, permission_name) values($1, $2)', [
-							adminId,
-							p.name
-						]);
+						await ds.manager.query(
+							'insert into role_permissions(role_id, permission_name) values($1, $2)',
+							[adminId, p.name]
+						);
 					}
 				}
 			}

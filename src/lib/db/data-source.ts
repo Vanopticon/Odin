@@ -6,7 +6,7 @@ import Source from '../types/source';
 import Reporter from '../types/reporter';
 import Language from '../types/language';
 
-const databaseUrl = process.env.DATABASE_URL || process.env.DATABASE_URI || '';
+const databaseUrl = process.env['DATABASE_URL'] || process.env['DATABASE_URI'] || '';
 
 export const AppDataSource = new DataSource({
 	type: 'postgres',
