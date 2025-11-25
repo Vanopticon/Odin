@@ -2,9 +2,13 @@
 
 ## Tracking Work
 
+You do not need permission to poerform any of the work tracking tasks that follow:
+
 1. Use the GitHub repo to track work, progress, etc.
 2. The Issues list in the GitHub repository is the definitive work source.
-3. Make a commit and then mark issues completed when the work is done.
+3. Create a feature branch (named for the feature).
+4. After work, make a commit and then mark issues completed when the work is done.
+5. Open a PR.
 
 ## Coding Standards
 

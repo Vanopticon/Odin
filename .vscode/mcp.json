@@ -1,7 +1,16 @@
 {
 	"servers": {
 		"svelte": {
-			"url": "https://mcp.svelte.dev/mcp"
+			"url": "https://mcp.svelte.dev/mcp",
+			"type": "http"
+		},
+		"git": {
+			"command": "uvx",
+			"args": [
+				"mcp-server-git"
+			],
+			"type": "stdio"
 		}
-	}
+	},
+	"inputs": []
 }
