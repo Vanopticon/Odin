@@ -31,7 +31,7 @@ describe('seedDatabase', () => {
         await mod.seedDatabase(fakeDS as DataSource);
 
         // Expect some insert queries to have been invoked
-        const hasInsert = called.some((s) => /insert into languages/i.test(s) || /insert into keywords/i.test(s) || /insert into roles/i.test(s)/i);
+        const hasInsert = called.some((s) => /insert into languages/i.test(s) || /insert into keywords/i.test(s) || /insert into roles/i.test(s));
         expect(hasInsert).toBe(true);
         // Ensure manager.query was called multiple times
         expect((mockManager.query as any).mock.calls.length).toBeGreaterThan(0);
