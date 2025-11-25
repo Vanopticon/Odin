@@ -1,18 +1,14 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import Panel from '$lib/controls/panel.svelte';
-	import { currentUser } from '$lib/auth/stores';
-	import { hasPermission } from '$lib/auth/permissions';
 
 	page.data.title = 'Dashboard';
 </script>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 m-0 grow">
-	{#if $currentUser && hasPermission($currentUser, 'manage:users')}
-		<div class="col-span-1 mb-2">
-			<Panel title="Admin" color="warn">Admin-only controls go here</Panel>
-		</div>
-	{/if}
+<div class="grid grid-cols-1 md:grid-cols-2 m-0 grow">
+	<div class="col-span-1 mb-2">
+		<Panel title="Admin" color="warn" permission="manage:users">Admin-only controls go here</Panel>
+	</div>
 	<div class="row-span-2">
 		<Panel title="Keywords"></Panel>
 	</div>

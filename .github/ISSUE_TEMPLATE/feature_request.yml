@@ -1,36 +1,39 @@
 name: 'Feature request'
-about: 'Use this form to propose new features or enhancements.'
+about: 'Propose a new feature or enhancement with motivation and acceptance criteria.'
 title: '[feature] '
 labels: ['enhancement']
 body:
-  - type: textarea
+  - type: input
     id: summary
     attributes:
       label: 'Summary'
-      description: 'Short description of the proposed feature.'
-      placeholder: 'A short, descriptive summary of the proposal.'
+      description: 'One-line description of the requested feature.'
   - type: textarea
-    id: problem
+    id: motivation
     attributes:
-      label: 'Problem to solve'
-      description: 'What problem does this feature solve? Who benefits?'
-      placeholder: 'Describe the current limitation or pain point.'
+      label: 'Motivation / user story'
+      description: 'Who benefits and what problem this solves. Provide a short user story.'
+      placeholder: 'As a <role>, I want <feature> so that <benefit>.'
   - type: textarea
     id: proposal
     attributes:
       label: 'Proposed solution'
-      description: 'Describe the proposed implementation or API changes.'
-      placeholder: 'Outline the change, including examples or pseudo-code.'
+      description: 'High-level approach, UX changes, API or schema suggestions, and examples.'
   - type: textarea
     id: alternatives
     attributes:
       label: 'Alternatives considered'
-      description: 'Other approaches considered and why they were rejected.'
+      description: 'Other approaches and why they were rejected.'
+  - type: input
+    id: impact
+    attributes:
+      label: 'Impact'
+      description: 'Backward-compatibility, migration needs, security, and estimated effort.'
   - type: checkboxes
     id: checklist
     attributes:
-      label: 'Checklist'
+      label: 'Pre-submission checklist'
       options:
-        - label: 'I considered backwards compatibility'
-        - label: 'I considered security implications'
-        - label: 'I added tests or a test plan'
+        - label: 'I described the user impact and migration needs'
+        - label: 'I considered security and compatibility'
+        - label: 'I included tests or a test plan where applicable'

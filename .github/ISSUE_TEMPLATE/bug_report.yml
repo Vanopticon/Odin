@@ -1,50 +1,49 @@
 name: 'Bug report'
-about: 'Use this form to report reproducible bugs. Provide steps to reproduce and expected behavior.'
+about: 'Report a reproducible bug — include steps, expected outcome, and logs.'
 title: '[bug] '
 labels: ['bug']
 body:
-  - type: textarea
+  - type: input
     id: summary
     attributes:
       label: 'Summary'
-      description: 'Short description of the bug.'
-      placeholder: 'A short, descriptive summary of the issue.'
+      description: 'One-line summary of the bug.'
+      placeholder: 'E.g. Crash when saving settings with empty token'
   - type: textarea
     id: steps
     attributes:
       label: 'Steps to reproduce'
-      description: 'Exact steps to reproduce the behavior. Include commands and inputs.'
-      placeholder: |
-        1. Do this
-        2. Then this
-        3. Observe the problem
+      description: 'Exact, minimal steps to reproduce (commands, inputs, screenshots).'
+      placeholder: |-
+        1. Start with a fresh DB
+        2. Run `pnpm dev`
+        3. Navigate to Settings → Save with empty token
   - type: textarea
     id: expected
     attributes:
       label: 'Expected behavior'
       description: 'What you expected to happen.'
-      placeholder: 'Describe the expected outcome.'
   - type: textarea
     id: actual
     attributes:
       label: 'Actual behavior'
-      description: 'What actually happened, including error messages and stack traces.'
-      placeholder: 'Describe the observed outcome, include logs/errors.'
+      description: 'What happened instead, including error output or stack traces.'
   - type: input
     id: environment
     attributes:
       label: 'Environment'
-      description: 'OS, runtime versions, and any relevant environment variables (do not include secrets).'
-      placeholder: 'e.g. Ubuntu 22.04, Node v20, Rust 1.70'
+      description: 'OS, Node/pnpm versions, commit SHA, and other relevant info (no secrets).'
+      placeholder: 'e.g. Ubuntu 22.04, Node v20, pnpm v8, commit abc123'
   - type: textarea
-    id: additional
+    id: logs
     attributes:
-      label: 'Additional context'
-      description: 'Screenshots, log excerpts, or other context that may help diagnose the issue.'
+      label: 'Relevant logs / traceback'
+      description: 'Paste the short, relevant log excerpt or error message.'
   - type: checkboxes
     id: checklist
     attributes:
-      label: 'Checklist'
+      label: 'Pre-submission checklist'
       options:
-        - label: 'I reproducible the issue in a minimal environment'
-        - label: 'I searched existing issues and PRs'
+        - label: 'I reproduced the issue on the latest v1.0.0 branch'
+        - label: 'I searched for existing issues and PRs'
+        - label: 'I removed any sensitive information from logs'

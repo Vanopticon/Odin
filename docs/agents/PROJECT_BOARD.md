@@ -24,29 +24,29 @@ Suggested labels
 Suggested mapping (move items below into columns as you triage):
 
 - Backlog
-    + <https://github.com/Vanopticon/Odin/issues/17> — Audit repository artifacts
-    + <https://github.com/Vanopticon/Odin/issues/16> — Define product requirements
-    + <https://github.com/Vanopticon/Odin/issues/15> — Create high-level designs
-    + <https://github.com/Vanopticon/Odin/issues/14> — Implement OAuth integration
-    + <https://github.com/Vanopticon/Odin/issues/13> — Design user/role/permission model
+  - <https://github.com/Vanopticon/Odin/issues/17> — Audit repository artifacts
+  - <https://github.com/Vanopticon/Odin/issues/16> — Define product requirements
+  - <https://github.com/Vanopticon/Odin/issues/15> — Create high-level designs
+  - <https://github.com/Vanopticon/Odin/issues/14> — Implement OAuth integration
+  - <https://github.com/Vanopticon/Odin/issues/13> — Design user/role/permission model
 
 - Ready
-    + <https://github.com/Vanopticon/Odin/issues/12> — Enforce permission checks (routes)
-    + <https://github.com/Vanopticon/Odin/issues/10> — Enforce permission checks (UI controls)
-    + <https://github.com/Vanopticon/Odin/issues/9> — Backend APIs & persisted sessions
-    + <https://github.com/Vanopticon/Odin/issues/8> — Database migrations and seed data
+  - <https://github.com/Vanopticon/Odin/issues/12> — Enforce permission checks (routes)
+  - <https://github.com/Vanopticon/Odin/issues/10> — Enforce permission checks (UI controls)
+  - <https://github.com/Vanopticon/Odin/issues/9> — Backend APIs & persisted sessions
+  - <https://github.com/Vanopticon/Odin/issues/8> — Database migrations and seed data
 
 - In Progress
-    + <https://github.com/Vanopticon/Odin/issues/7> — Frontend implementation & accessibility
-    + <https://github.com/Vanopticon/Odin/issues/5> — Testing: unit, integration, e2e
+  - <https://github.com/Vanopticon/Odin/issues/7> — Frontend implementation & accessibility
+  - <https://github.com/Vanopticon/Odin/issues/5> — Testing: unit, integration, e2e
 
 - Review
-    + <https://github.com/Vanopticon/Odin/issues/4> — CI, secrets, and security checks
-    + <https://github.com/Vanopticon/Odin/issues/6> — Docs: developer + operator guides
+  - <https://github.com/Vanopticon/Odin/issues/4> — CI, secrets, and security checks
+  - <https://github.com/Vanopticon/Odin/issues/6> — Docs: developer + operator guides
 
 - Done
-    + <https://github.com/Vanopticon/Odin/issues/11> — Observability & logging
-    + <https://github.com/Vanopticon/Odin/issues/3> — Release & deployment checklist
+  - <https://github.com/Vanopticon/Odin/issues/11> — Observability & logging
+  - <https://github.com/Vanopticon/Odin/issues/3> — Release & deployment checklist
 
 How to create the project quickly
 

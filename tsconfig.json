@@ -24,10 +24,5 @@
 		"strict": true
 	},
 	"extends": "./.svelte-kit/tsconfig.json",
-	"include": [
-		"server/*.js",
-		"src/**/*",
-		"src/**/*.svelte",
-		".svelte-kit/types/**/*.d.ts"
-	]
+	"include": ["server/*.js", "src/**/*", "src/**/*.svelte", ".svelte-kit/types/**/*.d.ts"]
 }
