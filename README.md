@@ -1,38 +1,49 @@
-# sv
+# Odin (Svelte app)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Everything you need to build and run the Odin Svelte app.
 
-## Creating a project
+## Prerequisites
 
-If you're seeing this, you've probably already done this step. Congrats!
+Install dependencies with your package manager of choice. This repository uses `pnpm`:
 
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```bash
+pnpm install
 ```
 
-## Developing
+## Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start the development server (the project uses an express wrapper in `server/server.js` for dev):
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```bash
+pnpm run dev
 ```
 
-## Building
+## Build & Preview
 
-To create a production version of your app:
+Create a production build and preview it locally:
 
-```sh
-npm run build
+```bash
+pnpm run build
+pnpm run preview
 ```
 
-You can preview the production build with `npm run preview`.
+The `preview` script runs `vite preview` on port `4173` (Playwright expects this by default).
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Tests
+
+Run unit and end-to-end tests:
+
+```bash
+pnpm test
+```
+
+- `pnpm run test:unit` — runs Vitest unit tests.
+- `pnpm run test:e2e` — runs Playwright end-to-end tests (Playwright will build and preview the app automatically).
+
+Notes:
+- The project uses `pnpm` across scripts and CI — Playwright is configured to run `pnpm run build && pnpm run preview` as the test web server.
+- A minimal smoke unit test exists at `src/__tests__/smoke.test.ts` to ensure the unit test runner is present in CI.
+
+## Deploy
+
+To deploy, choose the appropriate SvelteKit adapter for your platform. See https://svelte.dev/docs/kit/adapters for options.

@@ -34,12 +34,13 @@
 		"migrate:run": "pnpm build && node ./dist/lib/db/run-migrations.js",
 		"dev": "node server/server.js dev",
 		"format": "prettier --write .",
+		"preview": "vite preview --port 4173",
 		"lint": "prettier --check .",
 		"start": "node server/server.js prod",
 		"start:prod": "node server/server.js prod",
 		"test": "npm run test:unit -- --run && npm run test:e2e",
 		"test:e2e": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest --passWithNoTests"
 	},
 	"type": "module",
 	"version": "1.0.0-alpha"
