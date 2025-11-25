@@ -1,30 +1,32 @@
 name: 'Documentation request'
-about: 'Request improvements or corrections to documentation.'
+about: 'Suggest corrections or improvements to documentation or examples.'
 title: '[docs] '
 labels: ['documentation']
 body:
-  - type: textarea
+  - type: input
     id: summary
     attributes:
       label: 'Summary'
-      description: 'Brief summary of the documentation change requested.'
-      placeholder: 'Short description of the missing or incorrect documentation.'
+      description: 'Short summary of the documentation change.'
   - type: textarea
     id: current
     attributes:
-      label: 'Current documentation'
-      description: 'Link or quote the current documentation that should change (if applicable).'
-      placeholder: 'URL or excerpt of the current docs.'
+      label: 'Current docs (link or excerpt)'
+      description: 'URL or quote of the existing documentation to change.'
   - type: textarea
-    id: improvement
+    id: proposed
     attributes:
       label: 'Proposed improvement'
-      description: 'Describe the requested change and provide a suggested replacement or example.'
-      placeholder: 'Proposed text, code snippets, or screenshots.'
+      description: 'Suggested replacement text, code snippets, or screenshots. Be specific.'
+  - type: textarea
+    id: rationale
+    attributes:
+      label: 'Rationale'
+      description: 'Why this change improves clarity, correctness, or developer experience.'
   - type: checkboxes
     id: checklist
     attributes:
-      label: 'Checklist'
+      label: 'Pre-submission checklist'
       options:
         - label: 'I searched existing docs and issues'
-        - label: 'This change improves clarity or correctness'
+        - label: 'Change is minimally invasive and documented'
