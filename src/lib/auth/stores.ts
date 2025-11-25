@@ -9,5 +9,5 @@ import { ANONYMOUS_USER } from '$lib/types/user';
 export const currentUser = writable<User | null>(ANONYMOUS_USER);
 
 export function setCurrentUser(u: User | null) {
-    currentUser.set(u ?? ANONYMOUS_USER);
+	currentUser.set(u ?? ANONYMOUS_USER);
 }
