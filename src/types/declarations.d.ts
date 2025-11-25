@@ -7,3 +7,15 @@ declare module 'express-rate-limit';
 // Allow importing CSS/HTML in TS if any build step references them.
 declare module '*.css';
 declare module '*.html';
+
+// App-level types used by SvelteKit. Adds `locals.user` for server hooks.
+import type { User } from '$lib/types/user';
+
+declare namespace App {
+	interface Locals {
+		user: User | null;
+	}
+
+	interface PageData {}
+	interface Platform {}
+}
