@@ -28,23 +28,23 @@ Key principles:
 Odin groups capabilities into three primary areas: Configuration, Detection Tuning, and System Operations. High-level features include:
 
 - Configuration Management
-   	+ Editable keyword/phrase lists, IOCs, and regex-builder with linting.
-   	+ Rule versioning with diffs, rollback, and scheduled effective dates.
-   	+ Bulk import/export and CSV/JSON interchange for large-scale edits.
+    + Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+    + Rule versioning with diffs, rollback, and scheduled effective dates.
+    + Bulk import/export and CSV/JSON interchange for large-scale edits.
 
 - Source & Feed Management
-   	+ Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
-   	+ Feed health, last-ingest stats, and conflict resolution rules.
+    + Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
+    + Feed health, last-ingest stats, and conflict resolution rules.
 
 - Detection Logic Tuning
-   	+ Tunable scoring models, multi-condition rule builder, and simulation mode.
-   	+ False-positive feedback loop, whitelists, and explainability panels.
+    + Tunable scoring models, multi-condition rule builder, and simulation mode.
+    + False-positive feedback loop, whitelists, and explainability panels.
 
 - Analytics & Reporting
-   	+ Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
+    + Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
 
 - Operations & Audit
-   	+ Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
+    + Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
 
 For a compact feature overview, see `docs/README.md` and `docs/CHANGELOG.md`.
 
@@ -130,7 +130,7 @@ pnpm e2e
 We welcome contributions. Please follow these guidelines:
 
 1. Open an issue to discuss large changes before implementing.
-2. Branch from `main` and open a PR against `main` with a clear description and tests where applicable.
+2. Branch from `v1.0.0` and open a PR against `v1.0.0` with a clear description and tests where applicable.
 3. Keep patches small and focused. Follow repository coding standards (tabs for indentation, TypeScript strictness).
 
 See `docs/` for design and architecture guidelines, and check existing issues for priorities. The repo uses an issue board (`docs/agents/PROJECT_BOARD.md`) for planning.

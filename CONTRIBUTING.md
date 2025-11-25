@@ -9,12 +9,12 @@ Before you start
 
 Branching & commits
 
-- Branch from `main`. Name branches as `feature/short-description` or `fix/short-description`.
+- Branch from `v1.0.0`. Name branches as `feature/short-description` or `fix/short-description`.
 - Commit messages should be short and imperative (e.g., "Add migration for users table"). Include a longer description in the commit body when necessary.
 
 Pull requests
 
-- Open your PR against `main` and include a concise description of the change, rationale, and any relevant screenshots or test results.
+- Open your PR against `v1.0.0` and include a concise description of the change, rationale, and any relevant screenshots or test results.
 - Keep PRs small and focused; prefer multiple smaller PRs over one large change.
 - Add or update tests for behavior changes.
 
