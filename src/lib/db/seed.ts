@@ -38,69 +38,69 @@ export async function seedDatabase(ds: DataSource) {
 				[k.keyword, k.language_code]
 			);
 		}
+	}
 
-		// Seed default roles and permissions (if tables exist)
-		try {
-			// roles
-			const roles = [
-				{ name: 'admin', description: 'Full access' },
-				{ name: 'maintainer', description: 'Manage configuration and triggers' },
-				{ name: 'viewer', description: 'Read-only access' }
-			];
+	// Seed default roles and permissions (if tables exist)
+	try {
+		// roles
+		const roles = [
+			{ name: 'admin', description: 'Full access' },
+			{ name: 'maintainer', description: 'Manage configuration and triggers' },
+			{ name: 'viewer', description: 'Read-only access' }
+		];
 
-			for (const r of roles) {
-				const exists = await ds.manager.query('select 1 from roles where name = $1 limit 1', [
-					r.name
+		for (const r of roles) {
+			const exists = await ds.manager.query('select 1 from roles where name = $1 limit 1', [
+				r.name
+			]);
+			if (exists.length === 0) {
+				await ds.manager.query(
+					'insert into roles(id, name, description) values(gen_random_uuid(), $1, $2)',
+					[r.name, r.description]
+				);
+			}
+		}
+
+		// permissions: seed a minimal set
+		const permissions = [
+			{ name: 'view:app', description: 'Can view application' },
+			{ name: 'manage:triggers', description: 'Can create/update triggers' },
+			{ name: 'manage:users', description: 'Can manage users and roles' }
+		];
+
+		for (const p of permissions) {
+			const exists = await ds.manager.query('select 1 from permissions where name = $1 limit 1', [
+				p.name
+			]);
+			if (exists.length === 0) {
+				await ds.manager.query('insert into permissions(name, description) values($1, $2)', [
+					p.name,
+					p.description
 				]);
+			}
+		}
+
+		// assign broad permissions to admin role if not present
+		const adminRole = await ds.manager.query('select id from roles where name=$1 limit 1', [
+			'admin'
+		]);
+		if (adminRole.length > 0) {
+			const adminId = adminRole[0].id;
+			for (const p of permissions) {
+				const exists = await ds.manager.query(
+					'select 1 from role_permissions where role_id = $1 and permission_name = $2 limit 1',
+					[adminId, p.name]
+				);
 				if (exists.length === 0) {
 					await ds.manager.query(
-						'insert into roles(id, name, description) values(gen_random_uuid(), $1, $2)',
-						[r.name, r.description]
-					);
-				}
-			}
-
-			// permissions: seed a minimal set
-			const permissions = [
-				{ name: 'view:app', description: 'Can view application' },
-				{ name: 'manage:triggers', description: 'Can create/update triggers' },
-				{ name: 'manage:users', description: 'Can manage users and roles' }
-			];
-
-			for (const p of permissions) {
-				const exists = await ds.manager.query('select 1 from permissions where name = $1 limit 1', [
-					p.name
-				]);
-				if (exists.length === 0) {
-					await ds.manager.query('insert into permissions(name, description) values($1, $2)', [
-						p.name,
-						p.description
-					]);
-				}
-			}
-
-			// assign broad permissions to admin role if not present
-			const adminRole = await ds.manager.query('select id from roles where name=$1 limit 1', [
-				'admin'
-			]);
-			if (adminRole.length > 0) {
-				const adminId = adminRole[0].id;
-				for (const p of permissions) {
-					const exists = await ds.manager.query(
-						'select 1 from role_permissions where role_id = $1 and permission_name = $2 limit 1',
+						'insert into role_permissions(role_id, permission_name) values($1, $2)',
 						[adminId, p.name]
 					);
-					if (exists.length === 0) {
-						await ds.manager.query(
-							'insert into role_permissions(role_id, permission_name) values($1, $2)',
-							[adminId, p.name]
-						);
-					}
 				}
 			}
-		} catch (err) {
-			// tables may not exist in older DBs; safe to ignore during seeding
 		}
+	} catch (err) {
+		// tables may not exist in older DBs; safe to ignore during seeding
 	}
 }
 

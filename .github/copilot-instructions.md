@@ -66,6 +66,24 @@ Odin is the UI and reporting layer for the Vanopticon cyber-threat suite. It man
 - Do not restate information the user already knows or that provides no actionable value.
 - End all summaries with a short TL;DR. See the end of this file for an example.
 
+## Agent's Notes
+
+A) All formal requirements must be documented in individual files in design:
+ - System Architecture Overview (SAO)
+ - Threat Model & Security Architecture (TMSA)
+ - Interface Control Document (ICD)
+ - Data Architecture Specification (DAS)
+ - Component Design Specifications (CDS)
+ - Behavior & State Specifications (BSS)
+ - Configuration & Deployment Specification (CDS-Ops)
+ - Verification & Validation Plan (VVP)
+ - Operational Security & Runbook Specification (OSR)
+ - Compliance & Governance Map (CGM)
+
+B) Each requirements document must reference and link to its associated GitHub Issue.
+
+C) All requirements issues must be tracked in GitHub and updated as work progresses.
+
 ## Summary Example Guidance
 
 - Good summaries: concise findings, only relevant failures, and lettered next-step options.

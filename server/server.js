@@ -1,11 +1,8 @@
 import fs from 'fs';
-import https from 'https';
-import express from 'express';
 import path from 'path';
 import crypto from 'crypto';
-import { createServer as createViteServer } from 'vite';
-import compression from 'compression';
-import rateLimit from 'express-rate-limit';
+import Hapi from '@hapi/hapi';
+
 import { PROD_MODE, HOST, PORT, TLS_KEY_PATH, TLS_CERT_PATH, RATE_LIMIT_MAX } from './settings.js';
 
 function loadRequiredFile(label, filePath) {
@@ -14,118 +11,103 @@ function loadRequiredFile(label, filePath) {
 	return fs.readFileSync(filePath);
 }
 
-async function start() {
-	const app = express();
-	app.disable('x-powered-by');
+export async function startHapi() {
+	const keyPath = TLS_KEY_PATH;
+	const certPath = TLS_CERT_PATH;
+	const key = loadRequiredFile('TLS key', keyPath);
+	const cert = loadRequiredFile('TLS cert', certPath);
 
-	const DEV_HOST = process.env.OD_HOST || HOST || 'localhost';
-	const APP_PORT = Number(process.env.OD_PORT || PORT || 3000);
-	const HMR_PORT = Number(process.env.OD_HMR_PORT || APP_PORT + 1);
-
-	// Load TLS material — required for all modes
-	const key = loadRequiredFile('TLS key', TLS_KEY_PATH);
-	const cert = loadRequiredFile('TLS cert', TLS_CERT_PATH);
-
-	// Common middleware
-	app.use(compression());
-	app.use(express.json({ limit: '10kb' }));
-	app.use(express.urlencoded({ extended: false, limit: '10kb' }));
-	app.use(
-		rateLimit({
-			windowMs: 15 * 60 * 1000,
-			max: RATE_LIMIT_MAX,
-			standardHeaders: true
-		})
-	);
-
-	if (!PROD_MODE) {
-		// Vite dev server in middleware mode
-		const vite = await createViteServer({
-			server: {
-				middlewareMode: true,
-				https: { key, cert },
-				hmr: {
-					protocol: 'wss',
-					host: DEV_HOST,
-					port: HMR_PORT,
-					clientPort: HMR_PORT
-				}
-			}
-		});
-
-		// Dev mode CSP with unsafe-inline for scripts (HMR)
-		app.use(async (req, res, next) => {
-			const nonce = crypto.randomBytes(16).toString('base64');
-			res.locals.cspNonce = nonce;
-
-			const csp = [
-				"default-src 'self'",
-				"script-src 'self' 'unsafe-inline'",
-				"style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com",
-				"style-src-attr 'self' 'unsafe-inline'",
-				"font-src 'self' https://fonts.gstatic.com",
-				`connect-src 'self' wss://${DEV_HOST}:${HMR_PORT}`,
-				"img-src 'self' data:",
-				"object-src 'none'",
-				"base-uri 'self'",
-				"frame-ancestors 'none'"
-			].join('; ');
-
-			res.setHeader('Content-Security-Policy', csp);
-			next();
-		});
-
-		// Vite middleware
-		app.use(vite.middlewares);
-
-		// Serve transformed HTML
-		app.use('*', async (req, res) => {
-			try {
-				let html = fs.readFileSync('index.html', 'utf8');
-				html = await vite.transformIndexHtml(req.originalUrl, html);
-
-				html = html.replace('<!--app-->', '<div id="app">DEV</div>');
-
-				res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
-			} catch (err) {
-				vite.ssrFixStacktrace(err);
-				res.status(500).end(err.message);
-			}
-		});
-
-		https.createServer({ key, cert }, app).listen(APP_PORT, () => {
-			console.log(`DEV: https://${DEV_HOST}:${APP_PORT}`);
-			console.log(`HMR: wss://${DEV_HOST}:${HMR_PORT}`);
-		});
-
-		return;
+	// Security check: ensure TLS key file has restrictive permissions and is owned by this user
+	try {
+		const s = fs.statSync(keyPath);
+		const mode = s.mode & 0o777;
+		// deny group/other read/write/exec bits
+		if ((mode & 0o077) !== 0) {
+			throw new Error(
+				`TLS key file ${keyPath} has unsafe permissions (mode ${mode.toString(8)}). It must not be group/other accessible.`
+			);
+		}
+		if (typeof process.getuid === 'function' && s.uid !== process.getuid()) {
+			throw new Error(
+				`TLS key file ${keyPath} must be owned by the process user (uid ${process.getuid()}) but is owned by uid ${s.uid}`
+			);
+		}
+	} catch (err) {
+		throw new Error(`TLS key security check failed: ${err.message}`);
 	}
 
-	// ============================================================================
-	// PRODUCTION MODE
-	// ============================================================================
-	app.use((req, res, next) => {
-		const csp = [
-			"default-src 'self'",
-			"script-src 'self'",
-			"style-src 'self' https://fonts.googleapis.com",
-			"style-src-elem 'self' https://fonts.googleapis.com",
-			"font-src 'self' https://fonts.gstatic.com",
-			"img-src 'self' data:",
-			"connect-src 'self'",
-			"object-src 'none'",
-			"base-uri 'self'",
-			"frame-ancestors 'none'"
-		].join('; ');
-		res.setHeader('Content-Security-Policy', csp);
-		next();
+	const server = Hapi.server({
+		port: Number(process.env.OD_PORT || PORT || 3000),
+		host: process.env.OD_HOST || HOST || '0.0.0.0',
+		tls: {
+			key,
+			cert
+			// Node chooses TLS versions; ensure OpenSSL supports TLS1.3
+		}
 	});
 
-	app.use(express.static(path.resolve('dist')));
+	// Global auth intercept: no anonymous access except allowlist
+	server.ext('onPreAuth', (request, h) => {
+		try {
+			const url = request.url.pathname + (request.url.search || '');
+			const allowedPrefixes = ['/auth', '/_app', '/static', '/images'];
+			const allowedFiles = ['/robots.txt', '/site.webmanifest', '/favicon.ico'];
+			const isAsset =
+				url.endsWith('.css') ||
+				url.endsWith('.js') ||
+				url.endsWith('.png') ||
+				url.endsWith('.svg') ||
+				url.endsWith('.webmanifest');
+			const isAllowed =
+				allowedPrefixes.some((p) => url.startsWith(p)) ||
+				allowedFiles.includes(url.split('?')[0]) ||
+				isAsset;
+			if (isAllowed) return h.continue;
 
-	https.createServer({ key, cert }, app).listen(APP_PORT, () => {
-		console.log(`PROD: https://${HOST}:${APP_PORT}`);
+			const cookie = request.state && request.state.od_session;
+			if (!cookie) {
+				const accept = request.headers.accept || '';
+				if (accept.includes('application/json') || url.startsWith('/api')) {
+					return h.response({ error: 'Unauthenticated' }).code(401).takeover();
+				}
+				const returnTo = encodeURIComponent(url);
+				return h.redirect(`/auth/login?returnTo=${returnTo}`).takeover();
+			}
+
+			// quick integrity check: ensure token has three parts
+			if (String(cookie).split('.').length !== 3) {
+				return h.response({ error: 'Unauthenticated' }).code(401).takeover();
+			}
+
+			return h.continue;
+		} catch (e) {
+			console.error('Auth intercept error', e);
+			return h.response({ error: 'internal' }).code(500).takeover();
+		}
 	});
+
+	// Global error sanitiser
+	server.ext('onPreResponse', (request, h) => {
+		const response = request.response;
+		if (!response.isBoom) return h.continue;
+		const id = crypto.randomBytes(8).toString('hex');
+		console.error(`ERROR ${id}`, response.stack || response.message || response);
+		const accept = request.headers.accept || '';
+		if (accept.includes('application/json') || request.path.startsWith('/api')) {
+			return h.response({ error: 'Internal Server Error', id }).code(500);
+		}
+		const html = `<!doctype html><html><head><meta charset="utf-8"><title>Server error</title></head><body><h1>Something went wrong</h1><p>Reference ID: <strong>${id}</strong></p><p>Please contact support and provide that ID.</p></body></html>`;
+		return h.response(html).type('text/html').code(500);
+	});
+
+	await server.start();
+	console.log(`HAPI server listening at https://${server.settings.host}:${server.settings.port}`);
+	return server;
 }
 
-start();
+if (process.argv[1].endsWith('hapi-server.js')) {
+	startHapi().catch((err) => {
+		console.error('Failed to start Hapi server', err);
+		process.exit(1);
+	});
+}
