@@ -1,18 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-const OLD_ENV = process.env;
+let testSettings: any;
 
-beforeEach(() => {
+beforeEach(async () => {
 	vi.resetModules();
-	process.env = { ...OLD_ENV } as any;
-	process.env.OD_OAUTH_URL = 'https://oidc.example/.well-known/openid-configuration';
-	process.env.OD_PKCE_ID = 'test-client';
-	process.env.OD_PKCE_SECRET = 'test-secret';
-	process.env.OD_COOKIE_SECRET = 'cookie-secret-very-long';
+	testSettings = await import('$lib/test_settings');
+	// Mock the runtime settings module so app code reads values from here.
+	vi.doMock('$lib/settings', () => ({ ...testSettings }));
 });
 
 afterEach(() => {
-	process.env = OLD_ENV;
 	vi.restoreAllMocks();
 });
 
@@ -35,7 +32,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 
 		// mock fetch for provider discovery
 		global.fetch = vi.fn(async (input: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			throw new Error('unexpected fetch ' + input);
@@ -49,7 +46,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 			state: 's',
 			code_challenge: challenge
 		});
-		expect(url).toContain('client_id=' + encodeURIComponent(process.env.OD_PKCE_ID!));
+		expect(url).toContain('client_id=' + encodeURIComponent(testSettings.OD_PKCE_ID));
 		expect(url).toContain('code_challenge=' + encodeURIComponent(challenge));
 	});
 
@@ -60,7 +57,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 			userinfo_endpoint: 'https://provider/userinfo'
 		};
 		global.fetch = vi.fn(async (input: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			return { ok: true, json: async () => ({}) } as any;
@@ -94,7 +91,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 			userinfo_endpoint: 'https://provider/userinfo'
 		};
 		global.fetch = vi.fn(async (input: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			return { ok: true, json: async () => ({}) } as any;
@@ -125,7 +122,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 
 		// fetch mock: first call discovery, second call token exchange, third call userinfo
 		global.fetch = vi.fn(async (input: any, opts?: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			if (typeof input === 'string' && input === cfg.token_endpoint) {
@@ -185,7 +182,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 			userinfo_endpoint: 'https://provider/userinfo'
 		};
 		global.fetch = vi.fn(async (input: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			return { ok: false, text: async () => 'not found' } as any;
@@ -220,7 +217,7 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 		};
 		// discovery ok, token endpoint returns non-ok
 		global.fetch = vi.fn(async (input: any) => {
-			if (typeof input === 'string' && input === process.env.OD_OAUTH_URL) {
+			if (typeof input === 'string' && input === testSettings.OD_OAUTH_URL) {
 				return { ok: true, json: async () => cfg } as any;
 			}
 			if (typeof input === 'string' && input === cfg.token_endpoint) {

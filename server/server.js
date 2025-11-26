@@ -37,8 +37,8 @@ export async function startHapi() {
 	}
 
 	const server = Hapi.server({
-		port: Number(process.env.OD_PORT || PORT || 3000),
-		host: process.env.OD_HOST || HOST || '0.0.0.0',
+		port: Number(PORT || 3000),
+		host: HOST || '0.0.0.0',
 		tls: {
 			key,
 			cert

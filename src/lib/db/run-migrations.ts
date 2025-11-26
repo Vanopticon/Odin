@@ -1,9 +1,10 @@
 import { initializeDataSource } from './data-source';
 import { seedDatabase } from './seed';
+import { RUN_MIGRATIONS_SEED } from '$lib/settings';
 
 function shouldSeed(): boolean {
 	// CLI flag --seed or env var RUN_MIGRATIONS_SEED=1
-	if (process.env['RUN_MIGRATIONS_SEED'] === '1') return true;
+	if (RUN_MIGRATIONS_SEED === '1') return true;
 	return process.argv.includes('--seed');
 }
 

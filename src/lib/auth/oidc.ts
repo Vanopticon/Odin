@@ -2,9 +2,11 @@ import { randomBytes, createHash } from 'crypto';
 
 let providerConfig: any = null;
 
+import { OD_OAUTH_URL, OD_PKCE_ID, OD_PKCE_SECRET } from '$lib/settings';
+
 export async function getProviderConfig() {
 	if (providerConfig) return providerConfig;
-	const url = process.env.OD_OAUTH_URL;
+	const url = OD_OAUTH_URL;
 	if (!url) throw new Error('OD_OAUTH_URL is not set');
 	const res = await fetch(url);
 	if (!res.ok) throw new Error('Failed to fetch OIDC configuration');
@@ -40,7 +42,7 @@ export async function buildAuthorizationUrl({
 }) {
 	const cfg = await getProviderConfig();
 	const url = new URL(cfg.authorization_endpoint);
-	url.searchParams.set('client_id', process.env.OD_PKCE_ID || '');
+	url.searchParams.set('client_id', OD_PKCE_ID || '');
 	url.searchParams.set('response_type', 'code');
 	url.searchParams.set('scope', 'openid profile email');
 	url.searchParams.set('redirect_uri', redirect_uri);
@@ -65,8 +67,8 @@ export async function exchangeCodeForToken({
 	body.set('grant_type', 'authorization_code');
 	body.set('code', code);
 	body.set('redirect_uri', redirect_uri);
-	body.set('client_id', process.env.OD_PKCE_ID || '');
-	if (process.env.OD_PKCE_SECRET) body.set('client_secret', process.env.OD_PKCE_SECRET);
+	body.set('client_id', OD_PKCE_ID || '');
+	if (OD_PKCE_SECRET) body.set('client_secret', OD_PKCE_SECRET);
 	body.set('code_verifier', code_verifier);
 
 	const res = await fetch(tokenUrl, {

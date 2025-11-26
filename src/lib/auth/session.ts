@@ -1,6 +1,7 @@
 import { createCipheriv, randomBytes, createDecipheriv, createHash } from 'crypto';
+import { OD_COOKIE_SECRET, OD_PKCE_SECRET } from '$lib/settings';
 
-const SECRET = process.env.OD_COOKIE_SECRET || process.env.OD_PKCE_SECRET || '';
+const SECRET = OD_COOKIE_SECRET || OD_PKCE_SECRET || '';
 if (!SECRET) {
 	// do not throw at module load; rely on callers to surface meaningful errors
 }

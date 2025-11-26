@@ -16,6 +16,17 @@ export const BIND_ADDR = process.env['OD_BIND_ADDR'] || '::';
 
 export const DB_URL = process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || '';
 
-export const OAUTH_CLIENT_ID = process.env['OD_PKCE_ID'] || '';
-export const OAUTH_SECRENT = process.env['OD_PKCE_SECRET'] || '';
-export const OAUTH_AUTH_URL = process.env['OD_OAUTH_URL'] || '';
+// OAuth / PKCE
+export const OD_PKCE_ID = process.env['OD_PKCE_ID'] || '';
+export const OD_PKCE_SECRET = process.env['OD_PKCE_SECRET'] || '';
+export const OD_OAUTH_URL = process.env['OD_OAUTH_URL'] || '';
+
+// Session secret used for cookie encryption
+export const OD_COOKIE_SECRET = process.env['OD_COOKIE_SECRET'] || '';
+
+// HMR / dev
+export const OD_HMR_HOST = process.env['OD_HMR_HOST'] || HOST;
+export const OD_HMR_PORT = parseInt(process.env['OD_HMR_PORT'] || '3001', 10);
+
+// CI / runtime helpers
+export const RUN_MIGRATIONS_SEED = process.env['RUN_MIGRATIONS_SEED'] || '0';
