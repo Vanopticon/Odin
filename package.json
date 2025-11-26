@@ -1,14 +1,10 @@
 {
 	"dependencies": {
-		"@sveltejs/adapter-node": "^5.4.0",
-		"compression": "^1.8.1",
-		"dotenv": "^17.2.3",
 		"@hapi/hapi": "^21.0.0",
-		"express": "^5.1.0",
-		"express-rate-limit": "^8.2.1",
-		"helmet": "^8.1.0",
+		"@sveltejs/adapter-node": "^5.4.0",
+		"dotenv": "^17.2.3",
 		"pg": "^8.16.3",
-		"typeorm": "latest"
+		"typeorm": "^3.0.0"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.56.1",
