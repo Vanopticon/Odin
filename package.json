@@ -26,7 +26,8 @@
 		"typescript": "^5.9.3",
 		"vite": "^7.2.4",
 		"vitest": "^4.0.13",
-		"vitest-browser-svelte": "^2.0.1"
+		"vitest-browser-svelte": "^2.0.1",
+		"yaml": "^2.3.1"
 	},
 	"name": "odin",
 	"private": true,
