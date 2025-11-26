@@ -2,10 +2,13 @@
 
 ## 1. Tracking Work
 
-- Use the GitHub repository to track all work, progress, and issues.
-- The **Issues list** is the definitive source of work items.
-- Commit code and mark issues complete only after the work passes all checks and testing.
-- All code changes must reference the associated Issue ID in commit messages and comments.
+You do not need permission to poerform any of the work tracking tasks that follow:
+
+1. Use the GitHub repo to track work, progress, etc.
+2. The Issues list in the GitHub repository is the definitive work source.
+3. Create a feature branch (named for the feature).
+4. After work, make a commit and then mark issues completed when the work is done.
+5. Open a PR.
 
 ## 2. Coding Standards
 
