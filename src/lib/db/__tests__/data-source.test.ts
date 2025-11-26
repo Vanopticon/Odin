@@ -16,16 +16,18 @@ describe('initializeDataSource', () => {
 	});
 
 	it('throws when OD_DB_URL is not set', async () => {
-		delete process.env['OD_DB_URL'];
-		delete process.env['DATABASE_URL'];
-		delete process.env['DATABASE_URI'];
+		// Use centralized test settings and override DB_URL for this case
+		const testSettings = await import('$lib/test_settings');
+		vi.doMock('$lib/settings', () => ({ ...testSettings, DB_URL: '' }));
 
 		const mod = await import('$lib/db/data-source');
 		await expect(mod.initializeDataSource()).rejects.toThrow('OD_DB_URL not set in environment');
 	});
 
 	it('initializes and returns AppDataSource when OD_DB_URL is set', async () => {
-		process.env['OD_DB_URL'] = 'postgres://user:pass@localhost:5432/db';
+		// Use centralized test settings and provide a DB_URL override
+		const testSettings = await import('$lib/test_settings');
+		vi.doMock('$lib/settings', () => ({ ...testSettings, DB_URL: 'postgres://user:pass@localhost:5432/db' }));
 
 		const mod = await import('$lib/db/data-source');
 
@@ -42,7 +44,9 @@ describe('initializeDataSource', () => {
 	});
 
 	it('returns AppDataSource immediately when already initialized', async () => {
-		process.env['OD_DB_URL'] = 'postgres://user:pass@localhost:5432/db';
+		// Use centralized test settings and provide a DB_URL override
+		const testSettings = await import('$lib/test_settings');
+		vi.doMock('$lib/settings', () => ({ ...testSettings, DB_URL: 'postgres://user:pass@localhost:5432/db' }));
 		const mod = await import('$lib/db/data-source');
 
 		// mark initialized and ensure initialize isn't called
