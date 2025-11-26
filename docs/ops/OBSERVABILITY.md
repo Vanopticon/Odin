@@ -56,6 +56,16 @@ Example log line:
 - Propagate a `trace_id` (and optionally `span_id`) through incoming requests and use it in all log entries for that request.
 - Prefer standard headers like `traceparent` and `tracestate` for distributed tracing integration.
 
+## Metrics
+
+- The service exposes Prometheus-compatible metrics at `/metrics` (plain-text, Prometheus exposition format).
+- Default process and runtime metrics are collected with the prefix `odin_` and an HTTP request duration histogram is provided as `odin_http_request_duration_seconds`.
+
+## Tracing bootstrap
+
+- A lightweight OpenTelemetry bootstrap is started when the server launches. By default it uses a console span exporter for development visibility; you can configure an OTLP exporter via environment variables in future.
+- Instrumentation is provided for core Node HTTP paths; libraries may add more detailed spans as needed.
+
 ## Retention and rotation
 
 - Logs should be rotated and retained according to your operational policies. For production, keep at least 90 days of logs for auditing and incident investigation unless regulatory constraints require otherwise.

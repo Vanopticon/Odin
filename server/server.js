@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import Hapi from '@hapi/hapi';
+import telemetry, { httpRequestDuration, metricsRegister } from './telemetry.js';
 
 import { PROD_MODE, HOST, PORT, TLS_KEY_PATH, TLS_CERT_PATH, RATE_LIMIT_MAX } from './settings.js';
 
@@ -86,9 +87,35 @@ export async function startHapi() {
 		}
 	});
 
+	// Record request start time for metrics
+	server.ext('onPreHandler', (request, h) => {
+		try {
+			request.plugins = request.plugins || {};
+			request.plugins._metricsTimer = httpRequestDuration.startTimer();
+		} catch (e) {
+			// non-fatal
+		}
+		return h.continue;
+	});
+
 	// Global error sanitiser
 	server.ext('onPreResponse', (request, h) => {
 		const response = request.response;
+		// record metrics (if started)
+		try {
+			const end = request.plugins && request.plugins._metricsTimer;
+			const status =
+				(response && response.statusCode) ||
+				(response && response.output && response.output.statusCode) ||
+				200;
+			const route =
+				request.route && request.route.path ? request.route.path : request.path || 'unknown';
+			if (typeof end === 'function') {
+				end({ method: request.method.toUpperCase(), route, status_code: String(status) });
+			}
+		} catch (err) {
+			// ignore metric errors
+		}
 		if (!response.isBoom) return h.continue;
 		const id = crypto.randomBytes(8).toString('hex');
 		console.error(`ERROR ${id}`, response.stack || response.message || response);
@@ -98,6 +125,22 @@ export async function startHapi() {
 		}
 		const html = `<!doctype html><html><head><meta charset="utf-8"><title>Server error</title></head><body><h1>Something went wrong</h1><p>Reference ID: <strong>${id}</strong></p><p>Please contact support and provide that ID.</p></body></html>`;
 		return h.response(html).type('text/html').code(500);
+	});
+
+	// Expose Prometheus metrics endpoint
+	server.route({
+		method: 'GET',
+		path: '/metrics',
+		handler: async (request, h) => {
+			try {
+				const metrics = await metricsRegister.metrics();
+				return h
+					.response(metrics)
+					.type(metricsRegister.contentType || 'text/plain; version=0.0.4; charset=utf-8');
+			} catch (e) {
+				return h.response('error').code(500);
+			}
+		}
 	});
 
 	await server.start();
