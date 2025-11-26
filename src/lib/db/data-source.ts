@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
+import { DB_URL } from '$lib/settings';
 import Keyword from '../types/keyword';
 import Sighting from '../types/sighting';
 import Source from '../types/source';
@@ -25,8 +26,7 @@ export const AppDataSource = new DataSource({
 
 export async function initializeDataSource() {
 	// Resolve the database URL from environment at the time of initialization.
-	const databaseUrl =
-		process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || process.env['DATABASE_URI'] || '';
+	const databaseUrl = DB_URL || '';
 
 	if (!databaseUrl) {
 		throw new Error('OD_DB_URL not set in environment');
