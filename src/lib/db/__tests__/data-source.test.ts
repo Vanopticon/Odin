@@ -15,16 +15,17 @@ describe('initializeDataSource', () => {
 		process.env = { ...ORIGINAL_ENV };
 	});
 
-	it('throws when DATABASE_URL and DATABASE_URI are not set', async () => {
+	it('throws when OD_DB_URL is not set', async () => {
+		delete process.env['OD_DB_URL'];
 		delete process.env['DATABASE_URL'];
 		delete process.env['DATABASE_URI'];
 
 		const mod = await import('$lib/db/data-source');
-		await expect(mod.initializeDataSource()).rejects.toThrow('DATABASE_URL not set in environment');
+		await expect(mod.initializeDataSource()).rejects.toThrow('OD_DB_URL not set in environment');
 	});
 
-	it('initializes and returns AppDataSource when DATABASE_URL is set', async () => {
-		process.env['DATABASE_URL'] = 'postgres://user:pass@localhost:5432/db';
+	it('initializes and returns AppDataSource when OD_DB_URL is set', async () => {
+		process.env['OD_DB_URL'] = 'postgres://user:pass@localhost:5432/db';
 
 		const mod = await import('$lib/db/data-source');
 
@@ -41,7 +42,7 @@ describe('initializeDataSource', () => {
 	});
 
 	it('returns AppDataSource immediately when already initialized', async () => {
-		process.env['DATABASE_URL'] = 'postgres://user:pass@localhost:5432/db';
+		process.env['OD_DB_URL'] = 'postgres://user:pass@localhost:5432/db';
 		const mod = await import('$lib/db/data-source');
 
 		// mark initialized and ensure initialize isn't called

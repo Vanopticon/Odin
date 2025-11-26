@@ -6,7 +6,9 @@ import Source from '../types/source';
 import Reporter from '../types/reporter';
 import Language from '../types/language';
 
-const databaseUrl = process.env['DATABASE_URL'] || process.env['DATABASE_URI'] || '';
+// Prefer OD_DB_URL (project-specific env) but fall back to standard names.
+const databaseUrl =
+	process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || process.env['DATABASE_URI'] || '';
 
 export const AppDataSource = new DataSource({
 	type: 'postgres',
@@ -23,7 +25,7 @@ export const AppDataSource = new DataSource({
 
 export async function initializeDataSource() {
 	if (!databaseUrl) {
-		throw new Error('DATABASE_URL not set in environment');
+		throw new Error('OD_DB_URL not set in environment');
 	}
 	if (AppDataSource.isInitialized) return AppDataSource;
 	await AppDataSource.initialize();
