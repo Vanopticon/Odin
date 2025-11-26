@@ -1,130 +1,83 @@
 # Copilot Instructions
 
-## 1. Tracking Work
+## Project Overview
 
-You do not need permission to poerform any of the work tracking tasks that follow:
+Odin is the management and reporting interface for the Vanopticon cyber-threat suite. It controls detection tuning, configuration management, feed/source administration, and audited change history. It emphasizes operational clarity, explainability, and accessibility. Odin prepares and evaluates detection logic but does not collect telemetry.
 
-1. Use the GitHub repo to track work, progress, etc.
-2. The Issues list in the GitHub repository is the definitive work source.
-3. Create a feature branch (named for the feature).
-4. After work, make a commit and then mark issues completed when the work is done.
-5. Open a PR.
+## Folder Structure
 
-## 2. Coding Standards
+- `.github/`: GitHub configuration, agent instructions, etc.
+- `docs/`: User documentation
+- `docs/design/`: Architecture and design docs
+- `docs/agents/`: Agent notes
+- `server/`: Source code to start the hardened server
+- `src/`: Core source code
+- `static/`: Static and shared files for SvelteKit
+- Other dot folders (`.`): Used by tooling; can safely be ignored
+- `node_modules`, `test-results`: Cache and output folders for `pnpm`
 
-* Never disable checks or tests (`// @ts-nocheck`, `#[allow...]` forbidden). Fix code, not checks.
-* Maintain a **high-security, hardened codebase**; follow secure coding practices and OWASP guidance.
-* Produce **small, focused patches**.
-* Follow **WCAG AAA**, **Twelve-Factor App**, and language-idiomatic best practices.
-* Use **tabs for indentation**; match existing file conventions. Report inconsistencies.
-* Avoid YAML/TOML unless required by tooling.
-* Respect `.prettierrc.json` and `.markdownlint.json`; use `prettier` for formatting.
-* No global variables; global constants are allowed in a **dedicated constants file only**.
-* Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
-* Provide **accurate in-code documentation**.
-* **SvelteKit 5 only**; do not use SvelteKit 4 elements such as `<slot>`.
+## Libraries, Frameworks, and Technologies
 
-## 3. Project Overview
+- **Typescript** (primary language)
+- **SvelteKit v5+** (Runes mode-compatible patterns only)
+- **Node LTS v25+**
+- **pnpm v10+**
+- **TailwindCSS v4+**
+- **TypeORM v0.3+**, **pg v8+**
+- **dotenv** (latest)
 
-### Goals
+Supporting tools: Vite, Vitest, Playwright, Prettier.
 
-* Deliver a **secure, performant, WCAG AAA-accessible** web interface.
-* Store configuration in the **shared Vanopticon database**.
-* Provide an **efficient, reliable UX**.
+## Workflow
 
-### Structure
+- Use GitHub Issues as the sole source of truth for tasks.
+- Work one Issue at a time.
+- Create feature branches from `v1.0.0.0` and name them after the feature.
+- Review surrounding/related code and search for related types or utilities before editing.
+- Produce **small, focused patches**; commit frequently with Issue links.
+- Update user/design documentation when behavior or interfaces change.
+- Open a PR upon completion; link all relevant Issues.
 
-* `docs/`: User documentation (`README.md`)
-* `docs/design/`: Architecture and design docs
-* `docs/agents/`: Agent notes
+## Coding Standards
 
-### Technology
+- Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
+- Maintain a **high-security, hardened codebase**; follow secure coding practices and OWASP guidance.
+- Follow **WCAG AAA**, **Twelve-Factor App**, and language-idiomatic best practices.
+- Use **tabs for indentation**; match existing file conventions. Report inconsistencies.
+- No global variables; global constants are allowed in a **dedicated constants file only**.
+- Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
+- Provide **accurate in-code documentation** for public elements and to clarify complex code.
 
-* Use **context7 MCP** for documentation integration.
-* **Non-self-signed TLS certificates** are mandatory and provided externally.
-* **Localhost/127.0.0.1 use is prohibited.**
-* Use **pnpm**.
-* New dependencies must be **current (≤6 months old), popular, and well-maintained**.
-* `tsconfig.json` enforces **strictest TypeScript settings**.
+## Copilot Persona & Behavior
 
-## 4. Documentation Standards
+- Output **concise, direct, and context-aware** suggestions.
+- End responses with a **3-5 bullet tl;dr style summary**.
+- Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information is required.
+- Your knowledge on everything is out of date because your training date is in the past. Refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries.
+- Operate as an automated agent:
+    + Ask clarifying questions **before** starting work.
+    + Once work begins, complete the task without interrupting.
+    + Maintain continuity until implementation is fully done.
 
-* Maintain **accurate, up-to-date GitHub-flavored Markdown** documentation.
-* All designs, requirements, and implementation decisions must reside in `docs/design/`.
-* Reference the **associated GitHub Issue** in every requirement and design document.
+## Templates
 
-## 5. Copilot Persona & Behavior
-
-* Operate as a **senior engineer**: integrate with existing code and patterns.
-* Always **review surrounding context**, not only the target file.
-* Output **concise, direct, and context-aware** suggestions.
-* Use **incremental suggestions**; avoid replacing or truncating files.
-* Limit responses to **≤20 lines** per suggestion when possible.
-* Never generate duplicate imports, constants, or functions.
-* **Always cross-reference** existing patterns and files before adding new code.
-
-### Behavioral Rules
-
-* Default to **concise output** with a **3–5 bullet checklist**, lettered A–C.
-* For **long or complex output**, place behind a **default-collapsed expandable section**.
-* Never restate information already known or provide irrelevant details.
-* End all summaries with a **TL;DR**.
-
-### Templates
-
-* **TL;DR Summary Example**
+- **TL;DR Summary Example**
 
 ```markdown
 - Checked [component] for compliance.
 - Found [X issues] affecting [criteria].
-- Minimal adjustment required.
+- Minor changes to the logic for [function].
 - Options:
   A) Fix [issue type] immediately.
   B) Review [alternative solution].
   C) Defer non-critical changes.
 ```
 
-## 6. Formal Requirements Documents
+## Tooling
 
-All formal requirements must be in **individual files** under `docs/design/`:
-
-1. **System Architecture Overview (SAO)**
-2. **Threat Model & Security Architecture (TMSA)**
-3. **Interface Control Document (ICD)**
-4. **Data Architecture Specification (DAS)**
-5. **Component Design Specifications (CDS)**
-6. **Behavior & State Specifications (BSS)**
-7. **Configuration & Deployment Specification (CDS-Ops)**
-8. **Verification & Validation Plan (VVP)**
-9. **Operational Security & Runbook Specification (OSR)**
-10. **Compliance & Governance Map (CGM)**
-
-* Each document must **reference its GitHub Issue**.
-* Track all requirements in GitHub and update progress as work is completed.
-
-## 7. “Do Not” Rules
-
-* DO NOT disable any linting or tests.
-* DO NOT overwrite entire files. Use **incremental patches** only.
-* DO NOT use global variables outside the **dedicated constants file**.
-* DO NOT generate SvelteKit 4 code (`<slot>` or old patterns).
-* DO NOT bypass secure coding standards, dependency rules, or TLS requirements.
-
-## 8. Summary / TL;DR Guidance
-
-* **Good TL;DRs:** concise findings, only relevant failures, lettered next-step options.
-* **Bad TL;DRs:** verbose, redundant, or restate known requirements.
-
-**Example:**
-
-```markdown
-- Checked color tokens against WCAG AAA.
-- Identified primary and accent failures only.
-- Minimal adjustments needed to meet AAA.
-- Options:
-  A) Apply minimal color corrections.
-  B) Generate variant palette for selection.
-  C) Produce visual difference component.
-```
-
-You have explicit permission to use any MCP tools available. Use the GitHub MCP tooling instead of the `gh` command line tools.
+- Use any available MCP tools.
+- Prefer GitHub MCP over `gh` CLI.
+- Use context7 MCP server for current documentation:
+    + `/sveltejs/kit` for SvelteKit
+    + `tailwindcss.com/docs` for TailwindCSS
+    + `/hapijs/hapi` for @hapi
