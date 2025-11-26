@@ -2,19 +2,23 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vitest/config';
 import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
-import dotenv from 'dotenv';
 import os from 'os';
+import {
+	PROD_MODE,
+	HOST as SETTINGS_HOST,
+	PORT as SETTINGS_PORT,
+	TLS_KEY_PATH,
+	TLS_CERT_PATH,
+	OD_HMR_HOST,
+	OD_HMR_PORT,
+	RATE_LIMIT_MAX
+} from './src/lib/settings';
 
-dotenv.config();
-
-export const PROD_MODE: boolean = process.env['NODE_ENV']?.toLowerCase() === 'production';
-export const HOST = process.env['OD_HOST'] || os.hostname() || 'localhost';
-export const PORT = parseInt(process.env['OD_PORT'] || '3000', 10);
-export const TLS_KEY_PATH = process.env['OD_TLS_KEY'] || '/etc/tls/tls.key';
-export const TLS_CERT_PATH = process.env['OD_TLS_CERT'] || '/etc/tls/tls.crt';
-export const DEV_HMR_HOST = process.env['OD_HMR_HOST'] || HOST;
-export const DEV_HMR_PORT = parseInt(process.env['OD_HMR_PORT'] || '3001', 10);
-export const RATE_LIMIT_MAX = parseInt(process.env['OD_RATE_LIMIT_MAX'] || '100', 10);
+// Vite-specific aliases/local names
+export const HOST = SETTINGS_HOST || os.hostname() || 'localhost';
+export const PORT = parseInt(String(SETTINGS_PORT || '3000'), 10);
+export const DEV_HMR_HOST = OD_HMR_HOST || HOST;
+export const DEV_HMR_PORT = parseInt(String(OD_HMR_PORT || '3001'), 10);
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
