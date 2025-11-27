@@ -7,7 +7,7 @@ Odin is the management and reporting user interface for the Vanopticon cyber-thr
 Key principles:
 
 - Security-first: strict typing, secure defaults, and auditability.
-- Accessibility: designed for WCAG AAA compliance.
+- Accessibility: designed for WCAG AAA compliance. Human testing will be provided where required and further instructions provided for correction.
 - Deterministic behavior: predictable change effects and versioned rules.
 - Operator-focused UX: clear explainability, bulk operations, and rollback.
 
