@@ -1,3 +1,0 @@
-- Track telemetry work
-- Add metrics endpoint and OpenTelemetry bootstrap
-- Ensure tests pass
