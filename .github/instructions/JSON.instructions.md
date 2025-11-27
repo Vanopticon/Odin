@@ -9,8 +9,10 @@ Purpose: These directives are written for an automated coding agent that creates
 
 ## Formatting & Content Rules
 
-- **Include `$schema` when available**: If a JSON Schema exists for the file being edited or created, include the `$schema` property as the first key in the file with the appropriate URL. If no specific schema is known, prefer the widely used schemastore URLs (e.g., `https://json.schemastore.org/prettierrc` for Prettier config).
-- **Validate against schema**: When `$schema` is present or a known schema exists for a filename (e.g., `package.json`, `tsconfig.json`, `.prettierrc.json`, `.markdownlint.json`), the agent must validate the JSON against that schema and fail the change on validation errors.
+- **Include `$schema` when available**: If a JSON Schema exists for the file being edited or created, include the `$schema` property as the first key in the file with the appropriate URL. If no specific schema is known, prefer widely used schemastore URLs (e.g., `https://json.schemastore.org/prettierrc` for Prettier config).
+- **Validate against schema (best-effort)**: When `$schema` is present or a known schema exists for a filename (e.g., `package.json`, `tsconfig.json`, `.prettierrc.json`, `.markdownlint.json`) attempt to validate the JSON against that schema. Validation is best-effort: do not block or fail a proposed change solely because validation could not be performed (for example, if the schema is unreachable or private). Annotate the summary with the validation outcome if not successful:
+  - Inaccessible: The schema was not accessible and therefore the agent was unable to perform validation.
+  - Issues: note validation errors and the specific issues found.
 - **No comments**: Do not add JavaScript-style comments to `.json` files. JSON must be valid JSON. Do not use `jsonc` or `jsonb`.
 - **Double quotes only**: Use double quotes for all keys and string values (JSON standard). Do not use single quotes.
 - **Correct primitive types**: Preserve types — booleans and numbers must be JSON booleans/numbers, not strings.
@@ -22,4 +24,4 @@ Purpose: These directives are written for an automated coding agent that creates
 
 ## Exception Handling and Human Review
 
-- **Tag for Human Review**: If a change would violate any of these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.
+- **Include a note in the summary for Human Review**: If a change would violate any of these directives (other than cases where validation couldn't be performed due to an inaccessible schema), the agent must use the method that conforms closest to the directives and include a note in the summary for human review. If schema validation cannot be performed, annotate the summary with that fact rather than blocking the change.
