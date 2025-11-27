@@ -26,9 +26,9 @@ Purpose: These directives are written for an automated coding agent that creates
 
 ## Validation & Schema
 
-- **Schema Validation**: If a schema (JSON Schema for YAML or a dedicated YAML schema) exists for the file type (e.g., `kubernetes` resources, `github` workflows), validate the YAML against that schema and fail changes that do not validate.
+- **Schema Validation**: If a schema (JSON Schema for YAML or a dedicated YAML schema) exists for the file type (e.g., `kubernetes` resources, `github` workflows) and the schema is accessible or can be downloaded, validate the YAML against that schema and fail changes that do not validate.
 - **Sorting of Keys**: YAML files are often consumed by human-editable manifests; do **not** change key order when editing existing files. Preserve the existing order to avoid noisy diffs. Only reorder keys when a schema explicitly requires a specific order and document the reason in the PR.
 
 ## Exception Handling and Human Review
 
-- **Tag for Human Review**: If a change would violate any of these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.
+- **Include a note in the summary for Human Review**: If a change would violate any of these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.

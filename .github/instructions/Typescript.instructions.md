@@ -27,4 +27,4 @@ Use Markdown instructions for any in-code documentation or comments. Write clear
 
 ## Exception Handling & Human Review
 
-- **Tag for Human Review**: If changes would violate these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.
+- **Include a note in the summary for Human Review**: If changes would violate these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.

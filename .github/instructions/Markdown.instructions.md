@@ -39,4 +39,4 @@ Write short and useful documents. Cut out everything unnecessary, including out-
 
 ## Exception Handling and Human Review
 
-- **Tag for Human Review**: If a change would violate any of these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.
+- **Include a note in the summary for Human Review**: If a change would violate any of these directives, the agent must use the method that conforms closest to the directives and include a note in the summary for human review.

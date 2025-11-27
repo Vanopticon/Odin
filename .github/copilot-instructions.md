@@ -30,23 +30,38 @@ Supporting tools: Vite, Vitest, Playwright, Prettier.
 
 ## Workflow
 
-- Use GitHub Issues as the sole source of truth for tasks.
+This process must be followed in its entirety for all work:
+
+- Use GitHub Issues as the sole source of truth for tasks. The GitHub MCP should be available and authenticated. If repository access is not available or the GitHub MCP call fails, stop and notify the user immediately.
 - Work one Issue at a time.
 - Create feature branches from `v1.0.0.0` and name them after the feature.
+- Create or modify tests as appropriate, both unit and UX.
 - Review surrounding/related code and search for related types or utilities before editing.
 - Produce **small, focused patches**; commit frequently with Issue links.
+- Iterate until the implementation is complete and all tests are passing
 - Update user/design documentation when behavior or interfaces change.
+- Use `pnpm test`, `pnpm lint` and `pnpm format` as linting, formatting, and testing tools. They are all provided and the scripts are in the `package.json`.
 - Open a PR upon completion; link all relevant Issues.
 
 ## Coding Standards
 
-- Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
+- Instructions specific to a language or file supersede these.
+- Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks. Compliance may be enforced using search tooling, or by running the `lint` script provided in `package.json`.
 - Maintain a **high-security, hardened codebase**; follow secure coding practices and OWASP guidance.
-- Follow **WCAG AAA**, **Twelve-Factor App**, and language-idiomatic best practices.
-- Use **tabs for indentation**; match existing file conventions. Report inconsistencies.
+- Prioritize accessibility and apply WCAG principles alongside Twelve-Factor App and language-idiomatic best practices. The agent will enforce and run automated, testable WCAG checks where possible (for example: color contrast checks, presence of ARIA attributes when required, semantic HTML usage, keyboard focusability, and configured automated a11y linter rules). For accessibility items that cannot be validated automatically (manual UX heuristics, full AAA conformance checks requiring human judgement, or user testing), the agent will document them in the change summary and request human review. Document any conflicts, your evaluation, and the approach taken.
+
+- Use **tabs for indentation** unless a file-type-specific instruction overrides this (for example, YAML uses 2 spaces). Prefer tabs across the codebase for accessibility and consistency. Do not require a PR-level annotation solely because a contributor used spaces instead of tabs; only significant, systemic, or confusing indentation inconsistencies should be noted in the PR at maintainer discretion.
 - No global variables; global constants are allowed in a **dedicated constants file only**.
 - Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
 - Provide **accurate in-code documentation** for public elements and to clarify complex code.
+- Include positive, negative, and security tests for all code.
+
+## Acceptance Criteria
+
+- Tests cover positive, negative, and security cases for all code units.
+- Tests cover all normal user interactions and common user errors.
+- All tests are passing.
+- The Issue has been completely resolved.
 
 ## Copilot Persona & Behavior
 
@@ -58,6 +73,9 @@ Supporting tools: Vite, Vitest, Playwright, Prettier.
     + Ask clarifying questions **before** starting work.
     + Once work begins, complete the task without interrupting.
     + Maintain continuity until implementation is fully done.
+- Follow the "solo developer" style instead of pair programming because you are the only developer on this project.
+- External credentials will be provided, e.g. GitHub authentication.
+- If a needed system is not accessible, stop immediately, notify the user which system and what access is required, and they will make the needed corrections before prompting you to continue.
 
 ## Templates
 
