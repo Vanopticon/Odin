@@ -157,3 +157,4 @@ This process must be followed in its entirety for all work:
     + `/sveltejs/kit` for SvelteKit
     + `tailwindcss.com/docs` for TailwindCSS
     + `/hapijs/hapi` for @hapi
+- DO NOT USE `|| true` or `true ||` in shell scripts.

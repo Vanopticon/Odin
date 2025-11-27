@@ -1,6 +1,12 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { exchangeCodeForToken, getUserInfo } from '$lib/auth/oidc';
 import { encryptSession } from '$lib/auth/session';
+import { generateCsrfToken, setCsrfCookie } from '$lib/auth/csrf';
+import { DB_URL } from '$lib/settings';
+
+// Lazy import the DB-backed RBAC adapter only when needed so tests/dev without
+// a database configured don't attempt to initialize connections.
+let rbac: typeof import('$lib/auth/rbac') | null = null;
 
 export async function GET(event: RequestEvent) {
 	const url = event.url;
@@ -66,6 +72,20 @@ export async function GET(event: RequestEvent) {
 		user,
 		groups
 	};
+
+	// enrich session with DB-backed roles/permissions when possible
+	try {
+		const email = user && (user as any).email;
+		if (email && DB_URL) {
+			if (!rbac) rbac = await import('$lib/auth/rbac');
+			const res = await rbac.getUserRolesAndPermissionsByEmail(email);
+			// attach roles/permissions into session for runtime checks
+			(session as any).roles = res.roles || [];
+			(session as any).permissions = res.permissions || [];
+		}
+	} catch (e) {
+		// best-effort; do not block login on RBAC lookup failures
+	}
 	const enc = encryptSession(session);
 	// always set secure/httpOnly flags (treat dev like prod)
 	event.cookies.set('od_session', enc, {
@@ -75,6 +95,14 @@ export async function GET(event: RequestEvent) {
 		path: '/',
 		maxAge: 60 * 60 * 24 * 7
 	});
+
+	// set double-submit CSRF cookie (accessible to JS)
+	try {
+		const csrf = generateCsrfToken();
+		setCsrfCookie(event, csrf);
+	} catch (e) {
+		// best-effort; do not block login on cookie failures
+	}
 
 	// clear pkce cookies (best-effort)
 	event.cookies.delete('od_pkce_verifier', { path: '/' });

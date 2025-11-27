@@ -2,6 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import Trigger from '$lib/types/trigger';
 import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
 import { requirePermission, requireAuth } from '$lib/auth/server';
+import { validateCsrf } from '$lib/auth/csrf';
 import { z } from 'zod';
 
 async function getRepository() {
@@ -31,6 +32,12 @@ export async function GET(event: RequestEvent) {
 export async function POST(event: RequestEvent) {
 	// create new trigger — require permission
 	requirePermission(event, 'manage:triggers');
+	// validate CSRF for state-changing request
+	try {
+		validateCsrf(event);
+	} catch (e) {
+		return e as Response;
+	}
 	const body = await event.request.json();
 	// validate input
 	const createSchema = z.object({
@@ -41,9 +48,12 @@ export async function POST(event: RequestEvent) {
 	try {
 		createSchema.parse(body);
 	} catch (e: any) {
-		return new Response(JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }), {
-			status: 400
-		});
+		return new Response(
+			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
+			{
+				status: 400
+			}
+		);
 	}
 	const repo = await getRepository();
 
@@ -59,6 +69,11 @@ export async function POST(event: RequestEvent) {
 
 export async function PUT(event: RequestEvent) {
 	requirePermission(event, 'manage:triggers');
+	try {
+		validateCsrf(event);
+	} catch (e) {
+		return e as Response;
+	}
 	const body = await event.request.json();
 	const updateSchema = z.object({
 		id: z.string().uuid(),
@@ -69,9 +84,12 @@ export async function PUT(event: RequestEvent) {
 	try {
 		updateSchema.parse(body);
 	} catch (e: any) {
-		return new Response(JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }), {
-			status: 400
-		});
+		return new Response(
+			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
+			{
+				status: 400
+			}
+		);
 	}
 
 	const repo = await getRepository();
@@ -88,6 +106,11 @@ export async function PUT(event: RequestEvent) {
 
 export async function DELETE(event: RequestEvent) {
 	requirePermission(event, 'manage:triggers');
+	try {
+		validateCsrf(event);
+	} catch (e) {
+		return e as Response;
+	}
 	const id = event.url.searchParams.get('id');
 	if (!id) return new Response(JSON.stringify({ error: 'id required' }), { status: 400 });
 	const repo = await getRepository();
