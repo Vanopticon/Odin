@@ -1,10 +1,9 @@
 import { createCipheriv, randomBytes, createDecipheriv, createHash } from 'crypto';
-import { OD_COOKIE_SECRET, OD_PKCE_SECRET } from '$lib/settings';
+import { OD_COOKIE_SECRET } from '$lib/settings';
 
-const SECRET = OD_COOKIE_SECRET || OD_PKCE_SECRET || '';
-if (!SECRET) {
-	// do not throw at module load; rely on callers to surface meaningful errors
-}
+// Use a dedicated cookie secret for session encryption. Do NOT fall back to
+// PKCE or other secrets — cookie encryption must be explicit and managed.
+const SECRET = OD_COOKIE_SECRET || '';
 
 function getKey() {
 	// derive 32-byte key from secret using sha256
@@ -23,7 +22,7 @@ function base64UrlDecode(s: string) {
 }
 
 export function encryptSession(obj: unknown) {
-	if (!SECRET) throw new Error('OD_COOKIE_SECRET or OD_PKCE_SECRET must be set to encrypt session');
+	if (!SECRET) throw new Error('OD_COOKIE_SECRET must be set to encrypt session');
 	const key = getKey();
 	const iv = randomBytes(12); // 96-bit nonce for AES-GCM
 	const cipher = createCipheriv('aes-256-gcm', key, iv);
@@ -34,7 +33,7 @@ export function encryptSession(obj: unknown) {
 }
 
 export function decryptSession(token: string) {
-	if (!SECRET) throw new Error('OD_COOKIE_SECRET or OD_PKCE_SECRET must be set to decrypt session');
+	if (!SECRET) throw new Error('OD_COOKIE_SECRET must be set to decrypt session');
 	const parts = token.split('.');
 	if (parts.length !== 3) return null;
 	const iv = base64UrlDecode(parts[0]);
