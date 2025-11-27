@@ -77,7 +77,7 @@ You do not need permission to poerform any of the work tracking tasks that follo
 ```markdown
 - Checked [component] for compliance.
 - Found [X issues] affecting [criteria].
-- Minimal adjustment required.
+- Minor changes to the logic for [function].
 - Options:
   A) Fix [issue type] immediately.
   B) Review [alternative solution].
@@ -127,4 +127,9 @@ All formal requirements must be in **individual files** under `docs/design/`:
   C) Produce visual difference component.
 ```
 
-You have explicit permission to use any MCP tools available. Use the GitHub MCP tooling instead of the `gh` command line tools.
+- Use any available MCP tools.
+- Prefer GitHub MCP over `gh` CLI.
+- Use context7 MCP server for current documentation:
+    + `/sveltejs/kit` for SvelteKit
+    + `tailwindcss.com/docs` for TailwindCSS
+    + `/hapijs/hapi` for @hapi

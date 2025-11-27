@@ -6,7 +6,6 @@
 		"@opentelemetry/exporter-trace-otlp-http": "^0.208.0",
 		"@opentelemetry/sdk-node": "^0.208.0",
 		"@sveltejs/adapter-node": "^5.4.0",
-		"compression": "^1.8.1",
 		"dotenv": "^17.2.3",
 		"express": "^5.1.0",
 		"express-rate-limit": "^8.2.1",
