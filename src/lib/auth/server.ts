@@ -69,7 +69,8 @@ export function hasPermissionServer(event: RequestEvent, permission: string) {
 			if (session && Array.isArray(session.permissions) && session.permissions.length > 0) {
 				if (session.permissions.includes(permission)) return true;
 				// admins in session permissions are also honored
-				if (session.permissions.includes('admin') || session.permissions.includes('odin_admins')) return true;
+				if (session.permissions.includes('admin') || session.permissions.includes('odin_admins'))
+					return true;
 				return false;
 			}
 		} catch (e) {

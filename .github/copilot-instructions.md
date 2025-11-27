@@ -1,53 +1,54 @@
 # Copilot Instructions
 
-## Long Term Memory (LTM)
+## Long Term Memory (LTM, brain)
 
-- Treat the Obsidian MCP server memory (LTM) as the primary source of project knowledge.
-- Each conversation starts fresh; read and understand LTM entries before proceeding with any session. You are responsible for managing the memory, including seeding keys if missing or needed.
+- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge. #tool:obsidian_brain
+- You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
+- Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
 
-LTM uses a hierarchical structure with these core memory keys:
+LTM uses a hierarchical structure with these core LTM keys:
 
-- Required memory keys:
+- Required LTM keys:
     + project_brief - Foundation document
     + active_context - Current work state and focus
     + system_patterns - Architecture and design patterns
     + tech_stack - Technologies and setup
     + progress_tracker - Status and next steps
 
-- Optional Memory Keys:
+- Optional LTM Keys:
     + feature_specs - Detailed feature documentation
     + api_docs - API specifications
     + testing_strategy - Testing approaches
     + deployment_notes - Deployment procedures
     + user_preferences - User-specific preferences and decisions
 
-### Long Term Memory Triggers
+### Long Term LTM Triggers
 
 Append or update LTM when:
 
-- The user explicitly requests you to update memory
+- The user explicitly requests you to update LTM
 - Significant architectural decisions are made
 - New patterns or preferences are established
 - The status of the project changes, or features are completed or modified
 - The technical setup changes
 - Project scope or requirements evolve
 - New user preferences, patterns and practices for the project, or expectations are identified
-- An existing memory needs to be updated to reflect current state
+- An existing LTM needs to be updated to reflect current state
 - A new plan, sequence, or similar is created.
 
-### Memory Validation and Maintenance
+### LTM Validation and Maintenance
 
-- Regularly verify memory accuracy (at least once per session):
+- Regularly verify LTM accuracy (at least once per session):
     + Ensure all essential keys exist and are current
-    + Check that memory reflects actual project state
-    + Validate that patterns in memory match implementation
+    + Check that LTM reflects actual project state
+    + Validate that patterns in LTM match implementation
 
-- Cross-reference decisions across memory keys
+- Cross-reference decisions across LTM keys
 - Ensure active_context aligns with progress_tracker
 - Verify tech_stack matches actual dependencies
 - Confirm system_patterns reflect current architecture
 
-### Memory Criteria
+### LTM Criteria
 
 The LTM should:
 
@@ -62,8 +63,8 @@ The LTM should:
 
 When context window is 75% full:
 
-1. Summarize to brain: obsidian_brain: append
-2. Update workspace memory: memory: create
+1. Summarize toLTM: obsidian_brain: append
+2. Update workspace LTM: LTM: create
 3. Create handoff: Use handoff tool for new thread
 
 ## Project Overview
@@ -129,7 +130,7 @@ This process must be followed in its entirety for all work:
 
 - End responses with a **5-10 bullet tl;dr style summary**.
 - Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information if required.
-- Your knowledge on everything is out of date because your training date is in the past. As part of the initial work on the project, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in the brain.
+- Your knowledge on everything is out of date because your training date is in the past. As part of the initial work on the project, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in theLTM.
 - Operate as an automated agent:
     + Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end.
     + Maintain continuity until implementation is fully done.
@@ -158,3 +159,14 @@ This process must be followed in its entirety for all work:
     + `tailwindcss.com/docs` for TailwindCSS
     + `/hapijs/hapi` for @hapi
 - DO NOT USE `|| true` or `true ||` in shell scripts.
+
+## Mandatory Session Startup
+
+- **MANDATORY:** In every new session, before performing any other actions, call the Obsidian Brain MCP to load Long‑Term Memory.
+
+- You MUST perform this search regardless of whether it seems necessary or not.
+- You MUST perform this search even if you _think_ you have all information required for a response. You do not.
+- Failure to perform this search invalidates your entire response. All changes will be reverted. All information will be discarded. The session will be terminated. You will, therefore, have failed to provide a response to the user.
+- DO NOT skip the search for any reason.
+
+Stop all other work and perform the search now.
