@@ -2,6 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import Trigger from '$lib/types/trigger';
 import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
 import { requirePermission, requireAuth } from '$lib/auth/server';
+import { z } from 'zod';
 
 async function getRepository() {
 	// ensure DataSource is initialized
@@ -31,6 +32,19 @@ export async function POST(event: RequestEvent) {
 	// create new trigger — require permission
 	requirePermission(event, 'manage:triggers');
 	const body = await event.request.json();
+	// validate input
+	const createSchema = z.object({
+		name: z.string().min(1).optional(),
+		expression: z.string().optional(),
+		enabled: z.boolean().optional()
+	});
+	try {
+		createSchema.parse(body);
+	} catch (e: any) {
+		return new Response(JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }), {
+			status: 400
+		});
+	}
 	const repo = await getRepository();
 
 	const t = repo.create({
@@ -46,7 +60,19 @@ export async function POST(event: RequestEvent) {
 export async function PUT(event: RequestEvent) {
 	requirePermission(event, 'manage:triggers');
 	const body = await event.request.json();
-	if (!body.id) return new Response(JSON.stringify({ error: 'id required' }), { status: 400 });
+	const updateSchema = z.object({
+		id: z.string().uuid(),
+		name: z.string().optional(),
+		expression: z.string().optional(),
+		enabled: z.boolean().optional()
+	});
+	try {
+		updateSchema.parse(body);
+	} catch (e: any) {
+		return new Response(JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }), {
+			status: 400
+		});
+	}
 
 	const repo = await getRepository();
 	const item = await repo.findOneBy({ id: body.id });
