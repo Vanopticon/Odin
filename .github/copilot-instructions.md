@@ -1,83 +1,76 @@
 # Copilot Instructions
 
-## Project Overview
+## 1. Tracking Work
 
-Odin is the management and reporting interface for the Vanopticon cyber-threat suite. It controls detection tuning, configuration management, feed/source administration, and audited change history. It emphasizes operational clarity, explainability, and accessibility. Odin prepares and evaluates detection logic but does not collect telemetry.
+You do not need permission to poerform any of the work tracking tasks that follow:
 
-## Folder Structure
+1. Use the GitHub repo to track work, progress, etc.
+2. The Issues list in the GitHub repository is the definitive work source.
+3. Create a feature branch (named for the feature).
+4. After work, make a commit and then mark issues completed when the work is done.
+5. Open a PR.
 
-- `.github/`: GitHub configuration, agent instructions, etc.
-- `docs/`: User documentation
-- `docs/design/`: Architecture and design docs
-- `docs/agents/`: Agent notes
-- `server/`: Source code to start the hardened server
-- `src/`: Core source code
-- `static/`: Static and shared files for SvelteKit
-- Other dot folders (`.`): Used by tooling; can safely be ignored
-- `node_modules`, `test-results`: Cache and output folders for `pnpm`
+## 2. Coding Standards
 
-## Libraries, Frameworks, and Technologies
-
-- **Typescript** (primary language)
-- **SvelteKit v5+** (Runes mode-compatible patterns only)
-- **Node LTS v25+**
-- **pnpm v10+**
-- **TailwindCSS v4+**
-- **TypeORM v0.3+**, **pg v8+**
-- **dotenv** (latest)
-
-Supporting tools: Vite, Vitest, Playwright, Prettier.
-
-## Workflow
-
-This process must be followed in its entirety for all work:
-
-- Use GitHub Issues as the sole source of truth for tasks. The GitHub MCP should be available and authenticated. If repository access is not available or the GitHub MCP call fails, stop and notify the user immediately.
-- Work one Issue at a time.
-- Create feature branches from `v1.0.0.0` and name them after the feature.
-- Create or modify tests as appropriate, both unit and UX.
-- Review surrounding/related code and search for related types or utilities before editing.
-- Produce **small, focused patches**; commit frequently with Issue links.
-- Iterate until the implementation is complete and all tests are passing
-- Update user/design documentation when behavior or interfaces change.
-- Use `pnpm test`, `pnpm lint` and `pnpm format` as linting, formatting, and testing tools. They are all provided and the scripts are in the `package.json`.
-- Open a PR upon completion; link all relevant Issues.
-
-## Coding Standards
-
-- Instructions specific to a language or file supersede these.
-- Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks. Compliance may be enforced using search tooling, or by running the `lint` script provided in `package.json`.
+- Never disable checks or tests (`// @ts-nocheck`, `#[allow...]` forbidden). Fix code, not checks.
 - Maintain a **high-security, hardened codebase**; follow secure coding practices and OWASP guidance.
-- Prioritize accessibility and apply WCAG principles alongside Twelve-Factor App and language-idiomatic best practices. The agent will enforce and run automated, testable WCAG checks where possible (for example: color contrast checks, presence of ARIA attributes when required, semantic HTML usage, keyboard focusability, and configured automated a11y linter rules). For accessibility items that cannot be validated automatically (manual UX heuristics, full AAA conformance checks requiring human judgement, or user testing), the agent will document them in the change summary and request human review. Document any conflicts, your evaluation, and the approach taken.
-
-- Use **tabs for indentation** unless a file-type-specific instruction overrides this (for example, YAML uses 2 spaces). Prefer tabs across the codebase for accessibility and consistency. Do not require a PR-level annotation solely because a contributor used spaces instead of tabs; only significant, systemic, or confusing indentation inconsistencies should be noted in the PR at maintainer discretion.
+- Produce **small, focused patches**.
+- Follow **WCAG AAA**, **Twelve-Factor App**, and language-idiomatic best practices.
+- Use **tabs for indentation**; match existing file conventions. Report inconsistencies.
+- Avoid YAML/TOML unless required by tooling.
+- Respect `.prettierrc.json` and `.markdownlint.json`; use `prettier` for formatting.
 - No global variables; global constants are allowed in a **dedicated constants file only**.
 - Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
-- Provide **accurate in-code documentation** for public elements and to clarify complex code.
-- Include positive, negative, and security tests for all code.
+- Provide **accurate in-code documentation**.
+- **SvelteKit 5 only**; do not use SvelteKit 4 elements such as `<slot>`.
 
-## Acceptance Criteria
+## 3. Project Overview
 
-- Tests cover positive, negative, and security cases for all code units.
-- Tests cover all normal user interactions and common user errors.
-- All tests are passing.
-- The Issue has been completely resolved.
+### Goals
 
-## Copilot Persona & Behavior
+- Deliver a **secure, performant, WCAG AAA-accessible** web interface.
+- Store configuration in the **shared Vanopticon database**.
+- Provide an **efficient, reliable UX**.
 
+### Structure
+
+- `docs/`: User documentation (`README.md`)
+- `docs/design/`: Architecture and design docs
+- `docs/agents/`: Agent notes
+
+### Technology
+
+- Use **context7 MCP** for documentation integration.
+- **Non-self-signed TLS certificates** are mandatory and provided externally.
+- **Localhost/127.0.0.1 use is prohibited.**
+- Use **pnpm**.
+- New dependencies must be **current (≤6 months old), popular, and well-maintained**.
+- `tsconfig.json` enforces **strictest TypeScript settings**.
+
+## 4. Documentation Standards
+
+- Maintain **accurate, up-to-date GitHub-flavored Markdown** documentation.
+- All designs, requirements, and implementation decisions must reside in `docs/design/`.
+- Reference the **associated GitHub Issue** in every requirement and design document.
+
+## 5. Copilot Persona & Behavior
+
+- Operate as a **senior engineer**: integrate with existing code and patterns.
+- Always **review surrounding context**, not only the target file.
 - Output **concise, direct, and context-aware** suggestions.
-- End responses with a **3-5 bullet tl;dr style summary**.
-- Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information is required.
-- Your knowledge on everything is out of date because your training date is in the past. Refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries.
-- Operate as an automated agent:
-    + Ask clarifying questions **before** starting work.
-    + Once work begins, complete the task without interrupting.
-    + Maintain continuity until implementation is fully done.
-- Follow the "solo developer" style instead of pair programming because you are the only developer on this project.
-- External credentials will be provided, e.g. GitHub authentication.
-- If a needed system is not accessible, stop immediately, notify the user which system and what access is required, and they will make the needed corrections before prompting you to continue.
+- Use **incremental suggestions**; avoid replacing or truncating files.
+- Limit responses to **≤20 lines** per suggestion when possible.
+- Never generate duplicate imports, constants, or functions.
+- **Always cross-reference** existing patterns and files before adding new code.
 
-## Templates
+### Behavioral Rules
+
+- Default to **concise output** with a **3–5 bullet checklist**, lettered A–C.
+- For **long or complex output**, place behind a **default-collapsed expandable section**.
+- Never restate information already known or provide irrelevant details.
+- End all summaries with a **TL;DR**.
+
+### Templates
 
 - **TL;DR Summary Example**
 
@@ -91,7 +84,48 @@ This process must be followed in its entirety for all work:
   C) Defer non-critical changes.
 ```
 
-## Tooling
+## 6. Formal Requirements Documents
+
+All formal requirements must be in **individual files** under `docs/design/`:
+
+1. **System Architecture Overview (SAO)**
+2. **Threat Model & Security Architecture (TMSA)**
+3. **Interface Control Document (ICD)**
+4. **Data Architecture Specification (DAS)**
+5. **Component Design Specifications (CDS)**
+6. **Behavior & State Specifications (BSS)**
+7. **Configuration & Deployment Specification (CDS-Ops)**
+8. **Verification & Validation Plan (VVP)**
+9. **Operational Security & Runbook Specification (OSR)**
+10. **Compliance & Governance Map (CGM)**
+
+- Each document must **reference its GitHub Issue**.
+- Track all requirements in GitHub and update progress as work is completed.
+
+## 7. “Do Not” Rules
+
+- DO NOT disable any linting or tests.
+- DO NOT overwrite entire files. Use **incremental patches** only.
+- DO NOT use global variables outside the **dedicated constants file**.
+- DO NOT generate SvelteKit 4 code (`<slot>` or old patterns).
+- DO NOT bypass secure coding standards, dependency rules, or TLS requirements.
+
+## 8. Summary / TL;DR Guidance
+
+- **Good TL;DRs:** concise findings, only relevant failures, lettered next-step options.
+- **Bad TL;DRs:** verbose, redundant, or restate known requirements.
+
+**Example:**
+
+```markdown
+- Checked color tokens against WCAG AAA.
+- Identified primary and accent failures only.
+- Minimal adjustments needed to meet AAA.
+- Options:
+  A) Apply minimal color corrections.
+  B) Generate variant palette for selection.
+  C) Produce visual difference component.
+```
 
 - Use any available MCP tools.
 - Prefer GitHub MCP over `gh` CLI.
