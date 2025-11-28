@@ -31,6 +31,43 @@ async function run() {
       }
     }
 
+    // Start the dev server so the tests have an endpoint to hit. This mirrors
+    // Playwright's `webServer` behavior used by the test runner.
+    const { spawn } = require('child_process');
+    const dev = spawn('pnpm', ['dev'], { stdio: 'inherit' });
+
+    // Wait for the server to be available
+    const https = require('https');
+    const maxWait = 60000;
+    const start = Date.now();
+    async function waitForServer() {
+      return new Promise((resolve, reject) => {
+        (function ping() {
+          const req = https.request(baseURL + '/', { method: 'HEAD', timeout: 2000 }, (res) => {
+            resolve();
+          });
+          req.on('error', (err) => {
+            if (Date.now() - start > maxWait) return reject(new Error('Timed out waiting for dev server'));
+            setTimeout(ping, 500);
+          });
+          req.on('timeout', () => {
+            req.destroy();
+            if (Date.now() - start > maxWait) return reject(new Error('Timed out waiting for dev server'));
+            setTimeout(ping, 500);
+          });
+          req.end();
+        })();
+      });
+    }
+
+    try {
+      await waitForServer();
+    } catch (e) {
+      console.error('Dev server did not start in time:', e && e.message ? e.message : e);
+      dev.kill();
+      process.exit(1);
+    }
+
     console.info('Launching Chromium persistent context with profile:', userDataDir);
     const context = await chromium.launchPersistentContext(userDataDir, {
       headless: true
@@ -49,6 +86,7 @@ async function run() {
 
     console.info('E2E check succeeded: <h1> found');
     await context.close();
+    dev.kill();
     process.exit(0);
   } catch (err) {
     console.error('Persistent e2e runner failed:', err && err.message ? err.message : err);
