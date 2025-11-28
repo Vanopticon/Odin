@@ -28,23 +28,23 @@ Key principles:
 Odin groups capabilities into three primary areas: Configuration, Detection Tuning, and System Operations. High-level features include:
 
 - Configuration Management
-  - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
-  - Rule versioning with diffs, rollback, and scheduled effective dates.
-  - Bulk import/export and CSV/JSON interchange for large-scale edits.
+    + Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+    + Rule versioning with diffs, rollback, and scheduled effective dates.
+    + Bulk import/export and CSV/JSON interchange for large-scale edits.
 
 - Source & Feed Management
-  - Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
-  - Feed health, last-ingest stats, and conflict resolution rules.
+    + Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
+    + Feed health, last-ingest stats, and conflict resolution rules.
 
 - Detection Logic Tuning
-  - Tunable scoring models, multi-condition rule builder, and simulation mode.
-  - False-positive feedback loop, whitelists, and explainability panels.
+    + Tunable scoring models, multi-condition rule builder, and simulation mode.
+    + False-positive feedback loop, whitelists, and explainability panels.
 
 - Analytics & Reporting
-  - Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
+    + Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
 
 - Operations & Audit
-  - Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
+    + Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
 
 For a compact feature overview, see `docs/README.md` and `docs/CHANGELOG.md`.
 
@@ -53,7 +53,6 @@ For a compact feature overview, see `docs/README.md` and `docs/CHANGELOG.md`.
 - Frontend: SvelteKit 5 (TypeScript) — strict TypeScript settings in `tsconfig.json`.
 - Package manager: `pnpm` (monorepo-ready via `pnpm-workspace.yaml`).
 - Build: Vite (configured in `vite.config.ts`).
-- E2E: Playwright (see `playwright.config.ts` and `e2e/demo.test.ts`).
 - Server: lightweight Node/Express adapter used for local dev (`server/server.js`).
 - Database: schema and migrations under `src/lib/db/` (TypeORM-like migration scripts).
 
@@ -82,7 +81,7 @@ Project layout (high level)
 - `src/` — application sources (Svelte pages, lib, routes)
 - `src/lib/db/` — data-source, migrations, and seed scripts
 - `docs/` — design docs, architecture notes, and operation guides
-- `e2e/` — end-to-end tests (Playwright)
+- `e2e/` — end-to-end tests
 
 ## Development
 
@@ -93,7 +92,6 @@ pnpm install        # install dependencies
 pnpm dev            # run development server
 pnpm build          # build for production
 pnpm test           # run unit & integration tests (where configured)
-pnpm e2e            # run end-to-end Playwright tests
 ```
 
 Editor recommendations
@@ -108,7 +106,6 @@ The repo includes migration scripts in `src/lib/db/migrations/`. Use the include
 ## Testing
 
 - Unit tests: located under `src/__tests__/` and run via the `pnpm test` script.
-- E2E: Playwright tests are in `e2e/` and can be run with `pnpm e2e`.
 
 Example: run e2e locally
 

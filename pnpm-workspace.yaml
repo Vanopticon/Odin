@@ -2,4 +2,5 @@ ignoredBuiltDependencies:
   - protobufjs
 
 onlyBuiltDependencies:
+  - chromedriver
   - esbuild
