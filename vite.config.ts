@@ -9,16 +9,15 @@ import {
 	PORT as SETTINGS_PORT,
 	TLS_KEY_PATH,
 	TLS_CERT_PATH,
-	OD_HMR_HOST,
-	OD_HMR_PORT,
 	RATE_LIMIT_MAX
 } from './src/lib/settings';
 
 // Vite-specific aliases/local names
 export const HOST = SETTINGS_HOST || os.hostname() || 'localhost';
-export const PORT = parseInt(String(SETTINGS_PORT || '3000'), 10);
-export const DEV_HMR_HOST = OD_HMR_HOST || HOST;
-export const DEV_HMR_PORT = parseInt(String(OD_HMR_PORT || '3001'), 10);
+export const PORT = parseInt(String(SETTINGS_PORT || '443'), 10);
+// Use process.env for these values to match how other configs load env vars
+export const DEV_HMR_HOST = HOST;
+export const DEV_HMR_PORT = PORT + 1;
 
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],

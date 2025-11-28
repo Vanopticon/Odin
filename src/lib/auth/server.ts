@@ -63,6 +63,19 @@ export function hasAnyGroupServer(event: RequestEvent, wanted: string[]) {
 
 export function hasPermissionServer(event: RequestEvent, permission: string) {
 	try {
+		// Prefer explicit permissions attached to the session (e.g., DB-backed)
+		try {
+			const session = getSessionFromEvent(event as any) as any;
+			if (session && Array.isArray(session.permissions) && session.permissions.length > 0) {
+				if (session.permissions.includes(permission)) return true;
+				// admins in session permissions are also honored
+				if (session.permissions.includes('admin') || session.permissions.includes('odin_admins'))
+					return true;
+				return false;
+			}
+		} catch (e) {
+			// ignore and fall back to group/header mapping
+		}
 		const groups = getUserGroupsFromEvent(event);
 		if (groups.includes('odin_admins') || groups.includes('admin')) return true;
 		return groupsGrantPermission(groups, permission);

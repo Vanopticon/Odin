@@ -18,6 +18,7 @@ build/
 !.env.example
 
 # Secrets and key material
+.chromium-profile/
 *.pem
 *.key
 *.crt
