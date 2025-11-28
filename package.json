@@ -49,6 +49,7 @@
 		"start": "NODE_ENV=production node server/server.js",
 		"test": "pnpm test:unit && pnpm test:e2e",
 		"test:e2e": "node ./scripts/run-e2e-preferred.cjs",
+		"test:e2e:persistent": "node ./scripts/run-e2e-persistent.cjs",
 		"test:unit": "vitest run --passWithNoTests"
 	},
 	"type": "module",
