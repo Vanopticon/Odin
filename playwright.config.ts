@@ -94,7 +94,9 @@ projects.push(chromiumProject);
 const config = {
 	projects,
 	use: {
-		baseURL: `${URL}`
+		baseURL: `${URL}`,
+		// Allow tests to work against self-signed dev certificates.
+		ignoreHTTPSErrors: true
 	},
 	webServer: {
 		command: 'pnpm dev',
