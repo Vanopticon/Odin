@@ -69,8 +69,11 @@ async function run() {
     }
 
     console.info('Launching Chromium persistent context with profile:', userDataDir);
+    // Use headed (non-headless) to ensure the profile's NSS cert store is
+    // honored the same way as an interactive browser. The user's environment
+    // supports headed runs and the CA is trusted by the OS/profile.
     const context = await chromium.launchPersistentContext(userDataDir, {
-      headless: true
+      headless: false
     });
 
     const page = await context.newPage();
