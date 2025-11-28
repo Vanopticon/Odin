@@ -82,7 +82,11 @@ const chromiumProject = {
 	use: {
 		browserName: 'chromium',
 		launchOptions: {
-			args: usePersistent ? [`--user-data-dir=${userDataDir}`] : [],
+			// Use the standard Chromium user data directory so the launched
+			// browser process picks up the OS trust store (trusted CA).
+			// This helps Playwright-launched Chromium use certs already
+			// installed in the user's profile.
+			args: [`--user-data-dir=${userDataDir}`],
 			...(chromiumExecutable ? { executablePath: chromiumExecutable } : {})
 		}
 	}
@@ -94,9 +98,7 @@ projects.push(chromiumProject);
 const config = {
 	projects,
 	use: {
-		baseURL: `${URL}`,
-		// Allow tests to work against self-signed dev certificates.
-		ignoreHTTPSErrors: true
+		baseURL: `${URL}`
 	},
 	webServer: {
 		command: 'pnpm dev',
