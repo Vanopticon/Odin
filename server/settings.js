@@ -3,6 +3,7 @@ import os from 'os';
 
 dotenv.config();
 
+console.debug('Loading server settings from environment variables');
 export const PROD_MODE = process.env['NODE_ENV']?.toLowerCase() == 'production';
 
 export const TLS_KEY_PATH = process.env['OD_TLS_KEY'] || '/etc/tls/tls.key';

@@ -4,6 +4,9 @@ import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-base';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import client from 'prom-client';
+// The `@opentelemetry/resources` and `@opentelemetry/semantic-conventions`
+// packages are optional at runtime for some environments. Load them
+// dynamically so missing optional packages won't crash the server startup.
 
 // Initialize OpenTelemetry Node SDK with either an OTLP exporter (if configured)
 // or a ConsoleSpanExporter as a safe default for development.
@@ -20,16 +23,58 @@ try {
 		console.info('OpenTelemetry: using ConsoleSpanExporter (dev)');
 	}
 
+	// Allow service.name to be set via env, otherwise use a sensible default
+	const serviceName = process.env.OTEL_SERVICE_NAME || process.env.SERVICE_NAME || 'odin-server';
+
+	// Attempt to dynamically load resource helpers. If they are not
+	// available, continue without setting a Resource (SDK will still work).
+	let resourceOption = undefined;
+	try {
+		const { Resource } = await import('@opentelemetry/resources');
+		const { SemanticResourceAttributes } = await import('@opentelemetry/semantic-conventions');
+		resourceOption = new Resource({ [SemanticResourceAttributes.SERVICE_NAME]: serviceName });
+		// eslint-disable-next-line no-console
+		console.info('OpenTelemetry: resource and semantic conventions loaded');
+	} catch (e) {
+		// eslint-disable-next-line no-console
+		console.warn(
+			'OpenTelemetry optional resource modules not available, continuing without explicit Resource:',
+			e && e.message ? e.message : e
+		);
+	}
+
 	const sdk = new NodeSDK({
+		...(resourceOption ? { resource: resourceOption } : {}),
 		traceExporter,
 		instrumentations: [getNodeAutoInstrumentations()]
 	});
 
-	sdk.start().catch((err) => {
-		// Keep running even if telemetry fails to start; log for operational visibility
-		// eslint-disable-next-line no-console
-		console.error('OpenTelemetry failed to start', err);
-	});
+	// Start SDK and register a graceful shutdown handler. Keep failures non-fatal.
+	(async () => {
+		try {
+			await sdk.start();
+			// eslint-disable-next-line no-console
+			console.info('OpenTelemetry: SDK started');
+		} catch (err) {
+			// eslint-disable-next-line no-console
+			console.error('OpenTelemetry failed to start', err);
+		}
+
+		// On process exit attempt to shutdown the SDK cleanly
+		const shutdown = async () => {
+			try {
+				await sdk.shutdown();
+				// eslint-disable-next-line no-console
+				console.info('OpenTelemetry: SDK shut down');
+			} catch (err) {
+				// eslint-disable-next-line no-console
+				console.error('OpenTelemetry shutdown error', err);
+			}
+		};
+
+		process.on('SIGTERM', shutdown);
+		process.on('SIGINT', shutdown);
+	})();
 } catch (err) {
 	// eslint-disable-next-line no-console
 	console.error('OpenTelemetry initialization error', err);
