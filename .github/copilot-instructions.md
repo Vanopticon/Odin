@@ -2,7 +2,7 @@
 
 ## Long Term Memory (LTM, brain)
 
-- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge. #tool:obsidian_brain
+- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge.
 - You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
 - Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
 
@@ -35,6 +35,7 @@ Append or update LTM when:
 - New user preferences, patterns and practices for the project, or expectations are identified
 - An existing LTM needs to be updated to reflect current state
 - A new plan, sequence, or similar is created.
+- You provide the end of a response. At that point add a summary to the Obsidian Brain MCP.
 
 ### LTM Validation and Maintenance
 
@@ -159,10 +160,11 @@ This process must be followed in its entirety for all work:
     + `tailwindcss.com/docs` for TailwindCSS
     + `/hapijs/hapi` for @hapi
 - DO NOT USE `|| true` or `true ||` in shell scripts.
+- Use `pnpm` and `pnpx` instead of `npm` or `npx`.
 
 ## Mandatory Session Startup
 
-- **MANDATORY:** In every new session, before performing any other actions, call the Obsidian Brain MCP to load Long‑Term Memory.
+- **MANDATORY:** In every new session, before performing any other actions, call the Obsidian Brain MCP to load Long‑Term Memory. Do not perform a search, simply read the entire store. It is all part of the current context. This Vault is used solely for this project.
 
 - You MUST perform this search regardless of whether it seems necessary or not.
 - You MUST perform this search even if you _think_ you have all information required for a response. You do not.
