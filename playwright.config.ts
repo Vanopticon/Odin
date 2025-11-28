@@ -82,10 +82,6 @@ const chromiumProject = {
 	use: {
 		browserName: 'chromium',
 		launchOptions: {
-			// Use the standard Chromium user data directory so the launched
-			// browser process picks up the OS trust store (trusted CA).
-			// This helps Playwright-launched Chromium use certs already
-			// installed in the user's profile.
 			args: [`--user-data-dir=${userDataDir}`],
 			...(chromiumExecutable ? { executablePath: chromiumExecutable } : {})
 		}
