@@ -12,7 +12,6 @@ function which(bin) {
 	}
 }
 
-const firefox = which('firefox') || which('firefox-bin');
 const chromium =
 	which('chromium') ||
 	which('chromium-browser') ||
@@ -20,11 +19,11 @@ const chromium =
 	which('google-chrome-stable') ||
 	which('chrome');
 
-let preferred;
-if (firefox) preferred = 'firefox';
-else if (chromium) preferred = 'chromium';
-else preferred = 'chromium'; // fallback to Playwright bundled chromium
-
+// Always run tests using the Chromium project. If a system Chromium
+// executable is available, Playwright will use it via the config; otherwise
+// Playwright falls back to its bundled Chromium.
+const preferred = 'chromium';
+if (chromium) console.info(`Detected system Chromium executable: ${chromium}`);
 console.info(`Preferred browser: ${preferred}`);
 
 const extraArgs = process.argv.slice(2);

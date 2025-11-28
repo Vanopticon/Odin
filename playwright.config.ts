@@ -1,12 +1,22 @@
 import os from 'os';
+// `process` is available at runtime but TS in this environment may not have
+// Node.js typings. Declare it locally to keep this config file simple.
+declare const process: any;
 import fs from 'fs';
 import { execSync } from 'child_process';
 import { defineConfig } from '@playwright/test';
 console.info('Loading Playwright configuration');
 
-// No environment variables are used in this config. Use system hostname
-// and standard HTTPS port 443 for the base URL.
-const URL = `https://${os.hostname()}:443`;
+// Allow environment overrides for the test server address. Prefer an
+// explicit `PLAYWRIGHT_BASE_URL` if provided (useful in CI). Otherwise
+// prefer the server's configured host/port via `OD_HOST`/`OD_PORT`, and
+// fall back to localhost:3000. Default to `https` since the dev server
+// uses TLS by default in this repo's server implementation.
+const envBase = process.env.PLAYWRIGHT_BASE_URL;
+const host = process.env.OD_HOST || process.env.HOST || os.hostname() || 'localhost';
+const port = process.env.OD_PORT || process.env.PORT || '3000';
+const proto = process.env.PLAYWRIGHT_PROTOCOL || 'https';
+const URL = envBase || `${proto}://${host}:${port}`;
 
 // Fixed user data dir (no env overrides)
 const userDataDir = `${os.homedir()}/.config/chromium`;
@@ -55,28 +65,18 @@ const chromiumCandidates = [
 	'/usr/bin/chrome',
 	'/snap/bin/chromium'
 ];
-const firefoxCandidates = [
-	// search PATH for these names
-	'firefox',
-	'firefox-bin',
-	// absolute fallbacks
-	'/usr/bin/firefox',
-	'/usr/bin/firefox-bin'
-];
-
 const chromiumExecutable = findExecutable(chromiumCandidates);
-const firefoxExecutable = findExecutable(firefoxCandidates);
 
 if (chromiumExecutable) console.info(`Detected system Chromium executable: ${chromiumExecutable}`);
-if (firefoxExecutable) console.info(`Detected system Firefox executable: ${firefoxExecutable}`);
 
 // No environment variables used; persistent profile disabled by default.
 const usePersistent = false;
 
 // Configure projects so each browser project can use its detected system
-// executable. Prefer Firefox over Chromium when both are available.
+// executable. Only configure Chromium for local and CI runs. If a system
+// Chromium is detected, prefer it by setting `executablePath`; otherwise
+// leave it unset so Playwright uses the bundled browser.
 const projects: any[] = [];
-// Prepare project descriptors without committing order yet.
 const chromiumProject = {
 	name: 'chromium',
 	use: {
@@ -88,28 +88,8 @@ const chromiumProject = {
 	}
 };
 
-const firefoxProject = {
-	name: 'firefox',
-	use: {
-		browserName: 'firefox',
-		launchOptions: {
-			...(firefoxExecutable ? { executablePath: firefoxExecutable } : {})
-		}
-	}
-};
-
-// Choose project ordering based on detected system executables.
-// Prefer Firefox first when both browsers are present on the system.
-const hasFirefox = !!firefoxExecutable;
-const hasChromium = !!chromiumExecutable;
-
-if (hasFirefox || hasChromium) {
-	if (hasFirefox) projects.push(firefoxProject);
-	if (hasChromium) projects.push(chromiumProject);
-} else {
-	// No system executables found — fall back to Playwright's bundled Chromium.
-	projects.push(chromiumProject);
-}
+// Prefer system Chromium when available; otherwise fall back to Playwright's bundled Chromium.
+projects.push(chromiumProject);
 
 const config = {
 	projects,
