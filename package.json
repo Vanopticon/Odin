@@ -20,15 +20,15 @@
 		"zod": "^4.1.13"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.57.0",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/kit": "^2.49.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@tailwindcss/vite": "^4.1.17",
 		"@vitest/browser-playwright": "^4.0.14",
-		"playwright": "^1.57.0",
+		"chromedriver": "^142.0.3",
 		"prettier": "^3.7.1",
 		"prettier-plugin-svelte": "^3.4.0",
+		"selenium-webdriver": "^4.38.0",
 		"svelte": "^5.45.2",
 		"svelte-check": "^4.3.4",
 		"tailwindcss": "^4.1.17",
@@ -48,9 +48,13 @@
 		"lint": "prettier --check .",
 		"start": "NODE_ENV=production node server/server.js",
 		"test": "pnpm test:unit && pnpm test:e2e",
-		"test:e2e": "node ./scripts/run-e2e-preferred.cjs",
-		"test:e2e:persistent": "node ./scripts/run-e2e-persistent.cjs",
+		"test:e2e": "node ./scripts/run-e2e-selenium.cjs",
 		"test:unit": "vitest run --passWithNoTests"
+	},
+	"vitest": {
+		"exclude": [
+			"e2e/**"
+		]
 	},
 	"type": "module",
 	"version": "1.0.0-alpha"
