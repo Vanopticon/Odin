@@ -30,11 +30,55 @@ try {
 	// available, continue without setting a Resource (SDK will still work).
 	let resourceOption = undefined;
 	try {
-		const { Resource } = await import('@opentelemetry/resources');
-		const { SemanticResourceAttributes } = await import('@opentelemetry/semantic-conventions');
-		resourceOption = new Resource({ [SemanticResourceAttributes.SERVICE_NAME]: serviceName });
-		// eslint-disable-next-line no-console
-		console.info('OpenTelemetry: resource and semantic conventions loaded');
+		// Load resource helpers; be tolerant of differing package shapes across
+		// OpenTelemetry versions (some versions export Resource differently).
+		const resourcesModule = await import('@opentelemetry/resources');
+		const semconvModule = await import('@opentelemetry/semantic-conventions');
+		const ResourceCandidate =
+			resourcesModule.Resource || resourcesModule.default || resourcesModule;
+		const SemanticResourceAttributes =
+			semconvModule.SemanticResourceAttributes || semconvModule.default || semconvModule;
+
+		// Attempt to construct or obtain a Resource in a few compatible ways.
+		try {
+			if (typeof ResourceCandidate === 'function') {
+				resourceOption = new ResourceCandidate({
+					[SemanticResourceAttributes.SERVICE_NAME]: serviceName
+				});
+			} else if (ResourceCandidate && typeof ResourceCandidate.create === 'function') {
+				resourceOption = ResourceCandidate.create({
+					[SemanticResourceAttributes.SERVICE_NAME]: serviceName
+				});
+			} else if (ResourceCandidate && typeof ResourceCandidate.from === 'function') {
+				resourceOption = ResourceCandidate.from({
+					[SemanticResourceAttributes.SERVICE_NAME]: serviceName
+				});
+			} else {
+				// As a last-resort, try to use the module directly if it already
+				// represents a Resource-like object.
+				resourceOption = ResourceCandidate;
+			}
+			// eslint-disable-next-line no-console
+			console.info('OpenTelemetry: resource and semantic conventions loaded (compat)');
+
+			// Validate that the created resource looks like an OpenTelemetry
+			// Resource (some SDK code expects a `merge` function). If not,
+			// discard and continue without explicit resource to avoid
+			// runtime errors in differing versions.
+			if (!(resourceOption && typeof resourceOption.merge === 'function')) {
+				// eslint-disable-next-line no-console
+				console.warn(
+					'OpenTelemetry: created resource is incompatible with SDK, ignoring explicit resource'
+				);
+				resourceOption = undefined;
+			}
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.warn(
+				'OpenTelemetry: failed to construct Resource from optional modules, continuing without explicit Resource:',
+				e && e.message ? e.message : e
+			);
+		}
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.warn(
