@@ -130,7 +130,10 @@ try {
 			});
 		}
 
-		const healthUrl = `${chosenServer.replace(/:443$/, ':')}/api/health`.replace(/:$/, ':' + odPort);
+		const healthUrl = `${chosenServer.replace(/:443$/, ':')}/api/health`.replace(
+			/:$/,
+			':' + odPort
+		);
 		// More robust URL: ensure :port is present
 		const baseUrl = `${chosenServer}`;
 		const healthCheck = `${baseUrl.replace(/:\d+$/, '')}:${odPort}/api/health`;
@@ -152,7 +155,11 @@ try {
 		if (fs.existsSync(caPath)) {
 			console.log('Found CA certificate at', caPath, '- relying on OS trust store for validation');
 		} else {
-			console.warn('CA certificate not found at', caPath, "— the browser may reject the server certificate unless it's trusted by the OS");
+			console.warn(
+				'CA certificate not found at',
+				caPath,
+				"— the browser may reject the server certificate unless it's trusted by the OS"
+			);
 		}
 
 		const chromeOptions = new chrome.Options();
