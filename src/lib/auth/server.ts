@@ -89,9 +89,13 @@ export function hasPermissionServer(event: RequestEvent, permission: string) {
 		try {
 			const session = getSessionFromEvent(event as any) as any;
 			if (session && Array.isArray(session.permissions) && session.permissions.length > 0) {
+				// explicit permission match
 				if (session.permissions.includes(permission)) return true;
-				// admins in session permissions are also honored
-				if (session.permissions.includes('admin') || session.permissions.includes('odin_admins'))
+				// honor admin role on the session (roles are separate from permissions)
+				if (
+					Array.isArray(session.roles) &&
+					(session.roles.includes('admin') || session.roles.includes('odin_admins'))
+				)
 					return true;
 				return false;
 			}

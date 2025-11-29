@@ -158,7 +158,7 @@ This process must be followed in its entirety for all work:
   - `/sveltejs/kit` for SvelteKit
   - `tailwindcss.com/docs` for TailwindCSS
   - `/hapijs/hapi` for @hapi
-- DO NOT USE `|| true` or `true ||` commands.
+- DO NOT USE `true` as a command.
 - Use `pnpm` and `pnpx` instead of `npm` or `npx`.
 
 ## Mandatory Session Startup

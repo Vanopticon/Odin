@@ -28,24 +28,24 @@ Key principles:
 Odin groups capabilities into three primary areas: Configuration, Detection Tuning, and System Operations. High-level features include:
 
 - Configuration Management
-    + Editable keyword/phrase lists, IOCs, and regex-builder with linting.
-        * Keywords can be organized by groups, native language, or country where spoken.
-    + Rule versioning with diffs, rollback, and scheduled effective dates.
-    + Bulk import/export and CSV/JSON interchange for large-scale edits.
+  - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+    - Keywords can be organized by groups, native language, or country where spoken.
+  - Rule versioning with diffs, rollback, and scheduled effective dates.
+  - Bulk import/export and CSV/JSON interchange for large-scale edits.
 
 - Source & Feed Management
-    + Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
-    + Feed health, last-ingest stats, and conflict resolution rules.
+  - Enable/disable feeds, per-feed normalization, trust scoring and prioritization.
+  - Feed health, last-ingest stats, and conflict resolution rules.
 
 - Detection Logic Tuning
-    + Tunable scoring models, multi-condition rule builder, and simulation mode.
-    + False-positive feedback loop, whitelists, and explainability panels.
+  - Tunable scoring models, multi-condition rule builder, and simulation mode.
+  - False-positive feedback loop, whitelists, and explainability panels.
 
 - Analytics & Reporting
-    + Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
+  - Dashboards (trend, heatmap, source distribution), correlation views, and IOC propagation analysis.
 
 - Operations & Audit
-    + Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
+  - Pipeline and worker health views, audit log with filtering/export, and RBAC-based access control.
 
 For a compact feature overview, see `docs/README.md` and `docs/CHANGELOG.md`.
 

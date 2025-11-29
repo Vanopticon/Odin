@@ -2,7 +2,7 @@ name: CI + Copilot Review
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test-and-integration:

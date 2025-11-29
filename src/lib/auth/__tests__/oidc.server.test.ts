@@ -192,7 +192,10 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 				return { ok: true, json: async () => ({ access_token: 'at', id_token: 'it' }) } as any;
 			}
 			if (typeof input === 'string' && input === cfg.userinfo_endpoint) {
-				return { ok: true, json: async () => ({ sub: 'user1', email: 'dbuser@example.com' }) } as any;
+				return {
+					ok: true,
+					json: async () => ({ sub: 'user1', email: 'dbuser@example.com' })
+				} as any;
 			}
 			return { ok: false, text: async () => 'not found' } as any;
 		}) as any;
