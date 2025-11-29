@@ -23,7 +23,9 @@ export function getAppDataSource(): DataSource | null {
 /**
  * Legacy export for backwards compatibility.
  * Creates a placeholder DataSource that may not have the correct URL.
- * Prefer using getAppDataSource() after initializeDataSource().
+ * NOTE: This DataSource is not initialized - use getAppDataSource() after initializeDataSource().
+ * The entities here are for metadata reference only; the active DataSource (_appDataSource)
+ * omits entities to avoid validation issues during test initialization.
  */
 export const AppDataSource = new DataSource({
 	type: 'postgres',
@@ -55,7 +57,8 @@ export async function initializeDataSource(): Promise<DataSource> {
 	console.log('initializeDataSource: using DB URL ->', databaseUrl);
 
 	// Create a fresh DataSource with the correct URL and migration classes
-	// Note: We omit entities to avoid entity validation issues during test initialization
+	// Note: We omit entities to avoid entity constructor validation issues during test initialization.
+	// The Language entity has a constructor that requires valid arguments, which TypeORM validates at startup.
 	_appDataSource = new DataSource({
 		type: 'postgres',
 		url: databaseUrl,
@@ -65,7 +68,7 @@ export async function initializeDataSource(): Promise<DataSource> {
 		migrations: [CreateInitialTables0001, CreateAuthTables0002, CreateAuditEntries0003]
 	});
 
-	// Also update the legacy AppDataSource for backwards compatibility
+	// Update the legacy AppDataSource URL for reference only (it's not initialized)
 	(AppDataSource as any).options = {
 		...(AppDataSource as any).options,
 		url: databaseUrl
