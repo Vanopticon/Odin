@@ -1,0 +1,30 @@
+{
+  "id": "data-model-and-storage",
+  "title": "Data Model, Migrations, and Seeding",
+  "summary": "Define the database schema ownership, migration strategy, and seed data approach.",
+  "description": "Specifies where models live, migration responsibilities, expected constraints, indexing and seeding approaches for test/dev. Aligns with existing `server/db/migrations` and `seed.ts`.",
+  "components": [
+    { "name": "Schema Migrations", "responsibility": "Type-safe migration scripts in `src/lib/db/migrations`." },
+    { "name": "Seed Data", "responsibility": "Repeatable dev/test seeds via `seed.ts`." },
+    { "name": "Data Access Layer", "responsibility": "Centralized `data-source.ts` for DB connections and transactions." }
+  ],
+  "interactions": [
+    "Migrations run on CI before DB-dependent tests.",
+    "Seed scripts can be run locally for dev environment to create sample accounts and configs.",
+    "Data access is performed through a small DAO layer and transaction boundaries are explicit for multi-step changes." 
+  ],
+  "data_flow": "API -> DAO -> DB. Audit writes may be separated to ensure durability and isolation.",
+  "tech_stack": ["Postgres", "TypeORM or existing data-source implementation in `src/lib/db`"],
+  "acceptance_criteria": [
+    "Migrations apply cleanly in a fresh DB and in CI containers.",
+    "Seed script creates deterministic test fixtures used by unit and integration tests.",
+    "Indexes and constraints exist for common queries (e.g., unique keys for sources, users)." 
+  ],
+  "tasks": [
+    "Review `server/db/migrations/*` and ensure each migration is idempotent.",
+    "Add migration test harness to CI to validate forward/backward migrations where feasible.",
+    "Document seed usage and expose `pnpm` script to load test fixtures." 
+  ],
+  "references": ["src/lib/db/", "server/db/migrations/"],
+  "created_at": "2025-11-29"
+}

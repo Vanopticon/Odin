@@ -2,15 +2,16 @@
 
 ## Long Term Memory (LTM, brain)
 
-- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge.
-- You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
-- Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
+- The Obsidian Brain MCP server (a.k.a. LTM, or brain) is the primary source of project knowledge.
+- You MUST begin every session by reading the LTM.
+- You are responsible for managing the LTM, including seeding keys if missing or needed.
+- You have permission to use the Obsidian Brain MCP as you choose.
 
 LTM uses a hierarchical structure with these core LTM keys:
 
 - Required LTM keys:
-    + project_brief - Foundation document
-    + active_context - Current work state and focus
+    + project_brief - A summary of the project and its goals
+    + active_context - Current work state and focus; a summarized version of the current context
     + system_patterns - Architecture and design patterns
     + tech_stack - Technologies and setup
     + progress_tracker - Status and next steps
@@ -49,17 +50,6 @@ Append or update LTM when:
 - Verify tech_stack matches actual dependencies
 - Confirm system_patterns reflect current architecture
 
-### LTM Criteria
-
-The LTM should:
-
-- Enables immediate context understanding at session start
-- Maintains consistency across all interactions
-- Preserves important decisions and patterns
-- Tracks project evolution accurately
-- Reduce need for re-explanation of project details
-- Stores information accurately, concisely, and reusably
-
 ### Context Handoff
 
 When context window is 75% full:
@@ -91,18 +81,26 @@ Odin is the management and reporting interface for the Vanopticon cyber-threat s
 - If selecting work, choose the feature, bug, or requirement with the greatest impact, or if in doubt the first item.
 - Iterate without pausing or interruptions until the implementation is complete and all tests are passing. For ambiguous cases proceed with the most secure, common approach and include a note in the summary. DO NOT PAUSE TO ASK QUESTIONS. DO NOT PAUSE FOR CLARIFICATION.
 - Use `pnpm test`, `pnpm lint` and `pnpm format` as linting, formatting, and testing tools. They are all provided and the scripts are in the `package.json`.
+- It is unacceptable to edit or remove test unless acting as the Architect because this could lead to missing or buggy functionality.
 
 ## Workflow
 
 This process must be followed in its entirety for all work:
 
-- Read through LTM. Discard irrelevant information. Summarize and replace the results of this scan. If LTM is unavailable stop and notify the user for intervention.
-- Create a feature branche from `v1.0.0` and name it after the feature.
+- Start by reviewing the project and getting your bearings on the context and status of the project:
+    + Run `pwd` to identify the folder you are working in. You will not be able to access files outside this folder.
+    + Read through the Obsidian Brain MCP information to etablish the context of the project. Discard irrelevant information. Summarize and replace the results of this scan. If the Obsidian Brain MCP is unavailable stop and notify the user for intervention.
+    + Read the git logs and progress files to get up to speed on what was recently worked on.
+- Select the highest priority feature to work on. Only work one feature at a time.
 - Ask any questions and make any suggestions prior to beginning work. Summarize and replace the Q&A.
+- Create a feature branch from `v1.0.0` and name it after the feature.
 - Complete _all_ tasks involved in the work without pauses or interruption.
 - Create or modify tests for all code changes.
 - Update user/design documentation when behavior or interfaces change.
-- Open a PR upon completion; link all relevant Issues.
+- Commit all work with a concise, descriptive commit message.
+- Update the Obsidian Brain MCP with the status of the feature.
+- Update the "passes" field of the feature file to `true`.
+- Use the GitHub MCP server to open a PR; link all relevant Issues.
 
 ## Coding Standards
 
@@ -125,7 +123,7 @@ This process must be followed in its entirety for all work:
 - Tests cover positive, negative, and security cases for all code units.
 - Tests cover all normal user interactions and common user errors.
 - All tests related to the work are passing.
-- The Issue has been completely resolved.
+- The feature has been completely implemented.
 
 ## Copilot Persona & Behavior
 

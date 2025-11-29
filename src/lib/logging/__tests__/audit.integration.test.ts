@@ -31,8 +31,12 @@ describe('audit persistence (integration)', () => {
     const pass = 'test';
     const db = 'testdb';
 
-    // Set environment for AppDataSource resolver
-    process.env.OD_DB_URL = `postgresql://${user}:${pass}@${host}:${port}/${db}`;
+    // debug info
+    // eslint-disable-next-line no-console
+    console.log('Testcontainers started PG host,port ->', host, port, 'containerId=', container.getId && container.getId());
+
+    // Set environment for AppDataSource resolver (use schema 'postgres' for widest compatibility)
+    process.env.OD_DB_URL = `postgres://${user}:${pass}@${host}:${port}/${db}`;
 
     // Initialize datasource and run migrations
     await initializeDataSource();

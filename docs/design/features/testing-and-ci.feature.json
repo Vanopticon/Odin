@@ -1,0 +1,29 @@
+{
+  "id": "testing-and-ci",
+  "title": "Testing Strategy and CI",
+  "summary": "Outline unit, integration, and e2e testing approaches and CI pipeline requirements.",
+  "description": "Define test types, where tests live (`src/__tests__`, `server/__tests__`, `e2e/`), how to run them locally, and CI job expectations (migrations, seed, run tests).",
+  "components": [
+    { "name": "Unit Tests", "responsibility": "Fast tests for utils and small modules in `src/lib`." },
+    { "name": "Integration Tests", "responsibility": "DB-backed tests for data layer and audit integration (server/__tests__)." },
+    { "name": "E2E Tests", "responsibility": "Black-box browser or HTTP tests in `e2e/` verify key user flows." }
+  ],
+  "interactions": [
+    "CI runs migrations and seeds, then runs unit -> integration -> e2e stages.",
+    "Failed tests fail the pipeline; flakiness should be addressed with retries or test fixes." 
+  ],
+  "data_flow": "CI provision DB -> run migrations -> run seeds -> execute tests -> gather artifacts (test-results).",
+  "tech_stack": ["pnpm scripts in `package.json`", "Vitest/Jest as configured", "Playwright or E2E runner in `e2e/`"],
+  "acceptance_criteria": [
+    "`pnpm test` runs unit + integration tests reliably on CI containers.",
+    "E2E smoke tests (homepage, health) pass against a freshly migrated DB.",
+    "Test artifacts are produced and attached to CI jobs for failures." 
+  ],
+  "tasks": [
+    "Ensure `pnpm test` works locally with developer instructions.",
+    "Add CI job to run migrations before tests and tear down DB afterwards.",
+    "Document how to run subset of tests for faster feedback loops." 
+  ],
+  "references": ["e2e/", "server/__tests__", "src/__tests__/"],
+  "created_at": "2025-11-29"
+}

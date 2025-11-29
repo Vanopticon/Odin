@@ -34,6 +34,10 @@ export async function initializeDataSource() {
 
 	if (AppDataSource.isInitialized) return AppDataSource;
 
+	// debug: show resolved DB URL when initializing (helps integration tests)
+	// eslint-disable-next-line no-console
+	console.log('initializeDataSource: using DB URL ->', databaseUrl);
+
 	// Update DataSource options with the resolved URL before initializing.
 	// TypeORM keeps the options on the instance; mutate them here so other
 	// modules using the exported `AppDataSource` see the correct config.

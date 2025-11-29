@@ -1,0 +1,30 @@
+{
+  "id": "api-surface-and-validation",
+  "title": "API Surface, Validation, and Error Handling",
+  "summary": "Define the API endpoints, validation schemas, error model, and testing strategy.",
+  "description": "Cover endpoints under `src/routes/api`, their responsibilities, expected inputs/outputs, shared validation logic (schemas), and consistent error responses for the UI and automated tests.",
+  "components": [
+    { "name": "Route Handlers", "responsibility": "Implement REST endpoints (triggers, health, config)." },
+    { "name": "Schemas & Validation", "responsibility": "Centralized request/response schemas in `src/lib/schemas`." },
+    { "name": "Error Model", "responsibility": "Standard JSON error format and HTTP codes." }
+  ],
+  "interactions": [
+    "Routes validate incoming payloads and return 4xx on invalid input.",
+    "Successful modifications produce audit entries.",
+    "Health endpoints remain unauthenticated and lightweight for e2e tests." 
+  ],
+  "data_flow": "Client -> API -> validation -> business logic -> DB -> response (and audit).",
+  "tech_stack": ["Zod or existing schema helpers (see `src/lib/schemas/`)", "SvelteKit endpoints in TypeScript"],
+  "acceptance_criteria": [
+    "All API endpoints have explicit request/response schemas.",
+    "Tests cover positive & negative cases using existing test harness (`pnpm test`).",
+    "Consistent error format documented and used across the API." 
+  ],
+  "tasks": [
+    "Inventory `src/routes/api/*` and ensure each route uses a schema from `src/lib/schemas`.",
+    "Add or normalize error formatting utilities and unit tests for them.",
+    "Document API surface in `docs/` or update `openapi.yaml` as needed." 
+  ],
+  "references": ["src/routes/api/", "src/lib/schemas/"] ,
+  "created_at": "2025-11-29"
+}

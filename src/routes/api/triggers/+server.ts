@@ -4,6 +4,9 @@ import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
 import { requirePermission, requireAuth } from '$lib/auth/server';
 import { validateCsrf } from '$lib/auth/csrf';
 import { z } from 'zod';
+import { TriggerCreate, TriggerUpdate } from '$lib/schemas/trigger';
+import { requireValidBody } from '$lib/schemas/validate';
+import { writeAudit } from '$lib/logging/audit';
 
 async function getRepository() {
 	// ensure DataSource is initialized
@@ -38,23 +41,9 @@ export async function POST(event: RequestEvent) {
 	} catch (e) {
 		return e as Response;
 	}
-	const body = await event.request.json();
-	// validate input
-	const createSchema = z.object({
-		name: z.string().min(1).optional(),
-		expression: z.string().optional(),
-		enabled: z.boolean().optional()
-	});
-	try {
-		createSchema.parse(body);
-	} catch (e: any) {
-		return new Response(
-			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
-			{
-				status: 400
-			}
-		);
-	}
+	const maybe = await requireValidBody(event, TriggerCreate);
+	if (maybe instanceof Response) return maybe;
+	const body = maybe;
 	const repo = await getRepository();
 
 	const t = repo.create({
@@ -64,6 +53,12 @@ export async function POST(event: RequestEvent) {
 	} as Partial<Trigger>);
 
 	const saved = await repo.save(t);
+	// audit: creation
+	try {
+		await writeAudit({ action: 'trigger.create', resource: 'trigger', resource_id: saved.id, data: saved });
+	} catch (err) {
+		// do not block response on audit failures
+	}
 	return new Response(JSON.stringify(saved), { status: 201 });
 }
 
@@ -74,23 +69,9 @@ export async function PUT(event: RequestEvent) {
 	} catch (e) {
 		return e as Response;
 	}
-	const body = await event.request.json();
-	const updateSchema = z.object({
-		id: z.string().uuid(),
-		name: z.string().optional(),
-		expression: z.string().optional(),
-		enabled: z.boolean().optional()
-	});
-	try {
-		updateSchema.parse(body);
-	} catch (e: any) {
-		return new Response(
-			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
-			{
-				status: 400
-			}
-		);
-	}
+	const maybeUpdate = await requireValidBody(event, TriggerUpdate);
+	if (maybeUpdate instanceof Response) return maybeUpdate;
+	const body = maybeUpdate;
 
 	const repo = await getRepository();
 	const item = await repo.findOneBy({ id: body.id });
@@ -101,6 +82,9 @@ export async function PUT(event: RequestEvent) {
 	if (typeof body.enabled === 'boolean') item.enabled = body.enabled;
 
 	const saved = await repo.save(item);
+	try {
+		await writeAudit({ action: 'trigger.update', resource: 'trigger', resource_id: saved.id, data: saved });
+	} catch (err) {}
 	return new Response(JSON.stringify(saved), { status: 200 });
 }
 
@@ -117,5 +101,8 @@ export async function DELETE(event: RequestEvent) {
 	const item = await repo.findOneBy({ id });
 	if (!item) return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
 	await repo.remove(item);
+	try {
+		await writeAudit({ action: 'trigger.delete', resource: 'trigger', resource_id: id });
+	} catch (err) {}
 	return new Response(null, { status: 204 });
 }

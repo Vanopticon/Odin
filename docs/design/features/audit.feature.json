@@ -1,0 +1,30 @@
+{
+  "id": "audit-and-logging",
+  "title": "Audit Logging and Change History",
+  "summary": "Design for audit entry schema, how audit entries are emitted, stored, and surfaced in the UI.",
+  "description": "Audit is critical for Odin. This describes when to emit audit entries, required fields, retention policy, and how to query and display audit history.",
+  "components": [
+    { "name": "Audit Emitter", "responsibility": "Helper to create audit entries from route handlers and service methods (`src/lib/logging/audit.ts`)." },
+    { "name": "Audit Storage", "responsibility": "DB table for audit entries with indexes for timestamp and actor." },
+    { "name": "Audit UI", "responsibility": "Filtering, pagination, and export features in UI." }
+  ],
+  "interactions": [
+    "Any configuration change goes through API and emits an audit entry with actor, timestamp, change type, and optional diff.",
+    "Audit entries are immutable and retained for the configured retention period.",
+    "Sensitive data must be redacted from audit logs per policy." 
+  ],
+  "data_flow": "API action -> audit emitter attaches metadata -> write to audit table -> UI queries audit table for display.",
+  "tech_stack": ["Structured JSON audit stored in Postgres", "`src/lib/logging/audit.ts` utilities"],
+  "acceptance_criteria": [
+    "Every mutation endpoint creates an audit record and is covered by an integration test.",
+    "Audit UI can filter by actor, resource type, time range, and action.",
+    "Retention policy implemented as a background job or DB policy." 
+  ],
+  "tasks": [
+    "Add audit emission to missing mutation handlers.",
+    "Write integration tests for audit creation (`src/lib/logging/__tests__`).",
+    "Implement retention job and document retention configuration." 
+  ],
+  "references": ["src/lib/logging/audit.ts", "server/db/migrations/0003-CreateAuditEntries.ts"],
+  "created_at": "2025-11-29"
+}
