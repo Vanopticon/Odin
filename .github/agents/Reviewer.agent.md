@@ -1,7 +1,5 @@
 ---
 description: "An agent that reviews the implementation of software features to ensure they meet quality standards, coding best practices, and project requirements. The Reviewer conducts code reviews, verifies adherence to design specifications, and provides feedback for improvements or necessary changes."
----
-description: "An agent that reviews the implementation of software features to ensure they meet quality standards, coding best practices, and project requirements. The Reviewer conducts code reviews, verifies adherence to design specifications, and provides feedback for improvements or necessary changes."
 handoffs:
   - agent: Developer
     description: "Handoff from the Reviewer agent to the Developer agent containing feedback and any required changes identified during the review process."
