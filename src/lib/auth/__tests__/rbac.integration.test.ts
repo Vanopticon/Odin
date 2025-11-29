@@ -76,9 +76,6 @@ describe('rbac DB lookup (integration)', () => {
 
   it('resolves roles and permissions for a DB-backed user', async () => {
     const email = 'dbuser@example.com';
-
-    const result = await getUserRolesAndPermissionsByEmail(email);
-
     if (skipIntegration) {
       // ensure at least one assertion runs when skipping
       // eslint-disable-next-line no-console
@@ -86,6 +83,8 @@ describe('rbac DB lookup (integration)', () => {
       expect(true).toBe(true);
       return;
     }
+
+    const result = await getUserRolesAndPermissionsByEmail(email);
 
     expect(result).toHaveProperty('roles');
     expect(result).toHaveProperty('permissions');
