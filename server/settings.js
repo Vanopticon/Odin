@@ -26,9 +26,12 @@ export const OAUTH_AUTH_URL = process.env['OD_OAUTH_URL'] || '';
 function validateProductionStartup() {
 	if (!PROD_MODE) return;
 
-	const explicitHost = typeof process.env['OD_HOST'] !== 'undefined' && process.env['OD_HOST'] !== '';
+	const explicitHost =
+		typeof process.env['OD_HOST'] !== 'undefined' && process.env['OD_HOST'] !== '';
 	if (!explicitHost) {
-		console.error('FATAL: Running in production mode requires `OD_HOST` be explicitly set (not inferred from hostname).');
+		console.error(
+			'FATAL: Running in production mode requires `OD_HOST` be explicitly set (not inferred from hostname).'
+		);
 		process.exit(1);
 	}
 
@@ -42,7 +45,9 @@ function validateProductionStartup() {
 		console.error('FATAL: TLS key/cert not found. Expected files:');
 		if (!keyExists) console.error(` - TLS key missing: ${keyPath}`);
 		if (!certExists) console.error(` - TLS cert missing: ${certPath}`);
-		console.error('Set `OD_TLS_KEY` and `OD_TLS_CERT` or ensure the files exist at the configured locations.');
+		console.error(
+			'Set `OD_TLS_KEY` and `OD_TLS_CERT` or ensure the files exist at the configured locations.'
+		);
 		process.exit(1);
 	}
 }

@@ -24,7 +24,7 @@ describe('initializeDataSource', () => {
 		await expect(mod.initializeDataSource()).rejects.toThrow('OD_DB_URL not set in environment');
 	});
 
-	it('initializes and returns AppDataSource when OD_DB_URL is set', async () => {
+	it('creates a DataSource when OD_DB_URL is set', async () => {
 		// Use centralized test settings and provide a DB_URL override
 		const testSettings = await import('$lib/test_settings');
 		vi.doMock('$lib/settings', () => ({
@@ -32,37 +32,75 @@ describe('initializeDataSource', () => {
 			DB_URL: 'postgres://user:pass@localhost:5432/db'
 		}));
 
+		// Mock the DataSource class properly to avoid actual DB connection
+		const mockInitialize = vi.fn().mockResolvedValue(undefined);
+		const mockDs = {
+			isInitialized: true,
+			initialize: mockInitialize,
+			options: {}
+		};
+
+		vi.doMock('typeorm', async (importOriginal) => {
+			const actual = (await importOriginal()) as Record<string, unknown>;
+			return {
+				...actual,
+				DataSource: class MockDataSource {
+					isInitialized = false;
+					options: Record<string, unknown> = {};
+					async initialize() {
+						this.isInitialized = true;
+						// Sync with mockDs for verification
+						mockDs.isInitialized = true;
+						mockInitialize();
+						return this;
+					}
+				}
+			};
+		});
+
 		const mod = await import('$lib/db/data-source');
-
-		// mock initialize to avoid actual DB connection
-		const initMock = vi.fn().mockResolvedValue(mod.AppDataSource);
-		mod.AppDataSource.initialize = initMock;
-		// ensure it's not considered initialized
-		// @ts-expect-error test wiring
-		mod.AppDataSource.isInitialized = false;
-
 		const ds = await mod.initializeDataSource();
-		expect(ds).toBe(mod.AppDataSource);
-		expect(initMock).toHaveBeenCalled();
+
+		expect(ds).toBeDefined();
+		expect(mockInitialize).toHaveBeenCalled();
 	});
 
-	it('returns AppDataSource immediately when already initialized', async () => {
+	it('returns the same DataSource when called multiple times', async () => {
 		// Use centralized test settings and provide a DB_URL override
 		const testSettings = await import('$lib/test_settings');
 		vi.doMock('$lib/settings', () => ({
 			...testSettings,
 			DB_URL: 'postgres://user:pass@localhost:5432/db'
 		}));
+
+		let instanceCount = 0;
+		vi.doMock('typeorm', async (importOriginal) => {
+			const actual = (await importOriginal()) as Record<string, unknown>;
+			return {
+				...actual,
+				DataSource: class MockDataSource {
+					instanceId: number;
+					isInitialized = false;
+					options: Record<string, unknown> = {};
+					constructor() {
+						this.instanceId = ++instanceCount;
+					}
+					async initialize() {
+						this.isInitialized = true;
+						return this;
+					}
+				}
+			};
+		});
+
 		const mod = await import('$lib/db/data-source');
 
-		// mark initialized and ensure initialize isn't called
-		const initMock = vi.fn().mockResolvedValue(mod.AppDataSource);
-		mod.AppDataSource.initialize = initMock;
-		// @ts-expect-error test wiring
-		mod.AppDataSource.isInitialized = true;
+		// First call should create a new instance
+		const ds1 = await mod.initializeDataSource();
+		expect((ds1 as { instanceId: number }).instanceId).toBe(2); // 1 for AppDataSource, 2 for _appDataSource
 
-		const ds = await mod.initializeDataSource();
-		expect(ds).toBe(mod.AppDataSource);
-		expect(initMock).not.toHaveBeenCalled();
+		// Second call should return the same instance
+		const ds2 = await mod.initializeDataSource();
+		expect(ds2).toBe(ds1);
 	});
 });

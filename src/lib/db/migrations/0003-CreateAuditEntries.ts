@@ -22,7 +22,9 @@ export class CreateAuditEntries0003 implements MigrationInterface {
 			})
 		);
 
-		await queryRunner.query(`CREATE INDEX IF NOT EXISTS idx_audit_resource ON audit_entries (resource, resource_id);`);
+		await queryRunner.query(
+			`CREATE INDEX IF NOT EXISTS idx_audit_resource ON audit_entries (resource, resource_id);`
+		);
 	}
 
 	public async down(queryRunner: QueryRunner): Promise<void> {

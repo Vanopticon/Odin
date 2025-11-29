@@ -46,11 +46,11 @@ Testing & CI
 Developer notes & shortcuts
 
 - Key code locations:
-    + Auth: `src/lib/auth/`, `src/routes/auth/`, `src/hooks.server.ts`
-    + API: `src/routes/api/` and `src/lib/schemas/`
-    + Audit: `src/lib/logging/audit.ts`, migration `server/db/migrations/0003-CreateAuditEntries.ts`
-    + DB: `src/lib/db/` and `server/db/migrations/`
-    + UI: `src/lib/controls/`, `src/routes/+layout.svelte`
+  - Auth: `src/lib/auth/`, `src/routes/auth/`, `src/hooks.server.ts`
+  - API: `src/routes/api/` and `src/lib/schemas/`
+  - Audit: `src/lib/logging/audit.ts`, migration `server/db/migrations/0003-CreateAuditEntries.ts`
+  - DB: `src/lib/db/` and `server/db/migrations/`
+  - UI: `src/lib/controls/`, `src/routes/+layout.svelte`
 - When in doubt choose the secure, simplest option (least privilege for auth, strict validation for APIs).
 
 Acceptance criteria checklist (apply on PRs)
