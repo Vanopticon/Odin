@@ -158,6 +158,77 @@ describe('OIDC PKCE helpers and auth handlers', () => {
 		expect(calledWith).toBeTruthy();
 	});
 
+	it('callback enriches session with DB roles when DB_URL present', async () => {
+		// simulate a DB being configured and mock enrichSessionWithDB to inject roles
+		vi.resetModules();
+		// import default settings object and create a modified copy with DB_URL
+		const tsMod: any = await import('$lib/test_settings');
+		const testSettingsLocal: any = { ...(tsMod && tsMod.default ? tsMod.default : tsMod) };
+		// ensure DB_URL is present so callback attempts enrichment
+		testSettingsLocal.DB_URL = 'postgres://test:test@localhost:5432/testdb';
+		vi.doMock('$lib/settings', () => ({ ...testSettingsLocal }));
+
+		// mock enrichSessionWithDB to add roles and permissions
+		vi.doMock('$lib/auth/server', () => ({
+			enrichSessionWithDB: async (session: any) => {
+				if (!session) return session;
+				session.roles = ['maintainer'];
+				session.permissions = ['manage:triggers'];
+				return session;
+			}
+		}));
+
+		// mock discovery/token/userinfo flow
+		const cfg = {
+			authorization_endpoint: 'https://provider/auth',
+			token_endpoint: 'https://provider/token',
+			userinfo_endpoint: 'https://provider/userinfo'
+		};
+		global.fetch = vi.fn(async (input: any, opts?: any) => {
+			if (typeof input === 'string' && input === testSettingsLocal.OD_OAUTH_URL) {
+				return { ok: true, json: async () => cfg } as any;
+			}
+			if (typeof input === 'string' && input === cfg.token_endpoint) {
+				return { ok: true, json: async () => ({ access_token: 'at', id_token: 'it' }) } as any;
+			}
+			if (typeof input === 'string' && input === cfg.userinfo_endpoint) {
+				return { ok: true, json: async () => ({ sub: 'user1', email: 'dbuser@example.com' }) } as any;
+			}
+			return { ok: false, text: async () => 'not found' } as any;
+		}) as any;
+
+		const callback = await import('../../../routes/auth/callback/+server');
+		const cookiesSet = vi.fn();
+		const cookiesDeleted = vi.fn();
+		const event: any = {
+			url: new URL('https://app.example/auth/callback?code=thecode&state=thestate'),
+			cookies: {
+				get: (name: string) => {
+					if (name === 'od_oauth_state') return 'thestate';
+					if (name === 'od_pkce_verifier') return 'verifier-value';
+					return null;
+				},
+				set: cookiesSet,
+				delete: cookiesDeleted
+			}
+		};
+
+		const res: any = await callback.GET(event);
+		expect(res.status).toBe(302);
+		// ensure session cookie set
+		expect(cookiesSet).toHaveBeenCalled();
+		const calledWith = cookiesSet.mock.calls.find((c: any[]) => c[0] === 'od_session');
+		expect(calledWith).toBeTruthy();
+		// decrypt the session to inspect roles/permissions
+		const { decryptSession } = await import('$lib/auth/session');
+		const enc = calledWith[1];
+		const dec = decryptSession(enc);
+		expect(dec).toHaveProperty('roles');
+		expect(dec.roles).toContain('maintainer');
+		expect(dec).toHaveProperty('permissions');
+		expect(dec.permissions).toContain('manage:triggers');
+	});
+
 	it('callback returns 400 when code missing', async () => {
 		const callback = await import('../../../routes/auth/callback/+server');
 		const event: any = {
