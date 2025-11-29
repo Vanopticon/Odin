@@ -164,8 +164,17 @@ try {
 
 		const chromeOptions = new chrome.Options();
 		// Do not disable certificate checks; enforce validation.
-		// Add useful flags for CI environments if desired (kept minimal here).
-		// chromeOptions.addArguments('--headless=new'); // enable if you need headless
+		// Allow running headless by default for CI/local non-GUI environments.
+		// Set E2E_HEADLESS=false in the environment to disable headless mode.
+		const e2eHeadless = (process.env['E2E_HEADLESS'] || 'true').toLowerCase();
+		if (e2eHeadless === 'true' || e2eHeadless === '1') {
+			// Use newer headless mode when available and add CI-friendly flags.
+			chromeOptions.addArguments('--headless=new');
+			chromeOptions.addArguments('--no-sandbox');
+			chromeOptions.addArguments('--disable-dev-shm-usage');
+			chromeOptions.addArguments('--disable-gpu');
+			chromeOptions.addArguments('--window-size=1920,1080');
+		}
 
 		const driver = await new Builder()
 			.forBrowser('chrome')
