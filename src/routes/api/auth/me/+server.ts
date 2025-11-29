@@ -21,7 +21,10 @@ export async function GET(event: RequestEvent) {
 			groups: session.groups ?? []
 		};
 
-		return new Response(JSON.stringify(payload), { status: 200, headers: { 'Content-Type': 'application/json' } });
+		return new Response(JSON.stringify(payload), {
+			status: 200,
+			headers: { 'Content-Type': 'application/json' }
+		});
 	} catch (e) {
 		return new Response(JSON.stringify({ error: 'Internal' }), { status: 500 });
 	}

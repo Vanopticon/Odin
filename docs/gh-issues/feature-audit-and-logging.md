@@ -1,6 +1,6 @@
 ---
-title: "Audit Logging and Change History"
-labels: ["feature", "audit"]
+title: 'Audit Logging and Change History'
+labels: ['feature', 'audit']
 ---
 
 Summary

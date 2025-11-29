@@ -1,6 +1,6 @@
 ---
-title: "User Interface Patterns and Accessibility"
-labels: ["feature", "ui"]
+title: 'User Interface Patterns and Accessibility'
+labels: ['feature', 'ui']
 ---
 
 Summary

@@ -16,10 +16,10 @@
 
 General pattern for each issue/feature:
 
-1) Discovery & spec: update `docs/` (ICD, runbooks, VVP) and create small design/acceptance notes.
-2) Implement: code changes in `src/` or `server/` with small focused commits and feature branches from `v1.0.0`.
-3) Tests: unit + integration + e2e where applicable; add CI job entries.
-4) Docs & rollout: update `docs/` and the plan; open PR with the linked Issue.
+1. Discovery & spec: update `docs/` (ICD, runbooks, VVP) and create small design/acceptance notes.
+2. Implement: code changes in `src/` or `server/` with small focused commits and feature branches from `v1.0.0`.
+3. Tests: unit + integration + e2e where applicable; add CI job entries.
+4. Docs & rollout: update `docs/` and the plan; open PR with the linked Issue.
 
 A. Security & API Contracts
 
@@ -49,7 +49,7 @@ C. Testing, CI, and VVP
 
 - Issues: #29 (CI accessibility), #30 (migration tests), #31 (traceability), #59 (CGM closed), #69 (VVP mapping)
 - Steps:
-  1. Add CI workflow(s) to run: `pnpm build`, `pnpm preview` (port 4173), `vitest` unit tests, and  E2E tests. Ensure ephemeral DB or test DB used for migration tests (Issue #29).
+  1. Add CI workflow(s) to run: `pnpm build`, `pnpm preview` (port 4173), `vitest` unit tests, and E2E tests. Ensure ephemeral DB or test DB used for migration tests (Issue #29).
   2. Create DB migration+seed smoke test using a disposable Postgres (docker/testcontainers) that runs `run-migrations.ts` and `seed.ts` (Issue #30).
   3. Create `docs/design/VVP-TRACEABILITY.md` mapping critical requirements → tests, and add missing tests for gaps (Issue #69).
   4. Add accessibility checks into CI for critical flows (Issue #33).
@@ -87,9 +87,7 @@ F. Observability & Logging
 G. Frontend Accessibility & Performance
 
 - Issues: #33 (a11y checks), #36 (performance budgets)
-- Steps:
-  2. Define performance budgets in `docs/design/NFR-PERFORMANCE.md` and add a basic k6 or Lighthouse harness for primary pages (Issue #36).
-  3. Implement UI improvements: reduce main-thread work, measure TTFP, lazy-load non-critical assets.
+- Steps: 2. Define performance budgets in `docs/design/NFR-PERFORMANCE.md` and add a basic k6 or Lighthouse harness for primary pages (Issue #36). 3. Implement UI improvements: reduce main-thread work, measure TTFP, lazy-load non-critical assets.
 - Acceptance: CI enforces a11y checks on critical flows; performance budget doc and at least one automated test exist.
 
 H. Docs & Traceability

@@ -33,20 +33,20 @@ export function getSessionFromEvent(event: RequestEvent) {
 // (for example during login callback flows) to ensure session objects contain
 // DB-derived claims before being serialized back to cookies or used for checks.
 export async function enrichSessionWithDB(session: any) {
-    if (!session || !DB_URL) return session;
-    try {
-        const email = session.user && session.user.email;
-        if (!email) return session;
-        const rbac = await import('$lib/auth/rbac');
-        const res = await rbac.getUserRolesAndPermissionsByEmail(email);
-        if (res) {
-            session.roles = res.roles || [];
-            session.permissions = res.permissions || [];
-        }
-    } catch (e) {
-        // ignore and return original session on any error
-    }
-    return session;
+	if (!session || !DB_URL) return session;
+	try {
+		const email = session.user && session.user.email;
+		if (!email) return session;
+		const rbac = await import('$lib/auth/rbac');
+		const res = await rbac.getUserRolesAndPermissionsByEmail(email);
+		if (res) {
+			session.roles = res.roles || [];
+			session.permissions = res.permissions || [];
+		}
+	} catch (e) {
+		// ignore and return original session on any error
+	}
+	return session;
 }
 
 export function getUserGroupsFromEvent(event: RequestEvent) {

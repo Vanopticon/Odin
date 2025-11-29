@@ -1,31 +1,40 @@
 {
-  "id": "auth-and-rbac",
-  "title": "Authentication, Session, and RBAC",
-  "summary": "Design for integrating OIDC, session management, and role-based access control.",
-  "description": "Define how users authenticate, how sessions are stored and validated, how group claims map to local roles, and how permission checks are enforced in the API and UI.",
-  "components": [
-    { "name": "OIDC Connector", "responsibility": "Perform auth code flow and validate ID token." },
-    { "name": "Session Store", "responsibility": "Server-side session storage (encrypted cookies + server store)." },
-    { "name": "RBAC Engine", "responsibility": "Map groups/claims to permission sets; central permission checks." }
-  ],
-  "interactions": [
-    "User -> /auth/login -> OIDC provider -> /auth/callback -> create session.",
-    "Session cookie used by UI and server routes to identify the user and their roles.",
-    "Permission checks executed in route handlers and reusable server-side hooks (e.g., `hooks.server.ts`)."
-  ],
-  "data_flow": "On login, map provider groups to local roles and store minimal profile + roles in session. Use session ID in cookie to retrieve session on subsequent requests.",
-  "tech_stack": ["OIDC (existing code in `src/lib/auth/oidc.ts`)", "Server sessions via `session.ts` and stores in `src/lib/auth/stores.ts`"],
-  "acceptance_criteria": [
-    "Login flow works end-to-end with configured provider and tests for `src/lib/auth` pass.",
-    "Session expiration and revocation behavior specified and implemented.",
-    "RBAC rules cover admin, editor, viewer roles and are enforced by tests.",
-    "Sensitive endpoints return 403 when user lacks permission." 
-  ],
-  "tasks": [
-    "Audit existing files: `src/lib/auth/*.ts` and `src/routes/auth/*`.",
-    "Add RBAC unit tests for key API endpoints in `src/routes/api`.",
-    "Document mapping strategy for provider groups to local roles (configurable)."
-  ],
-  "references": ["src/lib/auth/", "src/hooks.server.ts", "src/routes/auth/"],
-  "created_at": "2025-11-29"
+	"id": "auth-and-rbac",
+	"title": "Authentication, Session, and RBAC",
+	"summary": "Design for integrating OIDC, session management, and role-based access control.",
+	"description": "Define how users authenticate, how sessions are stored and validated, how group claims map to local roles, and how permission checks are enforced in the API and UI.",
+	"components": [
+		{ "name": "OIDC Connector", "responsibility": "Perform auth code flow and validate ID token." },
+		{
+			"name": "Session Store",
+			"responsibility": "Server-side session storage (encrypted cookies + server store)."
+		},
+		{
+			"name": "RBAC Engine",
+			"responsibility": "Map groups/claims to permission sets; central permission checks."
+		}
+	],
+	"interactions": [
+		"User -> /auth/login -> OIDC provider -> /auth/callback -> create session.",
+		"Session cookie used by UI and server routes to identify the user and their roles.",
+		"Permission checks executed in route handlers and reusable server-side hooks (e.g., `hooks.server.ts`)."
+	],
+	"data_flow": "On login, map provider groups to local roles and store minimal profile + roles in session. Use session ID in cookie to retrieve session on subsequent requests.",
+	"tech_stack": [
+		"OIDC (existing code in `src/lib/auth/oidc.ts`)",
+		"Server sessions via `session.ts` and stores in `src/lib/auth/stores.ts`"
+	],
+	"acceptance_criteria": [
+		"Login flow works end-to-end with configured provider and tests for `src/lib/auth` pass.",
+		"Session expiration and revocation behavior specified and implemented.",
+		"RBAC rules cover admin, editor, viewer roles and are enforced by tests.",
+		"Sensitive endpoints return 403 when user lacks permission."
+	],
+	"tasks": [
+		"Audit existing files: `src/lib/auth/*.ts` and `src/routes/auth/*`.",
+		"Add RBAC unit tests for key API endpoints in `src/routes/api`.",
+		"Document mapping strategy for provider groups to local roles (configurable)."
+	],
+	"references": ["src/lib/auth/", "src/hooks.server.ts", "src/routes/auth/"],
+	"created_at": "2025-11-29"
 }

@@ -1,27 +1,37 @@
 {
-  "id": "deployment-and-ops",
-  "title": "Deployment, Configuration, and Operational Runbook",
-  "summary": "Deployment topology, configuration sources, secrets handling, and operational runbook notes.",
-  "description": "Describe recommended deployment (single-node or k8s), environment variables, secret stores, backup/restore for Postgres, and minimal runbook for incident handling.",
-  "components": [
-    { "name": "Config Management", "responsibility": "12-factor env vars and optional config files documented in `settings.js`/`server.js`." },
-    { "name": "Secrets", "responsibility": "Use external secret manager in prod; local env for dev." },
-    { "name": "Backups", "responsibility": "Regular DB backups and tested restore steps." }
-  ],
-  "interactions": [
-    "App reads config at startup; migrations executed as part of deploy or CI rollout.",",
-    "Monitoring/health endpoints used by orchestration system for liveness/readiness checks."
-  ],
-  "tech_stack": ["Node process or container image", "Kubernetes optional", "Postgres backups via pg_dump/managed provider"],
-  "acceptance_criteria": [
-    "Documentation covers how to deploy from main and v1.0.0 branches.",
-    "Health endpoints return expected status and can be used in probe configs.",
-    "Secrets and config practices documented for production use." 
-  ],
-  "tasks": [
-    "Add a short runbook in `docs/` for common ops tasks: backup/restore, rotate keys, handle migrations.",
-    "Document environment variables and required vault entries." 
-  ],
-  "references": ["server.js", "settings.js", "docs/odin-implementation-plan-2025-11-27.md"],
-  "created_at": "2025-11-29"
+	"id": "deployment-and-ops",
+	"title": "Deployment, Configuration, and Operational Runbook",
+	"summary": "Deployment topology, configuration sources, secrets handling, and operational runbook notes.",
+	"description": "Describe recommended deployment (single-node or k8s), environment variables, secret stores, backup/restore for Postgres, and minimal runbook for incident handling.",
+	"components": [
+		{
+			"name": "Config Management",
+			"responsibility": "12-factor env vars and optional config files documented in `settings.js`/`server.js`."
+		},
+		{
+			"name": "Secrets",
+			"responsibility": "Use external secret manager in prod; local env for dev."
+		},
+		{ "name": "Backups", "responsibility": "Regular DB backups and tested restore steps." }
+	],
+	"interactions": [
+		"App reads config at startup; migrations executed as part of deploy or CI rollout.",
+		"Monitoring/health endpoints used by orchestration system for liveness/readiness checks."
+	],
+	"tech_stack": [
+		"Node process or container image",
+		"Kubernetes optional",
+		"Postgres backups via pg_dump/managed provider"
+	],
+	"acceptance_criteria": [
+		"Documentation covers how to deploy from main and v1.0.0 branches.",
+		"Health endpoints return expected status and can be used in probe configs.",
+		"Secrets and config practices documented for production use."
+	],
+	"tasks": [
+		"Add a short runbook in `docs/` for common ops tasks: backup/restore, rotate keys, handle migrations.",
+		"Document environment variables and required vault entries."
+	],
+	"references": ["server.js", "settings.js", "docs/odin-implementation-plan-2025-11-27.md"],
+	"created_at": "2025-11-29"
 }

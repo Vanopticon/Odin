@@ -1,6 +1,6 @@
 ---
-title: "Testing Strategy and CI"
-labels: ["feature", "ci", "testing"]
+title: 'Testing Strategy and CI'
+labels: ['feature', 'ci', 'testing']
 ---
 
 Summary

@@ -18,7 +18,12 @@ describe('PUT /api/triggers and DELETE /api/triggers', () => {
 		const writeAuditMock = vi.fn();
 		vi.doMock('$lib/logging/audit', () => ({ writeAudit: writeAuditMock }));
 
-		const existing = { id: '550e8400-e29b-41d4-a716-446655440000', name: 'Old', expression: 'x', enabled: true };
+		const existing = {
+			id: '550e8400-e29b-41d4-a716-446655440000',
+			name: 'Old',
+			expression: 'x',
+			enabled: true
+		};
 		const repoMock = {
 			findOneBy: async (arg: any) => {
 				const id = arg && typeof arg === 'object' ? arg.id : arg;
@@ -51,7 +56,10 @@ describe('PUT /api/triggers and DELETE /api/triggers', () => {
 		vi.doMock('$lib/logging/audit', () => ({ writeAudit: writeAuditMock }));
 
 		const repoMock = {
-			findOneBy: async ({ id }: any) => (id === '550e8400-e29b-41d4-a716-446655440001' ? { id: '550e8400-e29b-41d4-a716-446655440001' } : null),
+			findOneBy: async ({ id }: any) =>
+				id === '550e8400-e29b-41d4-a716-446655440001'
+					? { id: '550e8400-e29b-41d4-a716-446655440001' }
+					: null,
 			remove: async (_: any) => {}
 		};
 		vi.doMock('$lib/db/data-source', () => ({
@@ -60,7 +68,9 @@ describe('PUT /api/triggers and DELETE /api/triggers', () => {
 		}));
 
 		const mod = await import('../+server');
-		const res = await mod.DELETE(makeEvent(null, 'https://fenris/api/triggers?id=550e8400-e29b-41d4-a716-446655440001'));
+		const res = await mod.DELETE(
+			makeEvent(null, 'https://fenris/api/triggers?id=550e8400-e29b-41d4-a716-446655440001')
+		);
 		expect(res.status).toBe(204);
 		expect(writeAuditMock).toHaveBeenCalled();
 		const arg = writeAuditMock.mock.calls[0][0];

@@ -55,7 +55,12 @@ export async function POST(event: RequestEvent) {
 	const saved = await repo.save(t);
 	// audit: creation
 	try {
-		await writeAudit({ action: 'trigger.create', resource: 'trigger', resource_id: saved.id, data: saved });
+		await writeAudit({
+			action: 'trigger.create',
+			resource: 'trigger',
+			resource_id: saved.id,
+			data: saved
+		});
 	} catch (err) {
 		// do not block response on audit failures
 	}
@@ -83,7 +88,12 @@ export async function PUT(event: RequestEvent) {
 
 	const saved = await repo.save(item);
 	try {
-		await writeAudit({ action: 'trigger.update', resource: 'trigger', resource_id: saved.id, data: saved });
+		await writeAudit({
+			action: 'trigger.update',
+			resource: 'trigger',
+			resource_id: saved.id,
+			data: saved
+		});
 	} catch (err) {}
 	return new Response(JSON.stringify(saved), { status: 200 });
 }

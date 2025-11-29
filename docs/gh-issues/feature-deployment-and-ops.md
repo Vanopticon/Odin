@@ -1,6 +1,6 @@
 ---
-title: "Deployment, Configuration, and Operational Runbook"
-labels: ["feature", "ops"]
+title: 'Deployment, Configuration, and Operational Runbook'
+labels: ['feature', 'ops']
 ---
 
 Summary

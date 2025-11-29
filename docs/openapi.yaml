@@ -9,7 +9,7 @@ servers:
       host:
         default: fenris
       port:
-        default: "3000"
+        default: '3000'
 paths:
   /api/health:
     get:

@@ -1,6 +1,6 @@
 ---
-title: "Core Architecture"
-labels: ["documentation", "architecture"]
+title: 'Core Architecture'
+labels: ['documentation', 'architecture']
 ---
 
 Summary

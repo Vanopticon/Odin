@@ -1,6 +1,6 @@
 ---
-title: "Data Model, Migrations, and Seeding"
-labels: ["feature", "db"]
+title: 'Data Model, Migrations, and Seeding'
+labels: ['feature', 'db']
 ---
 
 Summary
