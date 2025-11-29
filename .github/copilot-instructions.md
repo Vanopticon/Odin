@@ -93,6 +93,7 @@ This process must be followed in its entirety for all work:
     + Read the git logs and progress files to get up to speed on what was recently worked on.
 - Select the highest priority feature to work on. Only work one feature at a time.
 - Ask any questions and make any suggestions prior to beginning work. Summarize and replace the Q&A.
+- Open a GitHub Issue (using the GitHub MCP) for the work.
 - Create a feature branch from `v1.0.0` and name it after the feature.
 - Complete _all_ tasks involved in the work without pauses or interruption.
 - Create or modify tests for all code changes.
