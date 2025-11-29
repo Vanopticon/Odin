@@ -91,8 +91,8 @@ describe('rbac DB lookup (integration)', () => {
     expect(result.roles.length).toBeGreaterThan(0);
     // maintainer role should exist
     expect(result.roles).toContain('maintainer');
-    // permissions seeded for admin include manage:triggers; maintainer may not have all permissions,
-    // but at least the function should return an array for permissions (could be empty depending on seed)
+    // ensure seeded maintainer role grants manage:triggers (seed updated to add this)
     expect(Array.isArray(result.permissions)).toBe(true);
+    expect(result.permissions).toContain('manage:triggers');
   });
 });
