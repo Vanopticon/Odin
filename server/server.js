@@ -5,6 +5,7 @@ import Hapi from '@hapi/hapi';
 import telemetry, { httpRequestDuration, metricsRegister } from './telemetry.js';
 
 import { PROD_MODE, HOST, PORT, TLS_KEY_PATH, TLS_CERT_PATH, RATE_LIMIT_MAX } from './settings.js';
+import { DB_URL } from './settings.js';
 
 function loadRequiredFile(label, filePath) {
 	console.debug(`Loading ${label} from ${filePath}`);
@@ -15,6 +16,34 @@ function loadRequiredFile(label, filePath) {
 
 export async function startHapi() {
 	console.info(`Starting Hapi server in ${PROD_MODE ? 'production' : 'development'} mode`);
+
+	// Production startup validation: ensure required secrets and TLS files
+	function validateStartup() {
+		if (!PROD_MODE) return;
+
+		const missing = [];
+
+		if (!DB_URL) missing.push('OD_DB_URL (or DATABASE_URL)');
+
+		const cookieSecret = process.env['OD_COOKIE_SECRET'] || '';
+		if (!cookieSecret) missing.push('OD_COOKIE_SECRET (session cookie secret)');
+		else if (cookieSecret.length < 32) {
+			console.warn('OD_COOKIE_SECRET is set but shorter than 32 characters; this may be insecure');
+		}
+
+		if (!TLS_KEY_PATH || !fs.existsSync(TLS_KEY_PATH)) missing.push(`TLS key file at ${TLS_KEY_PATH}`);
+		if (!TLS_CERT_PATH || !fs.existsSync(TLS_CERT_PATH)) missing.push(`TLS cert file at ${TLS_CERT_PATH}`);
+
+		if (missing.length) {
+			console.error('Startup validation failed. Missing or invalid configuration:');
+			for (const m of missing) console.error(` - ${m}`);
+			console.error('Refusing to start in production mode until these are resolved.');
+			process.exit(1);
+		}
+	}
+
+	validateStartup();
+
 	console.debug(`Using TLS key: ${TLS_KEY_PATH}`);
 	console.debug(`Using TLS cert: ${TLS_CERT_PATH}`);
 	const keyPath = TLS_KEY_PATH;

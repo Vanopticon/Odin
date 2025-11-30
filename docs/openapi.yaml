@@ -1,0 +1,128 @@
+openapi: 3.0.3
+info:
+  title: Odin API
+  version: 0.1.0
+  description: OpenAPI skeleton for Vanopticon/Odin — start of contract work
+servers:
+  - url: https://{host}:{port}
+    variables:
+      host:
+        default: fenris
+      port:
+        default: '3000'
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+  /api/triggers:
+    get:
+      summary: List or retrieve triggers
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: Optional trigger id to fetch a single trigger
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trigger'
+    post:
+      summary: Create a trigger
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+    put:
+      summary: Update a trigger
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+    delete:
+      summary: Delete a trigger
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+components:
+  schemas:
+    Trigger:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        expression:
+          type: string
+        enabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TriggerCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        expression:
+          type: string
+        enabled:
+          type: boolean
+    TriggerUpdate:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        expression:
+          type: string
+        enabled:
+          type: boolean

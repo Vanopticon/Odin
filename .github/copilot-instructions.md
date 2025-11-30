@@ -1,30 +1,22 @@
 # Copilot Instructions
 
-## Long Term Memory (LTM, brain)
+## Long Term Memory (LTM)
 
-- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge.
-- You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
-- Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
+- Maintain a long term memory (LTM) at `docs/agents/` for this project.
+- The LTM must consist of, at least, the following files:
+    + Project.md - A summary of the project
+    + ActiveContext.md - The current work state and focus
+    + Patterns.md - Architecture and implementation patterns
+    + Technologies.md - The technology stack and libraries in use
+    + Progress.md - The master TODO list and progress tracker
+- Treat LTM as the primary source of project knowledge.
+- You MUST begin every session by reading the LTM.
+- You are responsible for managing the LTM, and do not need permission to modify files in it.
+- You may add other files and notes to the LTM as needed to track the peoject work.
 
-LTM uses a hierarchical structure with these core LTM keys:
+### LTM Triggers
 
-- Required LTM keys:
-    + project_brief - Foundation document
-    + active_context - Current work state and focus
-    + system_patterns - Architecture and design patterns
-    + tech_stack - Technologies and setup
-    + progress_tracker - Status and next steps
-
-- Optional LTM Keys:
-    + feature_specs - Detailed feature documentation
-    + api_docs - API specifications
-    + testing_strategy - Testing approaches
-    + deployment_notes - Deployment procedures
-    + user_preferences - User-specific preferences and decisions
-
-### Long Term LTM Triggers
-
-Append or update LTM when:
+At a minimum, append or update LTM when:
 
 - The user explicitly requests you to update LTM
 - Significant architectural decisions are made
@@ -35,38 +27,11 @@ Append or update LTM when:
 - New user preferences, patterns and practices for the project, or expectations are identified
 - An existing LTM needs to be updated to reflect current state
 - A new plan, sequence, or similar is created.
-- You provide the end of a response. At that point add a summary to the Obsidian Brain MCP.
-
-### LTM Validation and Maintenance
-
-- Regularly verify LTM accuracy (at least once per session):
-    + Ensure all essential keys exist and are current
-    + Check that LTM reflects actual project state
-    + Validate that patterns in LTM match implementation
-
-- Cross-reference decisions across LTM keys
-- Ensure active_context aligns with progress_tracker
-- Verify tech_stack matches actual dependencies
-- Confirm system_patterns reflect current architecture
-
-### LTM Criteria
-
-The LTM should:
-
-- Enables immediate context understanding at session start
-- Maintains consistency across all interactions
-- Preserves important decisions and patterns
-- Tracks project evolution accurately
-- Reduce need for re-explanation of project details
-- Stores information accurately, concisely, and reusably
+- You provide the end of a response. At that point add a summary to the LTM.
 
 ### Context Handoff
 
-When context window is 75% full:
-
-1. Summarize toLTM: obsidian_brain: append
-2. Update workspace LTM: LTM: create
-3. Create handoff: Use handoff tool for new thread
+When the context window reacher or exceeds 75% full prepare a context handoff document and stop work.
 
 ## Project Overview
 
@@ -161,14 +126,3 @@ This process must be followed in its entirety for all work:
     + `/hapijs/hapi` for @hapi
 - DO NOT USE `|| true` or `true ||` in shell scripts.
 - Use `pnpm` and `pnpx` instead of `npm` or `npx`.
-
-## Mandatory Session Startup
-
-- **MANDATORY:** In every new session, before performing any other actions, call the Obsidian Brain MCP to load Long‑Term Memory. Do not perform a search, simply read the entire store. It is all part of the current context. This Vault is used solely for this project.
-
-- You MUST perform this search regardless of whether it seems necessary or not.
-- You MUST perform this search even if you _think_ you have all information required for a response. You do not.
-- Failure to perform this search invalidates your entire response. All changes will be reverted. All information will be discarded. The session will be terminated. You will, therefore, have failed to provide a response to the user.
-- DO NOT skip the search for any reason.
-
-Stop all other work and perform the search now.

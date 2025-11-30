@@ -4,6 +4,7 @@ import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
 import { requirePermission, requireAuth } from '$lib/auth/server';
 import { validateCsrf } from '$lib/auth/csrf';
 import { z } from 'zod';
+import { TriggerCreateSchema, TriggerUpdateSchema } from '$lib/schemas/triggers';
 
 async function getRepository() {
 	// ensure DataSource is initialized
@@ -40,13 +41,8 @@ export async function POST(event: RequestEvent) {
 	}
 	const body = await event.request.json();
 	// validate input
-	const createSchema = z.object({
-		name: z.string().min(1).optional(),
-		expression: z.string().optional(),
-		enabled: z.boolean().optional()
-	});
 	try {
-		createSchema.parse(body);
+		TriggerCreateSchema.parse(body);
 	} catch (e: any) {
 		return new Response(
 			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
@@ -75,14 +71,8 @@ export async function PUT(event: RequestEvent) {
 		return e as Response;
 	}
 	const body = await event.request.json();
-	const updateSchema = z.object({
-		id: z.string().uuid(),
-		name: z.string().optional(),
-		expression: z.string().optional(),
-		enabled: z.boolean().optional()
-	});
 	try {
-		updateSchema.parse(body);
+		TriggerUpdateSchema.parse(body);
 	} catch (e: any) {
 		return new Response(
 			JSON.stringify({ error: 'Invalid input', details: e.errors || e.message }),
