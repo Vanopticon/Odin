@@ -1,6 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { groupsGrantPermission, parseGroupsHeader } from './groups';
 import { decryptSession } from './session';
+import { DB_URL } from '$lib/settings';
 
 function safeJson(obj: any) {
 	try {
@@ -25,6 +26,27 @@ export function getSessionFromEvent(event: RequestEvent) {
 	} catch (e) {
 		return null;
 	}
+}
+
+// Async helper: enrich a decrypted session object with DB-backed roles/permissions
+// when a DB is configured. This can be used by callers that are able to await
+// (for example during login callback flows) to ensure session objects contain
+// DB-derived claims before being serialized back to cookies or used for checks.
+export async function enrichSessionWithDB(session: any) {
+	if (!session || !DB_URL) return session;
+	try {
+		const email = session.user && session.user.email;
+		if (!email) return session;
+		const rbac = await import('$lib/auth/rbac');
+		const res = await rbac.getUserRolesAndPermissionsByEmail(email);
+		if (res) {
+			session.roles = res.roles || [];
+			session.permissions = res.permissions || [];
+		}
+	} catch (e) {
+		// ignore and return original session on any error
+	}
+	return session;
 }
 
 export function getUserGroupsFromEvent(event: RequestEvent) {
@@ -67,9 +89,13 @@ export function hasPermissionServer(event: RequestEvent, permission: string) {
 		try {
 			const session = getSessionFromEvent(event as any) as any;
 			if (session && Array.isArray(session.permissions) && session.permissions.length > 0) {
+				// explicit permission match
 				if (session.permissions.includes(permission)) return true;
-				// admins in session permissions are also honored
-				if (session.permissions.includes('admin') || session.permissions.includes('odin_admins'))
+				// honor admin role on the session (roles are separate from permissions)
+				if (
+					Array.isArray(session.roles) &&
+					(session.roles.includes('admin') || session.roles.includes('odin_admins'))
+				)
 					return true;
 				return false;
 			}

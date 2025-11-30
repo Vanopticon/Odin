@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: Odin API
+  version: 1.0.0
+  description: OpenAPI skeleton for Odin management API (Vanopticon)
+servers:
+  - url: https://{host}:{port}
+    variables:
+      host:
+        default: fenris
+      port:
+        default: '3000'
+paths:
+  /api/health:
+    get:
+      summary: Health check
+      description: Returns health status of the service.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/triggers:
+    get:
+      summary: List triggers
+      responses:
+        '200':
+          description: A list of triggers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trigger'
+    post:
+      summary: Create a trigger
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerCreate'
+      responses:
+        '201':
+          description: Trigger created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trigger'
+  /auth/login:
+    post:
+      summary: Initiate login
+      responses:
+        '302':
+          description: Redirect to provider
+  /auth/callback:
+    get:
+      summary: OIDC callback
+      responses:
+        '200':
+          description: Callback result
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        uptime:
+          type: number
+          example: 123.45
+    Trigger:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        enabled:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    TriggerCreate:
+      type: object
+      required: [name, expression]
+      properties:
+        name:
+          type: string
+        expression:
+          type: string
+        enabled:
+          type: boolean
+          default: true

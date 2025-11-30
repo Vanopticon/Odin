@@ -15,6 +15,64 @@ function loadRequiredFile(label, filePath) {
 
 export async function startHapi() {
 	console.info(`Starting Hapi server in ${PROD_MODE ? 'production' : 'development'} mode`);
+
+	// Attempt to apply DB migrations at startup when running a built release.
+	// In production the project is built to `dist/` and the compiled `data-source`
+	// module is available. When `OD_DB_URL` (or `DATABASE_URL`) is configured
+	// we must ensure migrations are applied before the server accepts traffic.
+	try {
+		const dbUrl = process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || '';
+		const builtDataSource = path.resolve(process.cwd(), 'dist/lib/db/data-source.js');
+		if (dbUrl && fs.existsSync(builtDataSource)) {
+			console.info('DB URL detected and built data-source present — applying migrations');
+			const dsMod = await import(builtDataSource);
+			const initializeDataSource =
+				dsMod.initializeDataSource || dsMod.default?.initializeDataSource;
+			const AppDataSource = dsMod.AppDataSource || dsMod.default?.AppDataSource;
+			if (!initializeDataSource || !AppDataSource) {
+				console.warn('Built data-source module missing expected exports; skipping migrations');
+			} else {
+				const ds = await initializeDataSource();
+				// Run migrations with optional retries/backoff to tolerate short
+				// transient DB errors. Configure via `OD_MIGRATE_RETRIES` and
+				// `OD_MIGRATE_BACKOFF_MS` (initial backoff in ms).
+				const maxRetries = Number(process.env['OD_MIGRATE_RETRIES'] || '3');
+				const baseBackoff = Number(process.env['OD_MIGRATE_BACKOFF_MS'] || '500');
+				let attempt = 0;
+				let lastErr = null;
+				while (attempt < Math.max(1, maxRetries)) {
+					try {
+						const res = await (ds.runMigrations
+							? ds.runMigrations()
+							: AppDataSource.runMigrations());
+						console.info('Migrations applied:', Array.isArray(res) ? res.map((r) => r.name) : res);
+						lastErr = null;
+						break;
+					} catch (err) {
+						lastErr = err;
+						attempt += 1;
+						const backoff = baseBackoff * Math.pow(2, attempt - 1);
+						console.warn(
+							`Migration attempt ${attempt} failed, will retry in ${backoff}ms:`,
+							err && (err.message || err)
+						);
+						// eslint-disable-next-line no-await-in-loop
+						await new Promise((r) => setTimeout(r, backoff));
+					}
+				}
+				if (lastErr) {
+					console.error(
+						'Failed to run migrations at startup after retries — aborting startup',
+						lastErr && (lastErr.message || lastErr)
+					);
+					process.exit(1);
+				}
+			}
+		}
+	} catch (e) {
+		console.error('Error while attempting migrations at startup:', e && (e.message || e));
+		process.exit(1);
+	}
 	console.debug(`Using TLS key: ${TLS_KEY_PATH}`);
 	console.debug(`Using TLS cert: ${TLS_CERT_PATH}`);
 	const keyPath = TLS_KEY_PATH;

@@ -25,14 +25,22 @@ export const AppDataSource = new DataSource({
 });
 
 export async function initializeDataSource() {
-	// Resolve the database URL from environment at the time of initialization.
-	const databaseUrl = DB_URL || '';
+	// Resolve the database URL using the exported value from `settings`.
+	// Tests mock `$lib/settings` (via `vi.doMock`) to control `DB_URL`, so
+	// prefer the `DB_URL` export here rather than reading `process.env`.
+	// This keeps behavior deterministic for unit tests while `settings`
+	// remains the source of truth for runtime configuration.
+	const databaseUrl = DB_URL;
 
 	if (!databaseUrl) {
 		throw new Error('OD_DB_URL not set in environment');
 	}
 
 	if (AppDataSource.isInitialized) return AppDataSource;
+
+	// debug: show resolved DB URL when initializing (helps integration tests)
+	// eslint-disable-next-line no-console
+	console.log('initializeDataSource: using DB URL ->', databaseUrl);
 
 	// Update DataSource options with the resolved URL before initializing.
 	// TypeORM keeps the options on the instance; mutate them here so other

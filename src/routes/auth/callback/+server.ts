@@ -4,9 +4,7 @@ import { encryptSession } from '$lib/auth/session';
 import { generateCsrfToken, setCsrfCookie } from '$lib/auth/csrf';
 import { DB_URL } from '$lib/settings';
 
-// Lazy import the DB-backed RBAC adapter only when needed so tests/dev without
-// a database configured don't attempt to initialize connections.
-let rbac: typeof import('$lib/auth/rbac') | null = null;
+import { enrichSessionWithDB } from '$lib/auth/server';
 
 export async function GET(event: RequestEvent) {
 	const url = event.url;
@@ -73,15 +71,10 @@ export async function GET(event: RequestEvent) {
 		groups
 	};
 
-	// enrich session with DB-backed roles/permissions when possible
+	// Enrich session with DB-backed roles/permissions when possible (best-effort).
 	try {
-		const email = user && (user as any).email;
-		if (email && DB_URL) {
-			if (!rbac) rbac = await import('$lib/auth/rbac');
-			const res = await rbac.getUserRolesAndPermissionsByEmail(email);
-			// attach roles/permissions into session for runtime checks
-			(session as any).roles = res.roles || [];
-			(session as any).permissions = res.permissions || [];
+		if (DB_URL) {
+			await enrichSessionWithDB(session as any);
 		}
 	} catch (e) {
 		// best-effort; do not block login on RBAC lookup failures
