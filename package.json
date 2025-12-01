@@ -26,7 +26,7 @@
 		"@tailwindcss/vite": "^4.1.17",
 		"@vitest/browser-playwright": "^4.0.14",
 		"chromedriver": "^142.0.3",
-		"prettier": "^3.7.1",
+		"prettier": "^3.7.3",
 		"prettier-plugin-svelte": "^3.4.0",
 		"selenium-webdriver": "^4.38.0",
 		"svelte": "^5.45.2",
