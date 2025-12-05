@@ -2,7 +2,7 @@
 
 This document contains the results of testing all configured Model Context Protocol (MCP) servers available in the development environment.
 
-**Test Date:** 2025-12-05  
+**Test Date:** December 5, 2025  
 **Tested By:** Automated Agent
 
 ## Overview
@@ -175,8 +175,10 @@ The bash execution environment provides command-line access with support for syn
 
 ### Configuration Notes
 
-- No additional MCP servers are configured in `.vscode/mcp.json` beyond the Svelte MCP server (HTTP endpoint)
-- All tested MCP servers are provided by the development environment, not repository-specific configuration
+- The repository includes a `.vscode/mcp.json` file that configures one HTTP-based MCP server:
+  - Svelte MCP server at `https://mcp.svelte.dev/mcp` for SvelteKit-specific assistance
+- The GitHub, Microsoft Docs, Todoist, Playwright, and Bash MCP servers tested above are provided by the agent's development environment and are available for all development tasks
+- Repository-specific MCP servers can be added to `.vscode/mcp.json` as needed for project-specific tooling
 
 ## Next Steps
 
