@@ -96,12 +96,12 @@ pnpm test           # run unit & integration tests (where configured)
 pnpm e2e            # run end-to-end Playwright tests
 ```
 
-Editor recommendations
+### Editor recommendations
 
 - Use an editor with TypeScript and Svelte support (VS Code + Svelte extension).
 - Respect `prettier` and the repo linting rules. The repo uses tabs for indentation.
 
-MCP Servers
+### MCP Servers
 
 The development environment includes several Model Context Protocol (MCP) servers for enhanced development capabilities:
 
@@ -112,7 +112,7 @@ The development environment includes several Model Context Protocol (MCP) server
 
 For detailed testing results and capabilities, see `docs/mcp-servers-test-results.md`.
 
-Database and migrations
+### Database and migrations
 
 The repo includes migration scripts in `src/lib/db/migrations/`. Use the included runner `src/lib/db/run-migrations.ts` and the seed file `src/lib/db/seed.ts` for local development. See `docs/README-db.md` for environment configuration.
 
