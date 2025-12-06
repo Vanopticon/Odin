@@ -1,8 +1,2 @@
-ignoredBuiltDependencies:
-  - protobufjs
-
 onlyBuiltDependencies:
-  - chromedriver
-  - cpu-features
   - esbuild
-  - ssh2
