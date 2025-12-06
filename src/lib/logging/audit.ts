@@ -1,4 +1,4 @@
-import { AppDataSource, initializeDataSource } from '$lib/db/data-source';
+mport { AppDataSource, initializeDataSource } from '$lib/db/data-source';
 
 export type AuditPayload = {
 	actor_id?: string;

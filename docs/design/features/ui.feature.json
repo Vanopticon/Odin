@@ -1,0 +1,47 @@
+{
+	"id": "ui-and-ux",
+	"title": "User Interface Patterns and Accessibility",
+	"summary": "Guidance for SvelteKit UI components, state management, controls, and WCAG accessibility requirements.",
+	"description": "Define component patterns, theming, keyboard navigation, and automations for the operator workflows (tuning, feeds, audit). Ensure WCAG AAA where feasible and include automated accessibility tests.",
+	"components": [
+		{
+			"name": "Top-level Layouts",
+			"responsibility": "Global navigation, header, user menu (see `src/routes/+layout.svelte`)."
+		},
+		{
+			"name": "Panels & Controls",
+			"responsibility": "Reusable controls in `src/lib/controls` (e.g., `panel.svelte`)."
+		},
+		{
+			"name": "Forms & Validation",
+			"responsibility": "Client-side validation mirroring backend schemas."
+		}
+	],
+	"interactions": [
+		"UI uses session cookies to fetch user info and permissions upon load.",
+		"Forms call API endpoints and show inline validation/errors.",
+		"Audit views allow filtering, pagination, and export of audit entries."
+	],
+	"accessibility": [
+		"All interactive controls must be keyboard operable.",
+		"Color contrast must meet WCAG AA minimum (AAA where practical).",
+		"Provide ARIA attributes for complex widgets."
+	],
+	"tech_stack": [
+		"SvelteKit",
+		"TailwindCSS for utility styles (project has CSS files)",
+		"Accessible component patterns"
+	],
+	"acceptance_criteria": [
+		"Key pages reachable and operable via keyboard and screen reader.",
+		"Forms validate equivalently server and client side.",
+		"E2E tests cover major workflows (homepage, login, triggers endpoints)."
+	],
+	"tasks": [
+		"Review `src/lib/controls/panel.svelte` and document patterns to reuse.",
+		"Add basic axe-core accessibility checks in the e2e pipeline.",
+		"Document design tokens (colors, spacing) and ensure consistent usage."
+	],
+	"references": ["src/lib/controls/", "src/routes/+layout.svelte", "static/", "app.theme.css"],
+	"created_at": "2025-11-29"
+}

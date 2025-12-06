@@ -23,6 +23,13 @@ export const OD_OAUTH_URL = process.env['OD_OAUTH_URL'] || '';
 
 // Session secret used for cookie encryption
 export const OD_COOKIE_SECRET = process.env['OD_COOKIE_SECRET'] || '';
+// Optional salt for cookie key derivation. Change when rotating keys/versioning.
+export const OD_COOKIE_SALT = process.env['OD_COOKIE_SALT'] || 'od_cookie_salt_v1';
+// PBKDF2 iteration count for deriving the cookie encryption key. Defaults to 100k.
+export const OD_COOKIE_PBKDF2_ITERS = parseInt(
+	process.env['OD_COOKIE_PBKDF2_ITERS'] || '100000',
+	10
+);
 
 // HMR / dev
 export const OD_HMR_HOST = process.env['OD_HMR_HOST'] || HOST;

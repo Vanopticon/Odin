@@ -3,4 +3,6 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - chromedriver
+  - cpu-features
   - esbuild
+  - ssh2

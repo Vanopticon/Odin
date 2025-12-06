@@ -29,6 +29,7 @@ Odin groups capabilities into three primary areas: Configuration, Detection Tuni
 
 - Configuration Management
   - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+    - Keywords can be organized by groups, native language, or country where spoken.
   - Rule versioning with diffs, rollback, and scheduled effective dates.
   - Bulk import/export and CSV/JSON interchange for large-scale edits.
 
@@ -115,6 +116,10 @@ pnpm build
 pnpm start   # start production-like server
 pnpm e2e
 ```
+
+E2E headless mode
+
+The e2e runner defaults to running Chrome in headless mode for CI and non-GUI environments. You can opt out by setting the `E2E_HEADLESS` environment variable to `false` (for example in `.env`) to run a visible browser during development.
 
 ## Security
 

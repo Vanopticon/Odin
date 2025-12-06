@@ -1,5 +1,6 @@
 import { beforeAll, afterAll, describe, it, expect } from 'vitest';
-// Import `testcontainers` dynamically inside `beforeAll` to avoid ESM import shims
+import dotenv from 'dotenv';
+dotenv.config();
 import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
 import { writeAudit } from '$lib/logging/audit';
 

@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
   title: Odin API
-  version: 0.1.0
-  description: OpenAPI skeleton for Vanopticon/Odin — start of contract work
+  version: 1.0.0
+  description: OpenAPI skeleton for Odin management API (Vanopticon)
 servers:
   - url: https://{host}:{port}
     variables:
@@ -14,28 +14,20 @@ paths:
   /api/health:
     get:
       summary: Health check
+      description: Returns health status of the service.
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
+                $ref: '#/components/schemas/HealthResponse'
   /api/triggers:
     get:
-      summary: List or retrieve triggers
-      parameters:
-        - in: query
-          name: id
-          schema:
-            type: string
-          description: Optional trigger id to fetch a single trigger
+      summary: List triggers
       responses:
         '200':
-          description: Successful response
+          description: A list of triggers
           content:
             application/json:
               schema:
@@ -52,59 +44,49 @@ paths:
               $ref: '#/components/schemas/TriggerCreate'
       responses:
         '201':
-          description: Created
+          description: Trigger created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trigger'
-    put:
-      summary: Update a trigger
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/TriggerUpdate'
+  /auth/login:
+    post:
+      summary: Initiate login
+      responses:
+        '302':
+          description: Redirect to provider
+  /auth/callback:
+    get:
+      summary: OIDC callback
       responses:
         '200':
-          description: Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Trigger'
-    delete:
-      summary: Delete a trigger
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Deleted
+          description: Callback result
 components:
   schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok
+        uptime:
+          type: number
+          example: 123.45
     Trigger:
       type: object
       properties:
         id:
           type: string
-          format: uuid
         name:
-          type: string
-        expression:
           type: string
         enabled:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
+        created_at:
           type: string
           format: date-time
     TriggerCreate:
       type: object
+      required: [name, expression]
       properties:
         name:
           type: string
@@ -112,17 +94,4 @@ components:
           type: string
         enabled:
           type: boolean
-    TriggerUpdate:
-      type: object
-      required:
-        - id
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        expression:
-          type: string
-        enabled:
-          type: boolean
+          default: true
