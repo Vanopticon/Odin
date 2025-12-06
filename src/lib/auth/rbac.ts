@@ -1,4 +1,4 @@
-import { initializeDataSource, AppDataSource } from '$lib/db/data-source';
+import { initializeDataSource } from '$lib/db/data-source';
 import { DB_URL } from '$lib/settings';
 
 /**
@@ -8,7 +8,9 @@ import { DB_URL } from '$lib/settings';
  */
 export async function getUserRolesAndPermissionsByEmail(email: string) {
 	if (!email) return { roles: [] as string[], permissions: [] as string[] };
-	if (!DB_URL) return { roles: [] as string[], permissions: [] as string[] };
+	// Read from process.env at runtime to support tests that set OD_DB_URL after module load
+	const databaseUrl = process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || DB_URL || '';
+	if (!databaseUrl) return { roles: [] as string[], permissions: [] as string[] };
 
 	const ds = await initializeDataSource();
 	// get roles for user by email

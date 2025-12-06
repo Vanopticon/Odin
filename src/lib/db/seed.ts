@@ -100,6 +100,27 @@ export async function seedDatabase(ds: DataSource) {
 			}
 		}
 
+<<<<<<< HEAD
+		// assign maintainer permissions (view:app and manage:triggers)
+		const maintainerRole = await ds.manager.query('select id from roles where name=$1 limit 1', [
+			'maintainer'
+		]);
+		if (maintainerRole.length > 0) {
+			const maintainerId = maintainerRole[0].id;
+			const maintainerPermissions = ['view:app', 'manage:triggers'];
+			for (const pName of maintainerPermissions) {
+				const exists = await ds.manager.query(
+					'select 1 from role_permissions where role_id = $1 and permission_name = $2 limit 1',
+					[maintainerId, pName]
+				);
+				if (exists.length === 0) {
+					await ds.manager.query(
+						'insert into role_permissions(role_id, permission_name) values($1, $2)',
+						[maintainerId, pName]
+					);
+				}
+			}
+=======
 		// ensure maintainers have essential permissions (best-effort)
 		try {
 			const maintRow = await ds.manager.query('select id from roles where name = $1 limit 1', [
@@ -123,6 +144,7 @@ export async function seedDatabase(ds: DataSource) {
 			}
 		} catch (err) {
 			// ignore if tables missing or other issues; seeding is best-effort
+>>>>>>> origin/v1.0.0
 		}
 	} catch (err) {
 		// tables may not exist in older DBs; safe to ignore during seeding

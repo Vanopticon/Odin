@@ -1,64 +1,56 @@
-mport { AppDataSource, initializeDataSource } from '$lib/db/data-source';
+import { getAppDataSource } from '$lib/db/data-source';
 
-export type AuditPayload = {
-	actor_id?: string;
-	actor_type?: string;
+export type AuditEntry = {
+	actor_id?: string | null;
+	actor_type?: string | null;
 	action: string;
-	resource: string;
-	resource_id?: string;
+	resource?: string | null;
+	resource_id?: string | null;
 	data?: any;
-	outcome?: string;
+	outcome?: string | null;
+	req_id?: string | null;
 };
 
-async function ensureAuditTable() {
-	if (!AppDataSource.isInitialized) return;
+export async function writeAudit(entry: AuditEntry) {
+	const payload = {
+		ts: new Date().toISOString(),
+		level: 'info',
+		type: 'audit',
+		...entry
+	};
 
-	// Ensure pgcrypto extension for gen_random_uuid() is available, then
-	// create the audit_entries table if it doesn't exist. Keep this SQL
-	// idempotent so tests and runtime can call it safely.
-	await AppDataSource.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
-
-	await AppDataSource.query(`
-    CREATE TABLE IF NOT EXISTS audit_entries (
-      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-      actor_id uuid,
-      actor_type text,
-      action text NOT NULL,
-      resource text NOT NULL,
-      resource_id text,
-      data jsonb,
-      outcome text,
-      created_at timestamptz NOT NULL DEFAULT now()
-    );
-  `);
-}
-
-export async function writeAudit(payload: AuditPayload) {
-	// Ensure datasource is initialized (tests may have already done this but
-	// be defensive when called standalone).
-	if (!AppDataSource.isInitialized) {
-		await initializeDataSource();
+	// Emit structured audit event to stdout (JSON) for centralized collection
+	try {
+		// Keep console output synchronous-friendly
+		// eslint-disable-next-line no-console
+		console.log(JSON.stringify(payload));
+	} catch (e) {
+		// ignore logging errors
 	}
 
-	// Ensure table exists before inserting (integration tests run migrations
-	// which may not include audit entries yet).
-	await ensureAuditTable();
-
-	const res = await AppDataSource.query(
-		`INSERT INTO audit_entries(actor_id, actor_type, action, resource, resource_id, data, outcome)
-     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-		[
-			payload.actor_id || null,
-			payload.actor_type || null,
-			payload.action,
-			payload.resource,
-			payload.resource_id || null,
-			payload.data ? JSON.stringify(payload.data) : null,
-			payload.outcome || null
-		]
-	);
-
-	return res && res[0] ? res[0] : null;
+	// Best-effort persistence: insert into `audit_entries` table if DB is available
+	try {
+		const ds = getAppDataSource();
+		if (ds && ds.isInitialized) {
+			const sql = `INSERT INTO audit_entries(
+                id, actor_id, actor_type, action, resource, resource_id, data, outcome, created_at
+            ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6::jsonb, $7, now())`;
+			const params = [
+				entry.actor_id || null,
+				entry.actor_type || null,
+				entry.action,
+				entry.resource || null,
+				entry.resource_id || null,
+				JSON.stringify(entry.data || {}),
+				entry.outcome || null
+			];
+			await ds.query(sql, params as any);
+		}
+	} catch (e) {
+		// do not throw — audit persistence failures should not impact application flow
+		// eslint-disable-next-line no-console
+		console.error('audit persistence failed', e);
+	}
 }
 
 export default { writeAudit };

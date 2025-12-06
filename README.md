@@ -29,7 +29,10 @@ Odin groups capabilities into three primary areas: Configuration, Detection Tuni
 
 - Configuration Management
   - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+<<<<<<< HEAD
+=======
     - Keywords can be organized by groups, native language, or country where spoken.
+>>>>>>> origin/v1.0.0
   - Rule versioning with diffs, rollback, and scheduled effective dates.
   - Bulk import/export and CSV/JSON interchange for large-scale edits.
 

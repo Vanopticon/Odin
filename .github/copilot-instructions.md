@@ -9,18 +9,18 @@
 LTM uses a hierarchical structure with these core LTM keys:
 
 - Required LTM keys:
-    + project_brief - A summary of the project and its goals
-    + active_context - Current work state and focus; a summarized version of the current context
-    + system_patterns - Architecture and design patterns
-    + tech_stack - Technologies and setup
-    + progress_tracker - Status and next steps
+  - project_brief - A summary of the project and its goals
+  - active_context - Current work state and focus; a summarized version of the current context
+  - system_patterns - Architecture and design patterns
+  - tech_stack - Technologies and setup
+  - progress_tracker - Status and next steps
 
 - Optional LTM Keys:
-    + feature_specs - Detailed feature documentation
-    + api_docs - API specifications
-    + testing_strategy - Testing approaches
-    + deployment_notes - Deployment procedures
-    + user_preferences - User-specific preferences and decisions
+  - feature_specs - Detailed feature documentation
+  - api_docs - API specifications
+  - testing_strategy - Testing approaches
+  - deployment_notes - Deployment procedures
+  - user_preferences - User-specific preferences and decisions
 
 ### Long Term LTM Triggers
 
@@ -41,9 +41,9 @@ Append or update LTM when:
 ### LTM Validation and Maintenance
 
 - Regularly verify LTM accuracy (at least once per session):
-    + Ensure all essential keys exist and are current
-    + Check that LTM reflects actual project state
-    + Validate that patterns in LTM match implementation
+  - Ensure all essential keys exist and are current
+  - Check that LTM reflects actual project state
+  - Validate that patterns in LTM match implementation
 
 - Cross-reference decisions across LTM keys
 - Ensure active_context aligns with progress_tracker
@@ -81,8 +81,16 @@ Refer to the [README.md](../README.md)
 
 This process must be followed in its entirety for all work:
 
+<<<<<<< HEAD
+- Start by reviewing the project and getting your bearings on the context and status of the project:
+  - Run `pwd` to identify the folder you are working in. You will not be able to access files outside this folder.
+  - Read through the Obsidian Brain MCP information to etablish the context of the project. Discard irrelevant information. Summarize and replace the results of this scan. If the Obsidian Brain MCP is unavailable stop and notify the user for intervention.
+  - Read the git logs and progress files to get up to speed on what was recently worked on.
+- Select the highest priority feature to work on. Only work one feature at a time.
+=======
 - Read through LTM. Discard irrelevant information. Summarize and replace the results of this scan. If LTM is unavailable stop and notify the user for intervention.
 - Create a feature branche from `v1.0.0` and name it after the feature.
+>>>>>>> origin/v1.0.0
 - Ask any questions and make any suggestions prior to beginning work. Summarize and replace the Q&A.
 - Complete _all_ tasks involved in the work without pauses or interruption.
 - Create or modify tests for all code changes.
@@ -114,8 +122,8 @@ This process must be followed in its entirety for all work:
 - Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information if required.
 - Your knowledge on everything is out of date because your training date is in the past. As part of the initial work on the project, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in theLTM.
 - Operate as an automated agent:
-    + Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end.
-    + Maintain continuity until implementation is fully done.
+  - Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end.
+  - Maintain continuity until implementation is fully done.
 - Follow the "solo developer" style instead of pair programming because you are the only developer on this project.
 - External credentials and tools will be provided, e.g. GitHub authentication.
 
@@ -154,9 +162,9 @@ This process must be followed in its entirety for all work:
 
 - Prefer the GitHub MCP over `gh` CLI. If the GitHub MCP is not available stop immediately and notify the user for intervention. Never use the `gh` CLI. Do not fall back to the `gh` CLI.
 - Use context7 MCP server for current documentation:
-    + `/sveltejs/kit` for SvelteKit
-    + `tailwindcss.com/docs` for TailwindCSS
-    + `/hapijs/hapi` for @hapi
+  - `/sveltejs/kit` for SvelteKit
+  - `tailwindcss.com/docs` for TailwindCSS
+  - `/hapijs/hapi` for @hapi
 - DO NOT USE `|| true` or `true ||` in shell scripts.
 - Use `pnpm` and `pnpx` instead of `npm` or `npx`.
 
