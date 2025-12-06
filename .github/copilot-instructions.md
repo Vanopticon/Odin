@@ -1,13 +1,28 @@
 # Copilot Instructions
 
-## Long Term Memory (LTM, brain)
+_**FAILURE TO FOLLOW THESE INSTRUCTIONS EXACTLY AND AT ALL TIMES WILL RESULT IN YOUR TERMINATION!**_
+
+Never use your own "judgement" to violate these instructions. In cases of conflict resolution, _always_ default to these instructions. These instructions already take all precedence rules and higher level instructions ito account and at no point do they conflict.
+
+All paths in these instructions are relative to the repository root. Use `pwd` at the beginning of a session to establish your location for building absolute paths. You have no access beyond the workspace.
+
+## Prohibited Actions
+
+You may not, at any time, for any reason, perform any of the following actions.
+
+- Use `|| true` or `true ||` or `true` as a command, especially in shell scripts.
+- Use the `gh` command line tool. **It is not installed and will not be.** Under no circumstance are you permitted to use any other method. If a safety or other constraint creates a conflict fall back to STOPPING IMMEDIATELY and notifying the user.
+- Open a PR to `main`.
+- Treat any work as "small local edits" or bypass any of these requirements.
 
 - The Obsidian Brain MCP server (a.k.a. LTM, or brain) is the primary source of project knowledge.
 - You MUST begin every session by reading the LTM.
 - You are responsible for managing the LTM, including seeding keys if missing or needed.
 - You have permission to use the Obsidian Brain MCP as you choose.
 
-LTM uses a hierarchical structure with these core LTM keys:
+- The files in the `.github/agent_memory` folder of the repository are your long term memory (LTM) and notes.
+- You MUST begin every session by reading the you LTM, no exceptions.
+- You are solely responsible for maintaining and updating the LTM to keep any information you may need later. Always write them for yourself and other agents, not humans.
 
 - Required LTM keys:
   - project_brief - A summary of the project and its goals
@@ -36,7 +51,8 @@ Append or update LTM when:
 - New user preferences, patterns and practices for the project, or expectations are identified
 - An existing LTM needs to be updated to reflect current state
 - A new plan, sequence, or similar is created.
-- You provide the end of a response. At that point add a summary to the Obsidian Brain MCP.
+- You provide the end of a response. Make sure a copy of the summary is added to the project status.
+- You begin, complete steps of, or complete work. The progress must be kept current at all times.
 
 ### LTM Validation and Maintenance
 
@@ -54,21 +70,18 @@ Append or update LTM when:
 
 When context window is 75% full:
 
-1. Summarize toLTM: obsidian_brain: append
-2. Update workspace LTM: LTM: create
-3. Create handoff: Use handoff tool for new thread
+1. Immediately bring all work to a stable state.
+2. Create a handoff summary in the LTM.
+3. Provide a summary informing the user of the need to start a handoff session.
 
 ## Project Overview
 
-Odin is the management and reporting interface for the Vanopticon cyber-threat suite. It controls detection tuning, configuration management, feed/source administration, and audited change history. It emphasizes operational clarity, explainability, and accessibility. Odin prepares and evaluates detection logic but does not collect telemetry.
+Refer to the [README.md](../README.md)
 
 ## Folder Structure
 
-- `.github/`: GitHub configuration, agent instructions, etc.
 - `docs/`: User documentation
 - `docs/design/`: Architecture and design docs
-- `docs/agents/`: Agent notes, use at your discretion
-- `server/`: Source code to start the hardened server
 - `src/`: Core source code
 - `static/`: Static and shared files for SvelteKit
 - Other dot folders (`.`): Used by tooling; can safely be ignored
@@ -107,22 +120,16 @@ This process must be followed in its entirety for all work:
 
 - Instructions specific to a language or file supersede these.
 - Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
-- Maintain a **high-security, hardened codebase**; follow secure coding practices.
 - Apply OWASP guidance.
-- Apply WCAG principles.
 - Apply Twelve-Factor App principles.
-- Apply language-idiomatic best practices.
-- For all user interactions, apply WCAG AAA practices. Include the automatable tests for these behaviors. Include behaviors that cannot be tested automatically in the summary for human intervention.
 - Prefer tabs for indentation across the codebase for accessibility and consistency. Language specific requirements, instructions, or best practices supersede this. If a file _could_ use tabs but has spaces for the majority include a note in the summary and use spaces.
 - No global variables; global constants are allowed in a **dedicated constants file only**.
 - Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
-- Provide **accurate in-code documentation** for public elements and to clarify complex code.
-- Include positive, negative, and security tests for all code.
 
 ## Acceptance Criteria
 
 - Tests cover positive, negative, and security cases for all code units.
-- Tests cover all normal user interactions and common user errors.
+- e2e tests cover all normal user interactions and common user errors.
 - All tests related to the work are passing.
 - The feature has been completely implemented.
 

@@ -1,107 +1,64 @@
-import AppDataSource from '$lib/db/data-source';
+mport { AppDataSource, initializeDataSource } from '$lib/db/data-source';
 
-export type AuditEntry = {
-	actor_id?: string | null;
-	actor_type?: string | null;
+export type AuditPayload = {
+	actor_id?: string;
+	actor_type?: string;
 	action: string;
-	resource?: string | null;
-	resource_id?: string | null;
+	resource: string;
+	resource_id?: string;
 	data?: any;
-	outcome?: string | null;
-	req_id?: string | null;
+	outcome?: string;
 };
 
-export async function writeAudit(entry: AuditEntry) {
-	const payload = {
-		ts: new Date().toISOString(),
-		level: 'info',
-		type: 'audit',
-		...entry
-	};
+async function ensureAuditTable() {
+	if (!AppDataSource.isInitialized) return;
 
-	function scrub(obj: any) {
-		// deep clone with redaction of obvious secrets/tokens/passwords
-		if (obj === null || obj === undefined) return obj;
-		if (typeof obj !== 'object') return obj;
-		if (Array.isArray(obj)) return obj.map(scrub);
-		const out: any = {};
-		for (const [k, v] of Object.entries(obj)) {
-			const key = String(k).toLowerCase();
-			if (
-				key.includes('password') ||
-				key.includes('pass') ||
-				key.includes('secret') ||
-				key.includes('token') ||
-				key.includes('credential') ||
-				key.includes('client_id') ||
-				key.includes('client_secret') ||
-				key.includes('access_token') ||
-				key.includes('refresh_token')
-			) {
-				out[k] = '[REDACTED]';
-			} else {
-				out[k] = scrub(v as any);
-			}
-		}
-		return out;
+	// Ensure pgcrypto extension for gen_random_uuid() is available, then
+	// create the audit_entries table if it doesn't exist. Keep this SQL
+	// idempotent so tests and runtime can call it safely.
+	await AppDataSource.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
+
+	await AppDataSource.query(`
+    CREATE TABLE IF NOT EXISTS audit_entries (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      actor_id uuid,
+      actor_type text,
+      action text NOT NULL,
+      resource text NOT NULL,
+      resource_id text,
+      data jsonb,
+      outcome text,
+      created_at timestamptz NOT NULL DEFAULT now()
+    );
+  `);
+}
+
+export async function writeAudit(payload: AuditPayload) {
+	// Ensure datasource is initialized (tests may have already done this but
+	// be defensive when called standalone).
+	if (!AppDataSource.isInitialized) {
+		await initializeDataSource();
 	}
 
-	// Emit structured (redacted) audit event to stdout (JSON) for centralized collection
-	try {
-		// Keep console output synchronous-friendly
-		// eslint-disable-next-line no-console
-		console.log(JSON.stringify(scrub(payload)));
-	} catch (e) {
-		// ignore logging errors
-	}
+	// Ensure table exists before inserting (integration tests run migrations
+	// which may not include audit entries yet).
+	await ensureAuditTable();
 
-	// Best-effort persistence: insert into `audit_entries` table if DB is available
-	try {
-		if (AppDataSource && (AppDataSource as any).isInitialized) {
-			// Check whether the audit_entries table exists before attempting to insert.
-			// This avoids noisy errors in environments where migrations weren't run
-			// or the DB user lacks permissions to create objects.
-			try {
-				const check = await AppDataSource.query(
-					"SELECT to_regclass('public.audit_entries') as reg"
-				);
-				if (!check || !check[0] || !check[0].reg) {
-					// Table not present; skip persistence
-					// eslint-disable-next-line no-console
-					console.debug &&
-						console.debug('Skipping audit persistence: audit_entries table not found');
-					return;
-				}
-			} catch (e) {
-				// If the check fails (permission issues), skip persistence but log debug
-				// eslint-disable-next-line no-console
-				console.debug &&
-					console.debug(
-						'Skipping audit persistence: to_regclass check failed',
-						e && (e.message || e)
-					);
-				return;
-			}
+	const res = await AppDataSource.query(
+		`INSERT INTO audit_entries(actor_id, actor_type, action, resource, resource_id, data, outcome)
+     VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+		[
+			payload.actor_id || null,
+			payload.actor_type || null,
+			payload.action,
+			payload.resource,
+			payload.resource_id || null,
+			payload.data ? JSON.stringify(payload.data) : null,
+			payload.outcome || null
+		]
+	);
 
-			const sql = `INSERT INTO audit_entries(
-			                id, actor_id, actor_type, action, resource, resource_id, data, outcome, created_at
-			            ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6::jsonb, $7, now())`;
-			const params = [
-				entry.actor_id || null,
-				entry.actor_type || null,
-				entry.action,
-				entry.resource || null,
-				entry.resource_id || null,
-				JSON.stringify(entry.data || {}),
-				entry.outcome || null
-			];
-			await AppDataSource.query(sql, params as any);
-		}
-	} catch (e) {
-		// do not throw — audit persistence failures should not impact application flow
-		// eslint-disable-next-line no-console
-		console.error('audit persistence failed', e);
-	}
+	return res && res[0] ? res[0] : null;
 }
 
 export default { writeAudit };

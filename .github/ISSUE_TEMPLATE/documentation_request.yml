@@ -1,23 +1,23 @@
 name: 'Documentation request'
-about: 'Suggest corrections or improvements to documentation or examples.'
+about: 'Suggest corrections or improvements to documentation, examples, or guides.'
 title: '[docs] '
 labels: ['documentation']
 body:
   - type: input
     id: summary
     attributes:
-      label: 'Summary'
-      description: 'Short summary of the documentation change.'
+      label: 'One-line summary'
+      description: 'Short summary of the requested documentation change.'
   - type: textarea
     id: current
     attributes:
       label: 'Current docs (link or excerpt)'
-      description: 'URL or quote of the existing documentation to change.'
+      description: 'URL, file path, or quote of the existing documentation to change.'
   - type: textarea
     id: proposed
     attributes:
       label: 'Proposed improvement'
-      description: 'Suggested replacement text, code snippets, or screenshots. Be specific.'
+      description: 'Suggested replacement text, code snippets, or screenshots. Be specific and include file path when applicable.'
   - type: textarea
     id: rationale
     attributes:
@@ -28,5 +28,6 @@ body:
     attributes:
       label: 'Pre-submission checklist'
       options:
-        - label: 'I searched existing docs and issues'
-        - label: 'Change is minimally invasive and documented'
+        - label: 'I searched existing docs, issues, and PRs for duplicates'
+        - label: 'I included file paths and code examples where applicable'
+        - label: 'Small changes include a proposed patch; larger changes have a design doc or discussion'

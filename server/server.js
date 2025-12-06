@@ -5,6 +5,7 @@ import Hapi from '@hapi/hapi';
 import telemetry, { httpRequestDuration, metricsRegister } from './telemetry.js';
 
 import { PROD_MODE, HOST, PORT, TLS_KEY_PATH, TLS_CERT_PATH, RATE_LIMIT_MAX } from './settings.js';
+import { DB_URL } from './settings.js';
 
 function loadRequiredFile(label, filePath) {
 	console.debug(`Loading ${label} from ${filePath}`);
