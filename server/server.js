@@ -31,8 +31,10 @@ export async function startHapi() {
 			console.warn('OD_COOKIE_SECRET is set but shorter than 32 characters; this may be insecure');
 		}
 
-		if (!TLS_KEY_PATH || !fs.existsSync(TLS_KEY_PATH)) missing.push(`TLS key file at ${TLS_KEY_PATH}`);
-		if (!TLS_CERT_PATH || !fs.existsSync(TLS_CERT_PATH)) missing.push(`TLS cert file at ${TLS_CERT_PATH}`);
+		if (!TLS_KEY_PATH || !fs.existsSync(TLS_KEY_PATH))
+			missing.push(`TLS key file at ${TLS_KEY_PATH}`);
+		if (!TLS_CERT_PATH || !fs.existsSync(TLS_CERT_PATH))
+			missing.push(`TLS cert file at ${TLS_CERT_PATH}`);
 
 		if (missing.length) {
 			console.error('Startup validation failed. Missing or invalid configuration:');
