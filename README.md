@@ -29,6 +29,10 @@ Odin groups capabilities into three primary areas: Configuration, Detection Tuni
 
 - Configuration Management
   - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+<<<<<<< HEAD
+=======
+    - Keywords can be organized by groups, native language, or country where spoken.
+>>>>>>> origin/v1.0.0
   - Rule versioning with diffs, rollback, and scheduled effective dates.
   - Bulk import/export and CSV/JSON interchange for large-scale edits.
 
@@ -94,12 +98,23 @@ pnpm build          # build for production
 pnpm test           # run unit & integration tests (where configured)
 ```
 
-Editor recommendations
+### Editor recommendations
 
 - Use an editor with TypeScript and Svelte support (VS Code + Svelte extension).
 - Respect `prettier` and the repo linting rules. The repo uses tabs for indentation.
 
-Database and migrations
+### MCP Servers
+
+The development environment includes several Model Context Protocol (MCP) servers for enhanced development capabilities:
+
+- GitHub MCP: Repository management, issues, PRs, and code search
+- Microsoft Docs MCP: Access to official Microsoft documentation and code samples
+- Todoist MCP: Task and project management
+- Playwright Browser MCP: Browser automation for testing (limited to local URLs)
+
+For detailed testing results and capabilities, see `docs/mcp-servers-test-results.md`.
+
+### Database and migrations
 
 The repo includes migration scripts in `src/lib/db/migrations/`. Use the included runner `src/lib/db/run-migrations.ts` and the seed file `src/lib/db/seed.ts` for local development. See `docs/README-db.md` for environment configuration.
 
@@ -115,6 +130,10 @@ pnpm build
 pnpm start   # start production-like server
 pnpm e2e
 ```
+
+E2E headless mode
+
+The e2e runner defaults to running Chrome in headless mode for CI and non-GUI environments. You can opt out by setting the `E2E_HEADLESS` environment variable to `false` (for example in `.env`) to run a visible browser during development.
 
 ## Security
 

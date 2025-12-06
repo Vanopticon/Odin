@@ -38,10 +38,20 @@ export const AppDataSource = new DataSource({
 	migrations: [CreateInitialTables0001, CreateAuthTables0002, CreateAuditEntries0003]
 });
 
+<<<<<<< HEAD
 export async function initializeDataSource(): Promise<DataSource> {
 	// Resolve the database URL from environment at the time of initialization.
 	// Read from process.env directly to support tests that set OD_DB_URL after module load.
 	const databaseUrl = process.env['OD_DB_URL'] || process.env['DATABASE_URL'] || DB_URL || '';
+=======
+export async function initializeDataSource() {
+	// Resolve the database URL using the exported value from `settings`.
+	// Tests mock `$lib/settings` (via `vi.doMock`) to control `DB_URL`, so
+	// prefer the `DB_URL` export here rather than reading `process.env`.
+	// This keeps behavior deterministic for unit tests while `settings`
+	// remains the source of truth for runtime configuration.
+	const databaseUrl = DB_URL;
+>>>>>>> origin/v1.0.0
 
 	if (!databaseUrl) {
 		throw new Error('OD_DB_URL not set in environment');

@@ -26,7 +26,7 @@ export class Keyword {
 	updatedAt: string;
 
 	@OneToMany(() => Sighting, (s: Sighting) => s.keyword, { cascade: true })
-	sightings: Sighting[] = [];
+	sightings: Sighting[];
 
 	constructor(value: string, languageCode?: string | Language, addedAt?: string) {
 		const now = new Date().toISOString();
@@ -52,6 +52,7 @@ export class Keyword {
 		timestamp?: string | Date
 	) {
 		const s = new Sighting(this.keyword, timestamp, data, source as any, reporter as any, details);
+		this.sightings = this.sightings || [];
 		this.sightings.push(s);
 		this.updatedAt = new Date().toISOString();
 		return s;
