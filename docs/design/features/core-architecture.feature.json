@@ -1,0 +1,58 @@
+{
+	"id": "core-architecture",
+	"title": "Core Architecture & Component Boundaries",
+	"summary": "Defines the high-level components, responsibilities, and interaction patterns for Odin (Vanopticon UI + API).",
+	"description": "Odin is a management and reporting interface for the Vanopticon cyber-threat suite. This feature document enumerates components (UI, API server, DB, auth, audit, background tasks), data flows between them, and cross-cutting concerns such as security, observability, and deployment.",
+	"components": [
+		{
+			"name": "Web UI (SvelteKit)",
+			"responsibility": "Rich client for operators: tuning, config, feeds, audit views."
+		},
+		{
+			"name": "API Server (Node/TS)",
+			"responsibility": "Business logic, REST endpoints, auth, validation, audit logging."
+		},
+		{
+			"name": "DB (Postgres)",
+			"responsibility": "Persist configuration, users, audit entries, sources."
+		},
+		{
+			"name": "Auth Provider / OIDC",
+			"responsibility": "External identity and group sync; local RBAC mapping."
+		},
+		{
+			"name": "Background Jobs",
+			"responsibility": "Migrations, seeds, periodic housekeeping, retention jobs."
+		},
+		{
+			"name": "Telemetry & Logging",
+			"responsibility": "Structured audit logs and minimal telemetry for operations."
+		}
+	],
+	"interactions": [
+		"UI calls API endpoints under /api/* using authenticated session cookies.",
+		"API validates requests, applies RBAC, persists to DB, and emits audit entries.",
+		"Auth integration uses OIDC callback and server-side session store.",
+		"Background jobs access DB via the same data-source layer and use transactions for migrations/seed operations."
+	],
+	"data_flow": "Operators interact with the UI -> UI calls API -> API updates DB and writes audit entries -> DB persists state. External auth providers may redirect via OIDC flows into /auth/callback endpoints.",
+	"tech_stack": [
+		"SvelteKit (client + server)",
+		"Node.js + TypeScript",
+		"Postgres",
+		"OIDC (Auth0/Keycloak) optional",
+		"pnpm"
+	],
+	"acceptance_criteria": [
+		"All top-level pages are served by SvelteKit and call documented API endpoints.",
+		"API endpoints validate and sanitize inputs using existing schemas in `src/lib/schemas`.",
+		"Audit entries are emitted for all configuration changes.",
+		"RBAC enforces permissions for sensitive actions and is test-covered."
+	],
+	"tasks": [
+		"Map existing routes to this component model and update docs/references.",
+		"Create feature files for Auth, API, UI, Data, Audit, Testing, Deployment (subsequent tasks)."
+	],
+	"references": ["src/routes/", "src/lib/", "docs/odin-implementation-plan-2025-11-27.md"],
+	"created_at": "2025-11-29"
+}

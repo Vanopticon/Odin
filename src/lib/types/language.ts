@@ -8,7 +8,14 @@ export class Language {
 	@Column({ type: 'text' })
 	name: string;
 
-	constructor(code: string, name: string) {
+	// Allow TypeORM to construct entities without arguments when building
+	// metadata. When called with explicit values, validate inputs.
+	constructor(code?: string | null, name?: string | null) {
+		if (typeof code === 'undefined' || code === null) {
+			// metadata initialization path — do not validate
+			return;
+		}
+
 		const normalized = String(code || '')
 			.trim()
 			.toLowerCase();

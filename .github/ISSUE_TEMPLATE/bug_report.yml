@@ -1,23 +1,41 @@
 name: 'Bug report'
-about: 'Report a reproducible bug — include steps, expected outcome, and logs.'
+about: 'Report a reproducible bug — include minimal repro, expected outcome, and logs.'
 title: '[bug] '
 labels: ['bug']
 body:
   - type: input
     id: summary
     attributes:
-      label: 'Summary'
-      description: 'One-line summary of the bug.'
-      placeholder: 'E.g. Crash when saving settings with empty token'
+      label: 'One-line summary'
+      description: 'Concise summary of the problem.'
+      placeholder: 'e.g. Crash when saving settings with empty token'
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 'Severity'
+      description: 'How severe is the issue for users or CI?'
+      options:
+        - label: 'P0 - Blocker (production outage)'
+        - label: 'P1 - High (major feature broken)'
+        - label: 'P2 - Medium (minor loss of functionality)'
+        - label: 'P3 - Low (cosmetic or edge-case)'
   - type: textarea
     id: steps
     attributes:
       label: 'Steps to reproduce'
-      description: 'Exact, minimal steps to reproduce (commands, inputs, screenshots).'
+      description: 'Minimal, exact steps to reproduce. Provide commands, inputs, and screenshots as needed.'
       placeholder: |-
         1. Start with a fresh DB
         2. Run `pnpm dev`
         3. Navigate to Settings → Save with empty token
+  - type: dropdown
+    id: reproducible
+    attributes:
+      label: 'Reproducible?'
+      options:
+        - label: 'Always'
+        - label: 'Sometimes'
+        - label: 'Unable to reproduce'
   - type: textarea
     id: expected
     attributes:
@@ -27,23 +45,24 @@ body:
     id: actual
     attributes:
       label: 'Actual behavior'
-      description: 'What happened instead, including error output or stack traces.'
+      description: 'What happened instead. Include error output or stack traces (sanitized).'
   - type: input
     id: environment
     attributes:
       label: 'Environment'
-      description: 'OS, Node/pnpm versions, commit SHA, and other relevant info (no secrets).'
+      description: 'OS, Node/pnpm versions, commit SHA, and other relevant info. Do not include secrets.'
       placeholder: 'e.g. Ubuntu 22.04, Node v20, pnpm v8, commit abc123'
   - type: textarea
     id: logs
     attributes:
       label: 'Relevant logs / traceback'
-      description: 'Paste the short, relevant log excerpt or error message.'
+      description: 'Paste a short, relevant log excerpt, error message, or attach files.'
   - type: checkboxes
     id: checklist
     attributes:
       label: 'Pre-submission checklist'
       options:
-        - label: 'I reproduced the issue on the latest v1.0.0 branch'
-        - label: 'I searched for existing issues and PRs'
-        - label: 'I removed any sensitive information from logs'
+        - label: 'I reproduced the issue on the current `v1.0.0` branch or noted differences'
+        - label: 'I searched existing issues and PRs for duplicates'
+        - label: 'I removed any sensitive information from logs and screenshots'
+        - label: 'I included a minimal repro (commands or dataset) where possible'

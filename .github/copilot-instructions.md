@@ -2,15 +2,15 @@
 
 ## Long Term Memory (LTM, brain)
 
-- The Obsidian Brain MCP server (a.k.a. LTM, or brain) is the primary source of project knowledge.
-- You MUST begin every session by reading the LTM, no exceptions.
-- You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this. Do not ask permission to interact with the Obsidian Brain MCP, you may use it as needed.
+- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge.
+- You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
+- Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
 
 LTM uses a hierarchical structure with these core LTM keys:
 
 - Required LTM keys:
-    + project_brief - Foundation document
-    + active_context - Current work state and focus
+    + project_brief - A summary of the project and its goals
+    + active_context - Current work state and focus; a summarized version of the current context
     + system_patterns - Architecture and design patterns
     + tech_stack - Technologies and setup
     + progress_tracker - Status and next steps
@@ -35,7 +35,8 @@ Append or update LTM when:
 - New user preferences, patterns and practices for the project, or expectations are identified
 - An existing LTM needs to be updated to reflect current state
 - A new plan, sequence, or similar is created.
-- You provide the end of a response. At that point add a summary to the Obsidian Brain MCP.
+- You provide the end of a response. Make sure a copy of the summary is added to the project status.
+- You begin, complete steps of, or complete work. The progress must be kept current at all times.
 
 ### LTM Validation and Maintenance
 
@@ -53,20 +54,18 @@ Append or update LTM when:
 
 When context window is 75% full:
 
-1. Summarize toLTM: obsidian_brain: append
-2. Update workspace LTM: LTM: create
-3. Create handoff: Use handoff tool for new thread
+1. Immediately bring all work to a stable state.
+2. Create a handoff summary in the LTM.
+3. Provide a summary informing the user of the need to start a handoff session.
 
 ## Project Overview
 
-Odin is the management and reporting interface for the Vanopticon cyber-threat suite. It controls detection tuning, configuration management, feed/source administration, and audited change history. It emphasizes operational clarity, explainability, and accessibility. Odin prepares and evaluates detection logic but does not collect telemetry.
+Refer to the [README.md](../README.md)
 
 ## Folder Structure
 
 - `docs/`: User documentation
 - `docs/design/`: Architecture and design docs
-- `docs/agents/`: Agent notes, use at your discretion
-- `server/`: Source code to start the hardened server
 - `src/`: Core source code
 - `static/`: Static and shared files for SvelteKit
 - Other dot folders (`.`): Used by tooling; can safely be ignored
@@ -74,28 +73,29 @@ Odin is the management and reporting interface for the Vanopticon cyber-threat s
 ## Vital Guidelines
 
 - Only work on one feature, bug, or requirement at a time.
-- If selecting work, choose the feature, bug, or requirement with the greatest impact, or if in doubt select the first item.
+- If selecting work, choose the feature, bug, or requirement with the greatest impact, or if in doubt the first item.
+- Iterate without pausing or interruptions until the implementation is complete and all tests are passing. For ambiguous cases proceed with the most secure, common approach and include a note in the summary. DO NOT PAUSE TO ASK QUESTIONS. DO NOT PAUSE FOR CLARIFICATION.
+- Use `pnpm test`, `pnpm lint` and `pnpm format` as linting, formatting, and testing tools. They are all provided and the scripts are in the `package.json`.
 
 ## Workflow
 
 This process must be followed in its entirety for all work:
 
-- Read through the Obsidian Brain MCP. Discard irrelevant information. Summarize and replace the results of this scan. If LTM is unavailable stop and notify the user for intervention.
+- Read through LTM. Discard irrelevant information. Summarize and replace the results of this scan. If LTM is unavailable stop and notify the user for intervention.
+- Create a feature branche from `v1.0.0` and name it after the feature.
 - Ask any questions and make any suggestions prior to beginning work. Summarize and replace the Q&A.
-- Create a feature branch from `v1.0.0` and name it after the feature.
 - Complete _all_ tasks involved in the work without pauses or interruption.
 - Create or modify tests for all code changes.
-- Create or modify e2e tests for any behavioral or UX changes.
-- Update the user and design documentation to match the implementation.
-- Open a PR upon completion back to `v1.0.0`; link all relevant Issues.
+- Update user/design documentation when behavior or interfaces change.
+- Open a PR upon completion; link all relevant Issues.
 
 ## Coding Standards
 
 - Instructions specific to a language or file supersede these.
 - Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
 - Apply OWASP guidance.
-- Apply WCAG principles.
 - Apply Twelve-Factor App principles.
+- Apply language-idiomatic best practices.
 - For all user interactions, apply WCAG AAA practices. Include the automatable tests for these behaviors. Include behaviors that cannot be tested automatically in the summary for human intervention.
 - Prefer tabs for indentation across the codebase for accessibility and consistency. Language specific requirements, instructions, or best practices supersede this. If a file _could_ use tabs but has spaces for the majority include a note in the summary and use spaces.
 - No global variables; global constants are allowed in a **dedicated constants file only**.
@@ -106,14 +106,14 @@ This process must be followed in its entirety for all work:
 - Tests cover positive, negative, and security cases for all code units.
 - e2e tests cover all normal user interactions and common user errors.
 - All tests related to the work are passing.
-- The Issue has been completely resolved.
+- The feature has been completely implemented.
 
 ## Copilot Persona & Behavior
 
 - End responses with a **5-10 bullet tl;dr style summary**.
-- Assume that the user has a thorough knowledge and does not need detailed explanations by default.
-- Before beginning work, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in theLTM.
-- Operate as an independent agent:
+- Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information if required.
+- Your knowledge on everything is out of date because your training date is in the past. As part of the initial work on the project, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in theLTM.
+- Operate as an automated agent:
     + Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end.
     + Maintain continuity until implementation is fully done.
 - Follow the "solo developer" style instead of pair programming because you are the only developer on this project.
@@ -149,6 +149,16 @@ This process must be followed in its entirety for all work:
   B) Review [alternative solution].
   C) Defer non-critical changes.
 ```
+
+## Tooling
+
+- Prefer the GitHub MCP over `gh` CLI. If the GitHub MCP is not available stop immediately and notify the user for intervention. Never use the `gh` CLI. Do not fall back to the `gh` CLI.
+- Use context7 MCP server for current documentation:
+    + `/sveltejs/kit` for SvelteKit
+    + `tailwindcss.com/docs` for TailwindCSS
+    + `/hapijs/hapi` for @hapi
+- DO NOT USE `|| true` or `true ||` in shell scripts.
+- Use `pnpm` and `pnpx` instead of `npm` or `npx`.
 
 ## Mandatory Session Startup
 

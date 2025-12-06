@@ -1,13 +1,25 @@
-import { createCipheriv, randomBytes, createDecipheriv, createHash } from 'crypto';
-import { OD_COOKIE_SECRET } from '$lib/settings';
+import { createCipheriv, randomBytes, createDecipheriv, pbkdf2Sync } from 'crypto';
+import { OD_COOKIE_SECRET, OD_COOKIE_SALT, OD_COOKIE_PBKDF2_ITERS } from '$lib/settings';
 
 // Use a dedicated cookie secret for session encryption. Do NOT fall back to
 // PKCE or other secrets — cookie encryption must be explicit and managed.
+//
+// Security notes:
+// - `OD_COOKIE_SECRET` must be high-entropy (32+ random bytes recommended).
+// - If deployment tokens may be low-entropy, set `OD_COOKIE_SALT` and consider
+//   using an external KDF or HKDF with a well-managed salt/nonce and rotation
+//   strategy. PBKDF2 is used here to harden low-entropy secrets.
 const SECRET = OD_COOKIE_SECRET || '';
+const SALT = OD_COOKIE_SALT || 'od_cookie_salt_v1';
 
 function getKey() {
-	// derive 32-byte key from secret using sha256
-	return createHash('sha256').update(SECRET).digest();
+	// Derive a 32-byte AES-256 key from the cookie secret using PBKDF2.
+	// Iteration count is intentionally high for CPU hardening; adjustable via
+	// `OD_COOKIE_PBKDF2_ITERS` environment variable for CI/serverless tradeoffs.
+	// TODO: adopt HKDF for more robust key separation and consider adding
+	// token versioning for key rotation (`v1`, `v2`, ...).
+	const ITER = Number.isFinite(Number(OD_COOKIE_PBKDF2_ITERS)) ? OD_COOKIE_PBKDF2_ITERS : 100000;
+	return pbkdf2Sync(SECRET, SALT, ITER, 32, 'sha256');
 }
 
 function base64UrlEncode(buf: Buffer) {

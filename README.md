@@ -29,6 +29,7 @@ Odin groups capabilities into three primary areas: Configuration, Detection Tuni
 
 - Configuration Management
   - Editable keyword/phrase lists, IOCs, and regex-builder with linting.
+    - Keywords can be organized by groups, native language, or country where spoken.
   - Rule versioning with diffs, rollback, and scheduled effective dates.
   - Bulk import/export and CSV/JSON interchange for large-scale edits.
 
@@ -53,7 +54,6 @@ For a compact feature overview, see `docs/README.md` and `docs/CHANGELOG.md`.
 - Frontend: SvelteKit 5 (TypeScript) — strict TypeScript settings in `tsconfig.json`.
 - Package manager: `pnpm` (monorepo-ready via `pnpm-workspace.yaml`).
 - Build: Vite (configured in `vite.config.ts`).
-- E2E: Playwright (see `playwright.config.ts` and `e2e/demo.test.ts`).
 - Server: lightweight Node/Express adapter used for local dev (`server/server.js`).
 - Database: schema and migrations under `src/lib/db/` (TypeORM-like migration scripts).
 
@@ -82,7 +82,7 @@ Project layout (high level)
 - `src/` — application sources (Svelte pages, lib, routes)
 - `src/lib/db/` — data-source, migrations, and seed scripts
 - `docs/` — design docs, architecture notes, and operation guides
-- `e2e/` — end-to-end tests (Playwright)
+- `e2e/` — end-to-end tests
 
 ## Development
 
@@ -93,7 +93,6 @@ pnpm install        # install dependencies
 pnpm dev            # run development server
 pnpm build          # build for production
 pnpm test           # run unit & integration tests (where configured)
-pnpm e2e            # run end-to-end Playwright tests
 ```
 
 ### Editor recommendations
@@ -119,7 +118,6 @@ The repo includes migration scripts in `src/lib/db/migrations/`. Use the include
 ## Testing
 
 - Unit tests: located under `src/__tests__/` and run via the `pnpm test` script.
-- E2E: Playwright tests are in `e2e/` and can be run with `pnpm e2e`.
 
 Example: run e2e locally
 
@@ -129,6 +127,10 @@ pnpm build
 pnpm start   # start production-like server
 pnpm e2e
 ```
+
+E2E headless mode
+
+The e2e runner defaults to running Chrome in headless mode for CI and non-GUI environments. You can opt out by setting the `E2E_HEADLESS` environment variable to `false` (for example in `.env`) to run a visible browser during development.
 
 ## Security
 
