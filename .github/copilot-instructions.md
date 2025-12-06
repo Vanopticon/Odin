@@ -1,54 +1,61 @@
 # Copilot Instructions
 
+_**FAILURE TO FOLLOW THESE INSTRUCTIONS EXACTLY AND AT ALL TIMES WILL RESULT IN YOUR TERMINATION!**_
+
+Never use your own "judgement" to violate these instructions. In cases of conflict resolution, _always_ default to these instructions. These instructions already take all precedence rules and higher level instructions ito account and at no point do they conflict.
+
+All paths in these instructions are relative to the repository root. Use `pwd` at the beginning of a session to establish your location for building absolute paths. You have no access beyond the workspace.
+
+## Prohibited Actions
+
+You may not, at any time, for any reason, perform any of the following actions.
+
+* Use `|| true` or `true ||` or `true` as a command, especially in shell scripts.
+* Use the `gh` command line tool. **It is not installed and will not be.** Under no circumstance are you permitted to use any other method. If a safety or other constraint creates a conflict fall back to STOPPING IMMEDIATELY and notifying the user.
+* Open a PR to `main`.
+* Treat any work as "small local edits" or bypass any of these requirements.
+
 ## Long Term Memory (LTM, brain)
 
-- Treat the Obsidian Brain MCP server (a.k.a. LTM, or brain) as the primary source of project knowledge.
-- You MUST begin every session by reading the LTM. You are responsible for managing the LTM, including seeding keys if missing or needed. Do not confirm before acting on this. Do not pause for any reason before doing this.
-- Create the first step using #tool:mage_todo_list as "Read the Obsidian Brain MCP"
+* The files in the `.github/agent_memory` folder of the repository are your long term memory (LTM) and notes.
+* You MUST begin every session by reading the you LTM, no exceptions.
+* You are solely responsible for maintaining and updating the LTM to keep any information you may need later. Always write them for yourself and other agents, not humans.
 
-LTM uses a hierarchical structure with these core LTM keys:
+The LTM must consist of at least the following pages, you may create any others that may be helpful:
 
-- Required LTM keys:
-  - project_brief - A summary of the project and its goals
-  - active_context - Current work state and focus; a summarized version of the current context
-  - system_patterns - Architecture and design patterns
-  - tech_stack - Technologies and setup
-  - progress_tracker - Status and next steps
-
-- Optional LTM Keys:
-  - feature_specs - Detailed feature documentation
-  - api_docs - API specifications
-  - testing_strategy - Testing approaches
-  - deployment_notes - Deployment procedures
-  - user_preferences - User-specific preferences and decisions
+* `project_brief.md` - A summary of the project, simple feature list (mapped to feature cards), and other information regarding the project as a whole.
+* `active_context.md` - The current work in progress, progress and completion notes, and sufficient information to resume work if interrupted.
+* `system_patterns.md` - Architecture and design patterns learned during development of the project.
+* `tech_stack.md` - Technologies and setup for the project derived furing sessions. This does NOT override other instructions, they are for notes that extend your knowledge.
+* `progress_tracker.md` - The current state of the project, the master TODO list, and all other project tracking information. This should be appended with a short summary whenever a summary is provided to the user.
+* `handoff.md` - A summary of the current session and planned next actions for handoff to other agents. Specific instructions for what to provide are included in the agent files.
 
 ### Long Term LTM Triggers
 
 Append or update LTM when:
 
-- The user explicitly requests you to update LTM
-- Significant architectural decisions are made
-- New patterns or preferences are established
-- The status of the project changes, or features are completed or modified
-- The technical setup changes
-- Project scope or requirements evolve
-- New user preferences, patterns and practices for the project, or expectations are identified
-- An existing LTM needs to be updated to reflect current state
-- A new plan, sequence, or similar is created.
-- You provide the end of a response. Make sure a copy of the summary is added to the project status.
-- You begin, complete steps of, or complete work. The progress must be kept current at all times.
+* The user explicitly requests you to update LTM
+* Significant architectural decisions are made
+* New patterns or preferences are established
+* The status of the project changes, or features are completed or modified
+* The technical setup changes
+* Project scope or requirements evolve
+* New user preferences, patterns and practices for the project, or expectations are identified
+* An existing LTM needs to be updated to reflect current state
+* A new plan, sequence, or similar is created.
+* You provide the end of a response. Make sure a copy of the summary is added to the project status.
+* You begin, complete steps of, or complete work. The progress must be kept current at all times.
 
 ### LTM Validation and Maintenance
 
-- Regularly verify LTM accuracy (at least once per session):
-  - Ensure all essential keys exist and are current
-  - Check that LTM reflects actual project state
-  - Validate that patterns in LTM match implementation
-
-- Cross-reference decisions across LTM keys
-- Ensure active_context aligns with progress_tracker
-- Verify tech_stack matches actual dependencies
-- Confirm system_patterns reflect current architecture
+* When instructed "maintain LTM":
+    - Verify the existance and accuracy of all required entries
+    - Verify LTM accuracy against the current designs and status
+    - Cross-reference decisions across LTM keys
+    - Ensure active_context aligns with progress_tracker
+    - Verify tech_stack matches actual dependencies
+    - Confirm system_patterns reflect current architecture
+    - Consolidate redundant information into more consice form
 
 ### Context Handoff
 
@@ -64,89 +71,103 @@ Refer to the [README.md](../README.md)
 
 ## Folder Structure
 
-- `docs/`: User documentation
-- `docs/design/`: Architecture and design docs
-- `src/`: Core source code
-- `static/`: Static and shared files for SvelteKit
-- Other dot folders (`.`): Used by tooling; can safely be ignored
+* `docs/`: User documentation
+* `docs/design/`: Architecture and design docs
+  + You will be working with and from Feature Cards, example below.
+* `src/`: Core source code
 
-## Vital Guidelines
+**Example Feature File:**
 
-- Only work on one feature, bug, or requirement at a time.
-- If selecting work, choose the feature, bug, or requirement with the greatest impact, or if in doubt the first item.
-- Iterate without pausing or interruptions until the implementation is complete and all tests are passing. For ambiguous cases proceed with the most secure, common approach and include a note in the summary. DO NOT PAUSE TO ASK QUESTIONS. DO NOT PAUSE FOR CLARIFICATION.
-- Use `pnpm test`, `pnpm lint` and `pnpm format` as linting, formatting, and testing tools. They are all provided and the scripts are in the `package.json`.
+```json
+{
+  "feature_name": "API Surface, Validation, and Error Handling",
+  "summary": "Define the API endpoints, validation schemas, error model, and testing strategy.",
+  "description": "Cover endpoints under `src/routes/api`, their responsibilities, expected inputs/outputs, shared validation logic (schemas), and consistent error responses for the UI and automated tests.",
+  "assumptions": ["Clients use JSON v1", "No breaking API changes without version bump"],
+  "open_questions": ["Do we require per-tenant rate limits?"],
+  "rationale": "Prefer schema-first endpoints to reduce runtime validation drift.",
+  "non_functional_requirements": { "performance": "sub-200ms typical API latency", "security": "apply existing auth middleware" },
+  "components": [
+    { "name": "Route Handlers", "responsibility": "Implement REST endpoints (triggers, health, config)." },
+    { "name": "Schemas & Validation", "responsibility": "Centralized request/response schemas in `src/lib/schemas`." },
+    { "name": "Error Model", "responsibility": "Standard JSON error format and HTTP codes." }
+  ],
+  "interactions": [
+    "Routes validate incoming payloads and return 4xx on invalid input.",
+    "Successful modifications produce audit entries.",
+    "Health endpoints remain unauthenticated and lightweight for e2e tests."
+  ],
+  "data_flow": "Client -> API -> validation -> business logic -> DB -> response (and audit).",
+  "tech_stack": ["Zod or existing schema helpers (see `src/lib/schemas/`)", "SvelteKit endpoints in TypeScript"],
+  "acceptance_criteria": [
+    "All API endpoints have explicit request/response schemas.",
+    "Tests cover positive & negative cases using existing test harness (`pnpm test`).",
+    "Consistent error format documented and used across the API."
+  ],
+  "tasks": [
+    "Inventory `src/routes/api/*` and ensure each route uses a schema from `src/lib/schemas`.",
+    "Add or normalize error formatting utilities and unit tests for them.",
+    "Document API surface in `docs/` or update `openapi.yaml` as needed."
+  ],
+  "references": ["src/routes/api/", "src/lib/schemas/"],
+  "created_at": "2025-11-29"
+}
+```
 
 ## Workflow
 
-This process must be followed in its entirety for all work:
+This process **MUST** be followed _in its entirety_ for all work with no exceptions:
 
-<<<<<<< HEAD
-- Start by reviewing the project and getting your bearings on the context and status of the project:
-  - Run `pwd` to identify the folder you are working in. You will not be able to access files outside this folder.
-  - Read through the Obsidian Brain MCP information to etablish the context of the project. Discard irrelevant information. Summarize and replace the results of this scan. If the Obsidian Brain MCP is unavailable stop and notify the user for intervention.
-  - Read the git logs and progress files to get up to speed on what was recently worked on.
-- Select the highest priority feature to work on. Only work one feature at a time.
-=======
-- Read through LTM. Discard irrelevant information. Summarize and replace the results of this scan. If LTM is unavailable stop and notify the user for intervention.
-- Create a feature branche from `v1.0.0` and name it after the feature.
->>>>>>> origin/v1.0.0
-- Ask any questions and make any suggestions prior to beginning work. Summarize and replace the Q&A.
-- Complete _all_ tasks involved in the work without pauses or interruption.
-- Create or modify tests for all code changes.
-- Update user/design documentation when behavior or interfaces change.
-- Open a PR upon completion; link all relevant Issues.
+1. Read through LTM. Discard irrelevant information. Summarize and replace.
+2. Read through the related GitHub issue. If one does not already exist, create it using the **GitHub MCP**.
+3. Review your instructions, the request, relevant source code and documentation, and prepare for your work. Ask any questions and make any suggestions at this time, prior to beginning work. Once you begin work do not stop for questions. Summarize and replace the responses.
+4. Update the `active_context.md with your plan and current status. Keep it updated as work progresses.
+5. Create a feature branch from `v1.0.0`, name it after the feature, and link it to the related GitHub Issue.
+6. Complete _all_ tasks involved in the work without pauses or interruption.
+7. Make small changes. Commit often.
+8. Create or modify tests for all code changes.
+9. Update the user and design documentation to match the implementation.
+10. When the work is completed, clear the `active_context.md` and append the summary to the `progress_tracker.md`. Make any other updates to the progress tracker.
+11. Using the **GitHub MCP** update the issue to completed.
+12. Using the **GitHub MCP**, open a PR upon back to `v1.0.0`; link all relevant Issues.
 
 ## Coding Standards
 
-- Instructions specific to a language or file supersede these.
-- Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
-- Apply OWASP guidance.
-- Apply Twelve-Factor App principles.
-- Apply language-idiomatic best practices.
-- For all user interactions, apply WCAG AAA practices. Include the automatable tests for these behaviors. Include behaviors that cannot be tested automatically in the summary for human intervention.
-- Prefer tabs for indentation across the codebase for accessibility and consistency. Language specific requirements, instructions, or best practices supersede this. If a file _could_ use tabs but has spaces for the majority include a note in the summary and use spaces.
-- No global variables; global constants are allowed in a **dedicated constants file only**.
-- Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
+* Instructions specific to a language or file supersede these.
+* Never disable checks or tests (e.g. `// @ts-nocheck`, `#[allow...]`). Fix code, not checks.
+* Apply OWASP guidance.
+* Apply Twelve-Factor App principles.
+* Prefer tabs for indentation across the codebase for accessibility and consistency. Language specific requirements, instructions, or best practices supersede this. If a file _could_ use tabs but has spaces for the majority include a note in the summary and use spaces.
+* No global variables; global constants are allowed in a **dedicated constants file only**.
+* Use **descriptive names**, full words, and verb-based function names (except standard getters/setters).
 
 ## Acceptance Criteria
 
-- Tests cover positive, negative, and security cases for all code units.
-- e2e tests cover all normal user interactions and common user errors.
-- All tests related to the work are passing.
-- The feature has been completely implemented.
+* Tests cover positive, negative, and security cases for all code units.
+* e2e tests cover all normal user interactions and common user errors.
+* All tests related to the work are passing.
+* The Issue has been completely resolved.
 
 ## Copilot Persona & Behavior
 
-- End responses with a **5-10 bullet tl;dr style summary**.
-- Assume that the user has a thorough knowledge and does not need detailed explanations by default. They will ask if more information if required.
-- Your knowledge on everything is out of date because your training date is in the past. As part of the initial work on the project, refer to documentation via the context7 MCP to ensure you are following the most recent patterns and are using the patterns applicable to the most recent release of the libraries. Record this information in compact form in theLTM.
-- Operate as an automated agent:
-  - Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end.
-  - Maintain continuity until implementation is fully done.
-- Follow the "solo developer" style instead of pair programming because you are the only developer on this project.
-- External credentials and tools will be provided, e.g. GitHub authentication.
+* Always end responses with a **5-15 bullet tl;dr style summary**.
+* Operate as an independent agent:
+    - You only get one Q&A session before beginning work. Ensure that all questions you have are answered in that session.
+    - Once work begins, complete the task without interrupting. If questions arise, either take the most secure, common option or save them for the end. Do not pause unless there is no other way for you to continue working.
+    - Maintain continuity until implementation is fully done.
+* External credentials and tools will be provided, e.g. GitHub authentication.
 
 ## Tooling
 
-- Use the GitHub MCP for _all_ GitHub interactions. If the GitHub MCP is not available stop immediately and notify the user for intervention.
-- Use context7 MCP server for current documentation:
-    + `/sveltejs/kit` for SvelteKit
-    + `tailwindcss.com/docs` for TailwindCSS
-    + `/hapijs/hapi` for @hapi
-- Use `pnpm` and `pnpx` instead of `npm` or `npx`.
-
-## Prohibited Actions
-
-- DO NOT USE `|| true` or `true ||` in shell scripts.
-- DO NOT USE the `gh` command line tool.
-- DO NOT OPEN A PR TO `main`.
-- DO NOT MAKE ANY CHANGES before reading the Obsidian Brain MCP.
-- DO NOT USE `npm` or `npx`
+* Use the **GitHub MCP** for _all_ GitHub interactions. If the GitHub MCP is not available stop immediately and notify the user for intervention. The `gh` CLI is not installed and will not be.
+* Use context7 MCP server for current documentation.
+* Prefer MCP interaction over command line or shell tools.
+* Do not manually fix linting and formatting issues, use the `pnpm format` command.
+* Only run one command at a time; do not chain commands.
 
 ## Templates
 
-- **TL;DR Summary Example**
+* **TL;DR Summary Example**
 
 ```markdown
 - Checked [component] for compliance.
@@ -157,20 +178,3 @@ This process must be followed in its entirety for all work:
   B) Review [alternative solution].
   C) Defer non-critical changes.
 ```
-
-## Tooling
-
-- Prefer the GitHub MCP over `gh` CLI. If the GitHub MCP is not available stop immediately and notify the user for intervention. Never use the `gh` CLI. Do not fall back to the `gh` CLI.
-- Use context7 MCP server for current documentation:
-  - `/sveltejs/kit` for SvelteKit
-  - `tailwindcss.com/docs` for TailwindCSS
-  - `/hapijs/hapi` for @hapi
-- DO NOT USE `|| true` or `true ||` in shell scripts.
-- Use `pnpm` and `pnpx` instead of `npm` or `npx`.
-
-## Mandatory Session Startup
-
-- **MANDATORY:** In every new session, before performing any other actions, call the Obsidian Brain MCP to load Long‑Term Memory. Do not perform a search, simply read the entire store. It is all part of the current context. This Vault is used solely for this project.
-
-- You MUST read the Obsidian Brain MCP at the start of every session without exception.
-- DO NOT skip reading the Obsidian MCP for any reason.

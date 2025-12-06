@@ -1,0 +1,28 @@
+{
+	"id": "traceability-and-vvp",
+	"title": "Traceability Matrix & Verification-VValidation Plan",
+	"summary": "Map requirements to tests and provide traceability for critical controls.",
+	"description": "Create a traceability matrix that maps requirement IDs to specific unit/integration/e2e tests and identify gaps in coverage. Produce a `VVP-TRACEABILITY.md` file under `docs/design`.",
+	"components": [
+		{ "name": "Traceability Matrix", "responsibility": "Document mapping between REQ IDs and test cases." },
+		{ "name": "Test Gap Analysis", "responsibility": "Identify missing tests for critical controls and create tasks to add them." },
+		{ "name": "VVP Document", "responsibility": "Produce `docs/design/VVP-TRACEABILITY.md`." }
+	],
+	"interactions": [
+		"Developers reference the matrix when adding features or tests.",
+		"CI and reviewers use the matrix to validate acceptance for PRs tied to requirements.",
+		"New tests update the matrix to show resolved gaps."
+	],
+	"acceptance_criteria": [
+		"A `VVP-TRACEABILITY.md` exists linking REQ IDs to tests.",
+		"All critical controls have at least one automated test mapping.",
+		"Open gaps are tracked as issues with owner and ETA."
+	],
+	"tasks": [
+		"Create `docs/design/VVP-TRACEABILITY.md` with initial mappings for high-impact REQ IDs.",
+		"Run test coverage and produce a gap list for critical controls.",
+		"Create issue(s) for missing critical tests and add to the master plan."
+	],
+	"references": ["docs/design/08-Verification-Validation-Plan.md", "docs/design/REQUIREMENTS.md"],
+	"created_at": "2025-12-05"
+}

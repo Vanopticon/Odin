@@ -1,0 +1,29 @@
+{
+	"id": "performance-and-load-testing",
+	"title": "Performance Budgets and Load Testing",
+	"summary": "Define measurable performance targets and provide a load-testing harness to validate them.",
+	"description": "Set performance budgets (e.g., TTFP targets for primary views, API p95/p99 latencies) and add an automated load-test harness (k6 or similar) to validate the budgets.",
+	"components": [
+		{ "name": "Budgets", "responsibility": "Document targets for primary pages and APIs." },
+		{ "name": "Load Tests", "responsibility": "Provide scripts and CI job to run load tests and record results." },
+		{ "name": "Reporting", "responsibility": "Store/load test artifacts and provide guidance to interpret results." }
+	],
+	"interactions": [
+		"CI can optionally run a short smoke load test on preview builds.",
+		"Load tests run against a production-like environment and report pass/fail based on thresholds.",
+		"Perf budgets reviewed when UI or API changes are made that may regress performance."
+	],
+	"tech_stack": ["k6 (recommended)", "k6 cloud or local runner", "CI job examples"],
+	"acceptance_criteria": [
+		"Documented performance budgets in `docs/`.",
+		"One automated load test script exists and can be run locally/CI.",
+		"Load test results are archived as CI artifacts when run." 
+	],
+	"tasks": [
+		"Define budgets for homepage and critical API endpoints.",
+		"Add a simple k6 script for the homepage and an API endpoint and document run steps.",
+		"Add a CI job to optionally run a short load smoke test on demand."
+	],
+	"references": ["e2e/", "docs/design/08-Verification-Validation-Plan.md"],
+	"created_at": "2025-12-05"
+}

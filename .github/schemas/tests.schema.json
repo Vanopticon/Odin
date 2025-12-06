@@ -1,0 +1,49 @@
+{
+  "$id": "https://vanopticon.dev/schemas/tests.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TestBuilder tests schema",
+  "type": "object",
+  "required": ["feature_id", "tests"],
+  "properties": {
+    "feature_id": { "type": "string" },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "category", "target", "run", "expected"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["unit", "integration", "e2e", "security"] },
+          "category": { "type": "string", "enum": ["positive", "negative", "security"] },
+          "target": { "type": "string" },
+          "fixture": { "type": "string" },
+          "run": { "type": "string" },
+          "expected": { "type": "string" },
+          "threat_note": { "type": "string" },
+          "secrets_handling": { "type": "string" },
+          "severity": { "type": "string", "enum": ["critical", "major", "minor"] },
+          "flaky": { "type": "boolean" },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "node": { "type": "string" },
+        "test_db": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "ci": {
+      "type": "object",
+      "properties": {
+        "stage": { "type": "string" },
+        "fail_policy": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+{
+  "$id": "https://vanopticon.dev/schemas/feature-card.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Feature Card",
+  "type": "object",
+  "required": ["title", "summary", "description", "components", "acceptance_criteria", "created_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "summary": { "type": "string" },
+    "description": { "type": "string" },
+    "assumptions": { "type": "array", "items": { "type": "string" } },
+    "open_questions": { "type": "array", "items": { "type": "string" } },
+    "rationale": { "type": "string" },
+    "nfrs": { "type": "object", "additionalProperties": true },
+    "components": {
+      "type": "array",
+      "items": { "type": "object", "required": ["name", "responsibility"], "properties": { "name": { "type": "string" }, "responsibility": { "type": "string" } }, "additionalProperties": false }
+    },
+    "interactions": { "type": "array", "items": { "type": "string" } },
+    "data_flow": { "type": "string" },
+    "tech_stack": { "type": "array", "items": { "type": "string" } },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "tasks": { "type": "array", "items": { "type": "string" } },
+    "handoff": { "type": "object", "additionalProperties": true },
+    "tests": { "$ref": "tests.schema.json" },
+    "references": { "type": "array", "items": { "type": "string" } },
+    "created_at": { "type": "string", "format": "date" }
+  },
+  "additionalProperties": false
+}

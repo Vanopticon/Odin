@@ -1,0 +1,29 @@
+{
+	"id": "monitoring-and-observability",
+	"title": "Monitoring, Metrics, and Runbook",
+	"summary": "Define metrics, alert thresholds, and operational runbooks for common incidents.",
+	"description": "Specify the minimal set of metrics (uptime, error rate, auth failures, DB errors, queue/backlog depth), provide sample alert rules, and document runbook steps for on-call responders.",
+	"components": [
+		{ "name": "Metrics List", "responsibility": "Define metric names, types, and labels to be exported (Prometheus or hosted provider)." },
+		{ "name": "Alert Rules", "responsibility": "Translate metrics to alert thresholds and recommended notification channels." },
+		{ "name": "Runbook", "responsibility": "Step-by-step playbooks for common incidents (DB down, auth provider failure, high error rate)." }
+	],
+	"interactions": [
+		"Metrics exported from API and background jobs to metrics backend.",
+		"Alerts map to runbook steps and on-call contacts.",
+		"Health endpoints consumed by orchestration (readiness/liveness)."
+	],
+	"tech_stack": ["Prometheus/Grafana (examples)", "OpenTelemetry (optional)", "Alertmanager or hosted alerts"],
+	"acceptance_criteria": [
+		"A documented metrics list with suggested thresholds exists in `docs/`.",
+		"At least two sample alert rules and runbook entries are documented.",
+		"Health endpoints are usable in readiness/liveness configs."
+	],
+	"tasks": [
+		"Inventory existing health endpoints and metrics exporters in codebase.",
+		"Draft `docs/design/monitoring.md` listing metrics and thresholds.",
+		"Add sample Prometheus rules and one runbook play for DB unavailable." 
+	],
+	"references": ["src/routes/api/health/", "docs/design/09-Operational-Security-Runbook.md"],
+	"created_at": "2025-12-05"
+}
